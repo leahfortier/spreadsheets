@@ -15,7 +15,7 @@ class Mode(Enum):
     ANY_SPLIT = 'Any% Split'
     FAREWELL = 'Farewell'
     FULL_RUN = 'Full Run'
-    BEST_POSSIBLE = 'Best Possible'
+    BEST_POSSIBLE = 'Best Possible*'
 
     def get_level(self, chapter: Enum):
         return get_level_name(self.value, chapter.value)

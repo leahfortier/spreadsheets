@@ -4,7 +4,7 @@ from main.data.records import Records
 
 
 class Scoreboard:
-    def __init__(self, player_names: List[str], rows: List[List[str]], start_index: int = 1):
+    def __init__(self, player_names: Iterable[str], rows: List[List[str]], start_index: int = 1):
         self.player_map: Dict[str, Records] = {}
         for player_name in player_names:
             self.player_map[player_name] = Records(player_name)
