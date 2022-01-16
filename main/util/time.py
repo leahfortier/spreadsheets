@@ -5,7 +5,7 @@ MINUTE_MILLIS = 60 * SECOND_MILLIS
 HOUR_MILLIS = 60 * MINUTE_MILLIS
 
 
-time_format = "(?:([0-9]+):)?([0-9]{1,2}):([0-9]{2})[. ]([0-9]{3})"
+time_format = '(?:([0-9]+):)?([0-9]{1,2}):([0-9]{2}).([0-9]{3})'
 
 
 def string_to_millis(time: str) -> int:
