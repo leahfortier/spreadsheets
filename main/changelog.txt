@@ -97,44 +97,18 @@
 01/14/22	Melanie   	C-Side - Forsaken City        	-- -> 28
 01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
 01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
-01/15/22	Melanie   	Full Run - Any%               	112 -> 101
-01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
-01/15/22	Melanie   	A-Side - Core                 	152 -> 98
-01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30.877
 01/15/22	Melanie   	Full Run - Any%               	112 -> 101
 01/15/22	L         	Best Possible - Any%          	-- -> 14
 01/15/22	Marcos    	Best Possible - Any%          	-- -> 31
 01/15/22	Melanie   	Best Possible - Any%          	-- -> 53
+01/15/22	L         	Best Possible - Any% Split    	-- -> 51:31.025
+01/15/22	L         	Best Possible - Any% Split    	-- -> 72
+01/15/22	Marcos    	Best Possible - Any% Split    	-- -> 49:16.351
+01/15/22	Marcos    	Best Possible - Any% Split    	-- -> 86
+01/15/22	Melanie   	Best Possible - Any% Split    	-- -> 59:30.306
+01/15/22	Melanie   	Best Possible - Any% Split    	-- -> 101
+01/15/22	L         	Best Possible - 100%-         	-- -> 3:35:23.755
+01/15/22	L         	Best Possible - 100%-         	-- -> 554
+01/15/22	L         	Best Possible - 100%          	-- -> 4:31:23.601
+01/15/22	L         	Best Possible - 100%          	-- -> 793

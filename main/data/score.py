@@ -17,10 +17,16 @@ class ScoreCounter:
     def __init__(self):
         self.speed_total: int = 0
         self.death_total: int = 0
+        self.invalid: bool = False
 
-    def add(self, score: Score):
-        self.speed_total += score.get_speed_millis()
-        self.death_total += score.get_deaths()
+    def add(self, score: Score) -> None:
+        if self.invalid or score.speed == '--' or score.deaths == '--':
+            self.invalid = True
+        else:
+            self.speed_total += score.get_speed_millis()
+            self.death_total += score.get_deaths()
 
     def get(self) -> Score:
+        if self.invalid:
+            return Score('--', '--')
         return Score(millis_to_string(self.speed_total), str(self.death_total))

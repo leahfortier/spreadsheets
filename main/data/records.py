@@ -1,7 +1,7 @@
-from enum import Enum
 from typing import Dict, List, Iterable
 
-from main.data.level import get_level_name, Mode, Chapter, CHAPTERS, Score, ScoreCounter
+from main.data.level import get_level_name
+from main.data.score import Score, ScoreCounter
 
 
 class Records:

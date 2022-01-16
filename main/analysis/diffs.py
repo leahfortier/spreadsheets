@@ -1,7 +1,7 @@
 from datetime import date
 from typing import List
 
-from main.data.level import Score
+from main.data.score import Score
 from main.util.file_io import from_csv, from_file, to_file
 from main.data.records import Records
 from main.data.scoreboard import Scoreboard
