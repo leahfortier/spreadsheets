@@ -2,6 +2,7 @@ import re
 from datetime import date as datetime
 from typing import List
 
+from main.data.level import MODES
 from main.data.score import Score
 from main.util.file_io import from_csv, from_file, to_file
 from main.data.records import Records
@@ -16,6 +17,14 @@ class Diff:
         self.level = level
         self.old = old
         self.new = new
+        self.type = 'Deaths' if self.new.isnumeric() else 'Speed'
+
+        match = re.compile(level_re_grouped).match(level)
+        self.mode = match.group(1)
+        self.chapter = match.group(2).strip()
+
+    def csv_string(self):
+        return ','.join([self.date, self.player_name, self.mode, self.chapter, self.type, self.old, self.new])
 
     def __str__(self):
         return f'{self.date}' \
@@ -25,10 +34,13 @@ class Diff:
                f'\t{self.new:>12}'
 
 
+modes_re = '|'.join([mode.value for mode in MODES])
+
 date_re = '[0-9]{2}/[0-9]{2}/[0-9]{2}'      # Ex: 01/16/22
 name_re = '[A-Z][a-z]*'                     # Ex: Melanie
-section_re = '[A-Za-z%\\- ]+'               # Ex: A-Side, Any%, Golden Ridge
-level_re = f'{section_re} - {section_re}'   # Ex: C-Side - The Summit
+section_re = '[A-Za-z0-9%\\- ]+'            # Ex: Golden Ridge, Any%
+level_re = f'(?:{modes_re}) - {section_re}'     # Ex: C-Side - The Summit
+level_re_grouped = f'({modes_re}) - ({section_re})'     # Ex: C-Side - The Summit
 value_re = '[0-9\\-:.]+'                    # Ex: 11:48.594, 28, --
 diff_format = f'({date_re})' \
               f'\\s+({name_re})' \
@@ -37,18 +49,28 @@ diff_format = f'({date_re})' \
               f'\\s+({value_re})'
 
 
-def to_diff(diffy: str) -> Diff:
+def matchy(diffy: str = None):
+    diffy = diffy or 'A-Side - Forsaken City'
+    format = level_re
+    if not re.fullmatch(format, diffy):
+        print("No match", diffy)
+    else:
+        print('Match!', diffy)
+
+
+def to_diff(diffy: str) -> str:
     if not re.fullmatch(diff_format, diffy):
         print("No match", diffy)
 
     match = re.compile(diff_format).match(diffy)
-    return Diff(
+    diff = Diff(
         date=match.group(1),
         player_name=match.group(2),
         level=match.group(3),
         old=match.group(4),
         new=match.group(5)
     )
+    return diff.csv_string()
 
 
 def add_diff(diffs: List[Diff], player_name: str, level: str, old: str, new: str):
@@ -90,3 +112,16 @@ def add_diffs(new_board: Scoreboard):
             print("\t" + diffy)
 
     to_file(DIFFS_FILE, prev_diffs + new_diffs)
+    check_diffs()
+
+
+def check_diffs():
+    # matchy()
+    new_diffs: List[str] = [to_diff(diffy) for diffy in from_file(DIFFS_FILE)]
+    to_file(DIFFS_FILE, new_diffs)
+    for diffy in new_diffs:
+        print(diffy)
+
+
+
+

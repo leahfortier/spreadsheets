@@ -59,6 +59,7 @@ class FullRun(Enum):
         return _FULL_RUN_MAP[self]
 
 
+MODES: List[Mode] = list(Mode)
 CHAPTERS: List[Chapter] = list(Chapter)
 FULL_RUNS: List[FullRun] = list(FullRun)
 
