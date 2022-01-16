@@ -1,0 +1,140 @@
+01/03/22	Melanie     A-Side - Forsaken City          7:34.614 -> 1:53.339
+01/03/22	Melanie     A-Side - Forsaken City          10 -> 0
+01/04/22    L           Farewell - Moon Berry           1:11:35.093 -> 55:59.846
+01/04/22    L           Farewell - Moon Berry           354 -> 239
+01/04/22	L         	B-Side - Core                   16:16.837 -> 14:40.311
+01/04/22	L         	B-Side - Core                 	74 -> 73
+01/05/22	L         	A-Side - Core                 	9:13.146 -> 8:43.685
+01/05/22	L         	A-Side - Core                 	23 -> 21
+01/05/22	L         	A-Side - Core                 	8:43.685 -> 8:12.711
+01/05/22	L         	A-Side - Core                 	21 -> 17
+01/05/22	Melanie     A-Side - Old Site             	17:40.953 -> 3:16.503
+01/05/22	Melanie     A-Side - Old Site             	27 -> 0
+01/05/22	Melanie     A-Side - Forsaken City          1:53.339 -> 1:51.333
+01/05/22	Melanie     A-Side - Forsaken City          1:51.333 -> 1:46.675
+01/05/22	L         	A-Side - Core                 	8:12.711 -> 8:08.478
+01/06/22	Melanie     A-Side - Old Site             	3:16.503 -> 2:55.338
+01/06/22	Melanie     A-Side - Forsaken City          1:46.675 -> 1:31.885
+01/06/22    Melanie     A-Side - Celestial Resort       1:10:08.877 -> 16:34.024
+01/06/22    Melanie     A-Side - Celestial Resort       281 -> 61
+01/06/22    Melanie     A-Side - Celestial Resort       16:34.024 -> 12:39.985
+01/06/22    Melanie     A-Side - Celestial Resort       61 -> 40
+01/06/22	Melanie     A-Side - Golden Ridge           56:25.431 -> 11:20.765
+01/06/22	Melanie     A-Side - Golden Ridge           258 -> 41
+01/06/22	Melanie     A-Side - Golden Ridge           11:20.765 -> 8:03.599
+01/06/22	Melanie     A-Side - Golden Ridge           41 -> 18
+01/06/22	Melanie     A-Side - Golden Ridge           8:03.599 -> 6:53.831
+01/06/22	Melanie     A-Side - Golden Ridge           18 -> 10
+01/06/22	Melanie     A-Side - Golden Ridge           6:53.831 -> 6:30.269
+01/06/22	Melanie     A-Side - Golden Ridge           10 -> 9
+01/06/22	Melanie     A-Side - Golden Ridge           6:30.269 -> 6:02.236
+01/06/22	Melanie     A-Side - Golden Ridge           9 -> 6
+01/06/22	Marcos      A-Side - Forsaken City          1:25.442 -> 1:21.294
+01/06/22	Marcos    	A-Side - Forsaken City        	1:21.294 -> 1:18.710
+01/06/22	Marcos    	A-Side - Old Site             	2:28.223 -> 2:25.214
+01/06/22	Marcos    	A-Side - Old Site             	2:25.214 -> 2.24.109
+01/06/22	Marcos    	A-Side - Old Site             	2.24.109 -> 2:19.672
+01/07/22	Melanie     A-Side - Golden Ridge           6:02.236 -> 5:12.222
+01/07/22	Melanie     A-Side - Golden Ridge           6 -> 2
+01/07/22	Melanie     A-Side - Forsaken City          1:31.885 -> 1:30.678
+01/07/22	Melanie     A-Side - Forsaken City          1:30.678 -> 1:22.807
+01/07/22	Melanie     A-Side - Old Site             	2:55.338 -> 2:44.730
+01/07/22    Melanie     A-Side - Celestial Resort       12:39.985 -> 11:37.561
+01/07/22    Melanie     A-Side - Celestial Resort       40 -> 30
+01/07/22    Melanie     A-Side - Celestial Resort       11:37.561 -> 10:43.280
+01/07/22    Melanie     A-Side - Celestial Resort       30 -> 27
+01/07/22    Melanie     A-Side - Mirror Temple          1:06:02.462 -> 19:29.481
+01/07/22    Melanie     A-Side - Mirror Temple          200 -> 49
+01/08/22	Marcos    	A-Side - Forsaken City        	1:18.710 -> 1:17.520
+01/09/22	L         	A-Side - Old Site             	2:38.916 -> 2:31.589
+01/09/22	L         	A-Side - Core                 	8:08.478 -> 6:41.846
+01/09/22	L         	A-Side - Core                 	17 -> 10
+01/09/22	Melanie   	A-Side - Old Site             	2:44.730 -> 2:43.37
+01/09/22	Melanie   	A-Side - Celestial Resort     	10:43.280 -> 9:49.611
+01/09/22	Melanie   	A-Side - Celestial Resort     	27 -> 20
+01/09/22	Melanie   	A-Side - Mirror Temple        	19:29.481 -> 9:46.347
+01/09/22	Melanie   	A-Side - Mirror Temple        	49 -> 11
+01/09/22	Melanie   	A-Side - Reflection           	45:02.643 -> 13:09.412
+01/09/22	Melanie   	A-Side - Reflection           	159 -> 29
+01/09/22	Melanie   	A-Side - The Summit           	1:11:10.655 -> 46:54.027
+01/09/22	Melanie   	A-Side - The Summit           	314 -> 270
+01/10/22	L         	A-Side - Old Site             	2:31.589 -> 2:27.543
+01/10/22	Melanie   	A-Side - The Summit           	46:54.027 -> 23:00.043
+01/10/22	Melanie   	A-Side - The Summit           	270 -> 62
+01/10/22	L         	A-Side - Celestial Resort     	7:45.817 -> 7:18.515
+01/10/22	L         	A-Side - Golden Ridge         	5:04.130 -> 5:02.209
+01/11/22	Melanie   	A-Side - Golden Ridge         	5:12.222 -> 5:01.512
+01/11/22	L         	A-Side - Golden Ridge         	5:02.209 -> 4:55.426
+01/11/22	Melanie   	A-Side - Celestial Resort     	9:49.611 -> 9:25.386
+01/11/22	Melanie   	A-Side - Celestial Resort     	20 -> 17
+01/11/22	L         	A-Side - Golden Ridge         	4:55.426 -> 4:53.998
+01/11/22	Melanie   	A-Side - Golden Ridge         	5:01.512 -> 4:38.137
+01/11/22	Melanie   	A-Side - Golden Ridge         	2 -> 1
+01/11/22	Melanie   	A-Side - Celestial Resort     	9:25.386 -> 8:33.281
+01/11/22	Melanie   	A-Side - Celestial Resort     	17 -> 10
+01/12/22	Melanie   	A-Side - Mirror Temple        	9:46.347 -> 8:42.665
+01/12/22	Melanie   	A-Side - Reflection           	13:09.412 -> 11:42.457
+01/12/22	Melanie   	A-Side - Reflection           	29 -> 17
+01/12/22	Melanie   	A-Side - The Summit           	23:00.043 -> 16:55.461
+01/12/22	Melanie   	A-Side - The Summit           	62 -> 24
+01/12/22	Melanie   	A-Side - Old Site             	2:43.37 -> 2:42.877
+01/12/22	Melanie   	A-Side - Reflection           	11:42.457 -> 10:29.119
+01/12/22	Melanie   	B-Side - Forsaken City        	34:17.051 -> 13:49.243
+01/12/22	Melanie   	B-Side - Forsaken City        	251 -> 93
+01/12/22	L         	A-Side - Golden Ridge         	4:53.998 -> 4:44.138
+01/12/22	Marcos    	A-Side - Celestial Resort     	7:41.618 -> 7:37.300
+01/12/22	Marcos    	A-Side - Celestial Resort     	12 -> 10
+01/12/22	Melanie   	Full Run - Any%               	-- -> 1:03:12
+01/12/22	Melanie   	Full Run - Any%               	-- -> 112
+01/14/22	Melanie   	A-Side - Old Site             	2:42.877 -> 2:34.666
+01/14/22	Melanie   	A-Side - Golden Ridge         	1 -> 0
+01/14/22	Melanie   	A-Side - Mirror Temple        	8:42.665 -> 7:52.634
+01/14/22	Melanie   	A-Side - Mirror Temple        	11 -> 5
+01/14/22	Melanie   	A-Side - Reflection           	10:29.119 -> 10:07.223
+01/14/22	Melanie   	A-Side - Reflection           	17 -> 14
+01/14/22	Melanie   	A-Side - The Summit           	16:55.461 -> 16:53.387
+01/14/22	Melanie   	C-Side - Forsaken City        	-- -> 6:26.036
+01/14/22	Melanie   	C-Side - Forsaken City        	-- -> 28
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	Melanie   	A-Side - Core                 	29:37.707 -> 19:08.214
+01/15/22	Melanie   	A-Side - Core                 	152 -> 98
+01/15/22	Melanie   	Full Run - Any%               	1:03:12 -> 1:00:30 877
+01/15/22	Melanie   	Full Run - Any%               	112 -> 101
+01/15/22	L         	Best Possible - Any%          	-- -> 14
+01/15/22	Marcos    	Best Possible - Any%          	-- -> 31
+01/15/22	Melanie   	Best Possible - Any%          	-- -> 53
