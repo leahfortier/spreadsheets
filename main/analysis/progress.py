@@ -28,7 +28,7 @@ def add_progress(board: Scoreboard) -> ProgressMap:
 
 
 def write_progress(board: Scoreboard, progress_map: ProgressMap):
-    rows: List[List[str]] = []
+    rows: List[List[str]] = [['Date', 'Player', 'Mode', 'Chapter', 'Type', 'Value']]
     for player_name in board.players():
         player: Player = board.get(player_name)
         for level in player.levels():
@@ -38,7 +38,8 @@ def write_progress(board: Scoreboard, progress_map: ProgressMap):
                     rows.append([
                         event.date,
                         player_name,
-                        level,
+                        level.mode,
+                        level.chapter,
                         score_type.value,
                         event.value
                     ])

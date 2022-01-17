@@ -1,4 +1,4 @@
-Date,Name,Mode,Chapter,Type,Old,New
+Date,Player,Mode,Chapter,Type,Old,New
 01/03/22,Melanie,A-Side,Forsaken City,Speed,7:34.614,1:53.339
 01/03/22,Melanie,A-Side,Forsaken City,Deaths,10,0
 01/04/22,L,Farewell,Moon Berry,Speed,1:11:35.093,55:59.846

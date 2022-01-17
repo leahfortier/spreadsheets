@@ -3,26 +3,28 @@ from typing import List, Dict
 from main.analysis.diffs import Diff
 from main.data.level import Level
 from main.data.score import Score, ScoreType
-from main.util.time import today_str
+from main.util.constants import DEFAULT_DATE
+
+
+class Event:
+    def __init__(self, value: str, date: str = None):
+        self.date: str = date or DEFAULT_DATE
+        self.value = value
+
+    def __str__(self):
+        return f'{self.date} {self.value}'
 
 
 class Progress:
     def __init__(self, current: str):
         self.events: List[Event] = [Event(current)]
 
-    def add(self, date: str, previous: str, current: str = None):
-        if current and self.events[-1].value != current:
-            print(f'Gaps in progress for {date}, {previous} -> {current}: {[str(event) for event in self.events]}')
-        self.events.append(Event(previous, date))
-
-
-class Event:
-    def __init__(self, value: str, date: str = None):
-        self.date: str = date or today_str()
-        self.value = value
-
-    def __str__(self):
-        return f'{self.date} {self.value}'
+    def add(self, date: str, previous: str, current: str):
+        if self.events[-1].value != current:
+            event_str: List[str] = [str(event) for event in self.events]
+            print(f'Gaps in progress for {date}, {previous} -> {current}: {event_str}')
+        self.events[-1].date = date
+        self.events.append(Event(previous))
 
 
 class ProgressMap:
