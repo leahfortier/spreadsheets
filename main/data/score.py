@@ -25,6 +25,18 @@ class Score:
         self.speed: str = speed
         self.deaths: str = deaths
 
+    def get(self, score_type: ScoreType) -> str:
+        if score_type == ScoreType.SPEED:
+            return self.speed
+        if score_type == ScoreType.DEATH:
+            return self.deaths
+
+    def get_value(self, score_type: ScoreType) -> int:
+        if score_type == ScoreType.SPEED:
+            return self.get_speed_millis()
+        if score_type == ScoreType.DEATH:
+            return self.get_deaths()
+
     def get_deaths(self) -> int:
         return int(self.deaths)
 

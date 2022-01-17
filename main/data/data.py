@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+from main.data.scoreboard import Scoreboard
 from main.util.constants import CHAPTER, MODE, RESERVED, SPREADSHEET_ID
 from main.util.sheets import get_sheet_data
 
@@ -37,11 +38,13 @@ class Data:
 
     def get(self, key: str, row: List[str]) -> str:
         if not self.has(key):
-            print("Key '" + key + "' not in schema.")
-            return ""
+            print(f'Key {key} not in schema.')
+            return ''
 
-        value: str = row[self.schema.get(key)]
-        return value
+        return row[self.schema.get(key)]
+
+    def to_board(self) -> Scoreboard:
+        return Scoreboard(self.player_names, self.rows)
 
 
 def read_item_sheet(tab_name: str) -> Data:
