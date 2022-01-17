@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 from typing import List
 
+from main.util.constants import EMPTY_FIELD
 from main.util.time import millis_to_string, string_to_millis
 
 
@@ -51,7 +52,7 @@ class ScoreCounter:
         self.invalid: bool = False
 
     def add(self, score: Score) -> None:
-        if self.invalid or score.speed == '--' or score.deaths == '--':
+        if self.invalid or score.speed == EMPTY_FIELD or score.deaths == EMPTY_FIELD:
             self.invalid = True
         else:
             self.speed_total += score.get_speed_millis()
@@ -59,5 +60,5 @@ class ScoreCounter:
 
     def get(self) -> Score:
         if self.invalid:
-            return Score('--', '--')
+            return Score(EMPTY_FIELD, EMPTY_FIELD)
         return Score(millis_to_string(self.speed_total), str(self.death_total))

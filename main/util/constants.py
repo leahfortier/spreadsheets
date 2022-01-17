@@ -9,6 +9,7 @@ CHAPTER = 'Chapter'
 RESERVED = [MODE, CHAPTER]
 
 DEFAULT_DATE = '01/01/22'
+EMPTY_FIELD = '--'
 
 PREVIOUS_FILE = with_path('previous.csv')
 DIFFS_FILE = with_path('changelog.csv')
