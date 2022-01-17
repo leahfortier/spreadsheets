@@ -32,14 +32,15 @@ class Diff:
     def __str__(self):
         return f'{self.date}' \
                f'\t{self.player_name:10}' \
-               f'\t{self.level:30}' \
+               f'\t{self.level.name():30}' \
+               f'\t{self.type.value}' \
                f'\t{self.old:>12}' \
                f'\t{self.new:>12}'
 
 
 def add_diff(diffs: List[Diff], player_name: str, level: Level, score_type: ScoreType, old: str, new: str):
     if old != new:
-        diffs.append(Diff(player_name, level, score_type.value, old, new))
+        diffs.append(Diff(player_name, level, score_type, old, new))
 
 
 def player_diff(player_name: str, old: Player, new: Player) -> List[Diff]:

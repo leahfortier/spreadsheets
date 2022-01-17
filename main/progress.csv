@@ -83,16 +83,16 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/22,L,Any% Split,Forsaken City,Deaths,0
 01/01/22,L,Any% Split,Old Site,Speed,2:44.628
 01/01/22,L,Any% Split,Old Site,Deaths,2
-01/01/22,L,Any% Split,Celestial Resort,Speed,10:05.642
-01/01/22,L,Any% Split,Celestial Resort,Deaths,25
-01/01/22,L,Any% Split,Golden Ridge,Speed,4:50.581
-01/01/22,L,Any% Split,Golden Ridge,Deaths,4
+01/01/22,L,Any% Split,Celestial Resort,Speed,7:57.904
+01/01/22,L,Any% Split,Celestial Resort,Deaths,11
+01/01/22,L,Any% Split,Golden Ridge,Speed,4:46.977
+01/01/22,L,Any% Split,Golden Ridge,Deaths,2
 01/01/22,L,Any% Split,Mirror Temple,Speed,7:29.208
 01/01/22,L,Any% Split,Mirror Temple,Deaths,1
 01/01/22,L,Any% Split,Reflection,Speed,9:54.065
-01/01/22,L,Any% Split,Reflection,Deaths,18
+01/01/22,L,Any% Split,Reflection,Deaths,16
 01/01/22,L,Any% Split,The Summit,Speed,14:56.053
-01/01/22,L,Any% Split,The Summit,Deaths,22
+01/01/22,L,Any% Split,The Summit,Deaths,18
 01/01/22,L,Farewell,Clear,Speed,44:56.234
 01/01/22,L,Farewell,Clear,Deaths,170
 01/01/22,L,Farewell,Moon Berry,Speed,1:11:35.093
@@ -143,6 +143,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/22,Marcos,A-Side,The Summit,Speed,13:34.079
 01/01/22,Marcos,A-Side,The Summit,Deaths,13
 01/01/22,Marcos,A-Side,Core,Speed,10:55:26
+01/17/22,Marcos,A-Side,Core,Speed,10:45.626
 01/01/22,Marcos,A-Side,Core,Deaths,34
 01/01/22,Marcos,B-Side,Forsaken City,Speed,3:15.806
 01/01/22,Marcos,B-Side,Forsaken City,Deaths,6
@@ -196,14 +197,14 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/22,Marcos,Any% Split,Forsaken City,Deaths,2
 01/01/22,Marcos,Any% Split,Old Site,Speed,2:25.622
 01/01/22,Marcos,Any% Split,Old Site,Deaths,0
-01/01/22,Marcos,Any% Split,Celestial Resort,Speed,8:27.943
-01/01/22,Marcos,Any% Split,Celestial Resort,Deaths,21
+01/01/22,Marcos,Any% Split,Celestial Resort,Speed,7:40.156
+01/01/22,Marcos,Any% Split,Celestial Resort,Deaths,10
 01/01/22,Marcos,Any% Split,Golden Ridge,Speed,5:06.340
-01/01/22,Marcos,Any% Split,Golden Ridge,Deaths,10
-01/01/22,Marcos,Any% Split,Mirror Temple,Speed,8:17.505
-01/01/22,Marcos,Any% Split,Mirror Temple,Deaths,10
-01/01/22,Marcos,Any% Split,Reflection,Speed,8:57.608
-01/01/22,Marcos,Any% Split,Reflection,Deaths,14
+01/01/22,Marcos,Any% Split,Golden Ridge,Deaths,6
+01/01/22,Marcos,Any% Split,Mirror Temple,Speed,7:39.051
+01/01/22,Marcos,Any% Split,Mirror Temple,Deaths,8
+01/01/22,Marcos,Any% Split,Reflection,Speed,8:48.462
+01/01/22,Marcos,Any% Split,Reflection,Deaths,12
 01/01/22,Marcos,Any% Split,The Summit,Speed,14:29.244
 01/01/22,Marcos,Any% Split,The Summit,Deaths,29
 01/01/22,Marcos,Farewell,Clear,Speed,32:18.255
@@ -253,6 +254,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/09/22,Melanie,A-Side,Celestial Resort,Speed,9:49.611
 01/11/22,Melanie,A-Side,Celestial Resort,Speed,9:25.386
 01/11/22,Melanie,A-Side,Celestial Resort,Speed,8:33.281
+01/17/22,Melanie,A-Side,Celestial Resort,Speed,8:28.368
 01/01/22,Melanie,A-Side,Celestial Resort,Deaths,281
 01/06/22,Melanie,A-Side,Celestial Resort,Deaths,61
 01/06/22,Melanie,A-Side,Celestial Resort,Deaths,40
@@ -302,10 +304,12 @@ Date,Player,Mode,Chapter,Type,Value
 01/10/22,Melanie,A-Side,The Summit,Speed,23:00.043
 01/12/22,Melanie,A-Side,The Summit,Speed,16:55.461
 01/14/22,Melanie,A-Side,The Summit,Speed,16:53.387
+01/17/22,Melanie,A-Side,The Summit,Speed,15:19.938
 01/01/22,Melanie,A-Side,The Summit,Deaths,314
 01/09/22,Melanie,A-Side,The Summit,Deaths,270
 01/10/22,Melanie,A-Side,The Summit,Deaths,62
 01/12/22,Melanie,A-Side,The Summit,Deaths,24
+01/17/22,Melanie,A-Side,The Summit,Deaths,15
 01/01/22,Melanie,A-Side,Core,Speed,29:37.707
 01/15/22,Melanie,A-Side,Core,Speed,19:08.214
 01/01/22,Melanie,A-Side,Core,Deaths,152
@@ -373,9 +377,9 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/22,Melanie,Any% Split,Mirror Temple,Speed,9:30.282
 01/01/22,Melanie,Any% Split,Mirror Temple,Deaths,13
 01/01/22,Melanie,Any% Split,Reflection,Speed,11:48.594
-01/01/22,Melanie,Any% Split,Reflection,Deaths,28
-01/01/22,Melanie,Any% Split,The Summit,Speed,19:13.722
-01/01/22,Melanie,Any% Split,The Summit,Deaths,36
+01/01/22,Melanie,Any% Split,Reflection,Deaths,25
+01/01/22,Melanie,Any% Split,The Summit,Speed,18:07.524
+01/01/22,Melanie,Any% Split,The Summit,Deaths,30
 01/01/22,Melanie,Farewell,Clear,Speed,--
 01/01/22,Melanie,Farewell,Clear,Deaths,--
 01/01/22,Melanie,Farewell,Moon Berry,Speed,--

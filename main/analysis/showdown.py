@@ -31,7 +31,7 @@ def read_showdown(tab_name, board: Scoreboard):
             best_score: Score = player.get(level)
             for score_type in SCORE_TYPES:
                 add_update(updates, player_name, level, score_type, showdown_score, best_score)
-                if check_split and level.mode != Mode.FULL_RUN.value:
+                if check_split and level.mode == Mode.A_SIDE.value:
                     split_level: Level = Level(Mode.ANY_SPLIT.value, level.chapter)
                     best_split: Score = player.get(split_level)
                     add_update(updates, player_name, split_level, score_type, showdown_score, best_split)
