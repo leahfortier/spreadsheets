@@ -1,4 +1,11 @@
+from enum import Enum, auto
+
 from main.util.time import millis_to_string, string_to_millis
+
+
+class ScoreType(Enum):
+    SPEED = 'Speed'
+    DEATH = 'Death'
 
 
 class Score:

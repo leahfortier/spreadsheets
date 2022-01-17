@@ -21,6 +21,6 @@ def best_possible(board: Scoreboard):
             check_updates(
                 full_run.value,
                 player_name,
-                records.get(Mode.BEST_POSSIBLE.get_level(full_run)),
+                records.get(Mode.BEST_POSSIBLE.level(full_run)),
                 records.get_best_possible(full_run.get_levels())
             )

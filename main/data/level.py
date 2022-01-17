@@ -3,8 +3,22 @@ from enum import Enum
 from typing import List, Dict
 
 
-def get_level_name(mode: str, chapter: str) -> str:
-    return mode + " - " + chapter
+class Level:
+    def __init__(self, mode: str, chapter: str):
+        self.mode = mode
+        self.chapter = chapter
+
+    def __str__(self):
+        return self.name()
+
+    def __eq__(self, other):
+        return self.name() == other.name()
+
+    def __hash__(self):
+        return hash(self.name())
+
+    def name(self) -> str:
+        return self.mode + " - " + self.chapter
 
 
 class Mode(Enum):
@@ -17,18 +31,18 @@ class Mode(Enum):
     FULL_RUN = 'Full Run'
     BEST_POSSIBLE = 'Best Possible*'
 
-    def get_level(self, chapter: Enum):
-        return get_level_name(self.value, chapter.value)
+    def level(self, chapter: Enum) -> Level:
+        return Level(self.value, chapter.value)
 
-    def get_any_percent_levels(self) -> List[str]:
+    def get_any_percent_levels(self) -> List[Level]:
         return [
-            self.get_level(chapter)
+            self.level(chapter)
             for chapter in ANY_PERCENT_CHAPTERS
         ]
 
-    def get_all_levels(self) -> List[str]:
+    def get_all_levels(self) -> List[Level]:
         return [
-            self.get_level(chapter)
+            self.level(chapter)
             for chapter in CHAPTERS
         ]
 
@@ -44,7 +58,7 @@ class Chapter(Enum):
     CORE = 'Core'
 
 
-class FarewellChapter(Enum):
+class Farewell(Enum):
     CLEAR = 'Clear'
     MOON_BERRY = 'Moon Berry'
 
@@ -55,7 +69,7 @@ class FullRun(Enum):
     HUNDRED_MINUS = '100%-'
     FULL_HUNDRED = '100%'
 
-    def get_levels(self) -> List[str]:
+    def get_levels(self) -> List[Level]:
         return _FULL_RUN_MAP[self]
 
 
@@ -65,14 +79,13 @@ FULL_RUNS: List[FullRun] = list(FullRun)
 
 ANY_PERCENT_CHAPTERS: List[Chapter] = [chapter for chapter in CHAPTERS if chapter != Chapter.CORE]
 
-_HUNDRED_MINUS_LEVELS: List[str] = Mode.FULL_CLEAR.get_all_levels() \
+_HUNDRED_MINUS_LEVELS: List[Level] = Mode.FULL_CLEAR.get_all_levels() \
                                    + Mode.B_SIDE.get_all_levels() \
                                    + Mode.C_SIDE.get_all_levels()
-_MOON_BERRY: str = Mode.FAREWELL.get_level(FarewellChapter.MOON_BERRY)
 
-_FULL_RUN_MAP: Dict[FullRun, List[str]] = {
+_FULL_RUN_MAP: Dict[FullRun, List[Level]] = {
     FullRun.ANY_SPLIT: Mode.ANY_SPLIT.get_any_percent_levels(),
     FullRun.ANY_PERCENT: Mode.A_SIDE.get_any_percent_levels(),
     FullRun.HUNDRED_MINUS: _HUNDRED_MINUS_LEVELS,
-    FullRun.FULL_HUNDRED: _HUNDRED_MINUS_LEVELS + [_MOON_BERRY],
+    FullRun.FULL_HUNDRED: _HUNDRED_MINUS_LEVELS + [Mode.FAREWELL.level(Farewell.MOON_BERRY)],
 }
