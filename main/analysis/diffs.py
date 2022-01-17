@@ -1,17 +1,17 @@
-from datetime import date as datetime
 from typing import List
 
 from main.data.level import Level
-from main.data.records import Records
-from main.data.score import Score, ScoreType
+from main.data.player import Player
+from main.data.score import Score, ScoreType, get_score_type
 from main.data.scoreboard import Scoreboard
 from main.util.constants import PREVIOUS_FILE, DIFFS_FILE
 from main.util.file_io import from_csv, from_file, to_file
+from main.util.time import today_str
 
 
 class Diff:
-    def __init__(self, player_name: str, level: Level, score_type: str, old: str, new: str, date: str = None):
-        self.date: str = date or datetime.today().strftime("%m/%d/%y")
+    def __init__(self, player_name: str, level: Level, score_type: ScoreType, old: str, new: str, date: str = None):
+        self.date = date or today_str()
         self.player_name = player_name
         self.level = level
         self.type = score_type
@@ -24,7 +24,7 @@ class Diff:
             self.player_name,
             self.level.mode,
             self.level.chapter,
-            self.type,
+            self.type.value,
             self.old,
             self.new
         ])
@@ -42,7 +42,7 @@ def add_diff(diffs: List[Diff], player_name: str, level: Level, score_type: Scor
         diffs.append(Diff(player_name, level, score_type.value, old, new))
 
 
-def records_diff(player_name: str, old: Records, new: Records) -> List[Diff]:
+def player_diff(player_name: str, old: Player, new: Player) -> List[Diff]:
     diffs: List[Diff] = []
     for level in old.levels():
         old_score: Score = old.get(level)
@@ -55,9 +55,9 @@ def records_diff(player_name: str, old: Records, new: Records) -> List[Diff]:
 def board_diff(old: Scoreboard, new: Scoreboard) -> List[Diff]:
     diffs: List[Diff] = []
     for player_name in old.players():
-        first_records = old.get(player_name)
-        second_records = new.get(player_name)
-        diffs += records_diff(player_name, first_records, second_records)
+        first_player: Player = old.get(player_name)
+        second_player: Player = new.get(player_name)
+        diffs += player_diff(player_name, first_player, second_player)
     return diffs
 
 
@@ -76,20 +76,19 @@ def add_diffs(new_board: Scoreboard):
     write_diffs(diffs)
 
 
-def line_to_diff(line: str) -> Diff:
-    split: List[str] = line.split(",")
+def row_to_diff(row: List[str]) -> Diff:
     return Diff(
-        date=split[0],
-        player_name=split[1],
-        level=Level(split[2], split[3]),
-        score_type=split[4],
-        old=split[5],
-        new=split[6]
+        date=row[0],
+        player_name=row[1],
+        level=Level(row[2], row[3]),
+        score_type=get_score_type(row[4]),
+        old=row[5],
+        new=row[6]
     )
 
 
 def read_diffs() -> List[Diff]:
-    return [line_to_diff(diffy) for diffy in from_file(DIFFS_FILE)[1:]]
+    return [row_to_diff(row) for row in from_csv(DIFFS_FILE)[1:]]
 
 
 def write_diffs(new_diffs: List[Diff]) -> None:

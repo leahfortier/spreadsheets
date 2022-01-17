@@ -1,4 +1,5 @@
 import re
+from datetime import date
 
 SECOND_MILLIS = 1000
 MINUTE_MILLIS = 60 * SECOND_MILLIS
@@ -29,3 +30,7 @@ def millis_to_string(millis: int) -> str:
     millis -= seconds * SECOND_MILLIS
     hours_minutes = f'{minutes}' if hours == 0 else f'{hours}:{minutes:02}'
     return f'{hours_minutes}:{seconds:02}.{millis:03}'
+
+
+def today_str() -> str:
+    return date.today().strftime("%m/%d/%y")

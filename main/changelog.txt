@@ -100,16 +100,16 @@ Date,Name,Mode,Chapter,Type,Old,New
 01/15/22,Melanie,A-Side,Core,Deaths,152,98
 01/15/22,Melanie,Full Run,Any%,Speed,1:03:12,1:00:30.877
 01/15/22,Melanie,Full Run,Any%,Deaths,112,101
-01/15/22,L,Best Possible,Any%,Deaths,--,14
-01/15/22,Marcos,Best Possible,Any%,Deaths,--,31
-01/15/22,Melanie,Best Possible,Any%,Deaths,--,53
-01/15/22,L,Best Possible,Any% Split,Speed,--,51:31.025
-01/15/22,L,Best Possible,Any% Split,Deaths,--,72
-01/15/22,Marcos,Best Possible,Any% Split,Speed,--,49:16.351
-01/15/22,Marcos,Best Possible,Any% Split,Deaths,--,86
-01/15/22,Melanie,Best Possible,Any% Split,Speed,--,59:30.306
-01/15/22,Melanie,Best Possible,Any% Split,Deaths,--,101
-01/15/22,L,Best Possible,100%-,Speed,--,3:35:23.755
-01/15/22,L,Best Possible,100%-,Deaths,--,554
-01/15/22,L,Best Possible,100%,Speed,--,4:31:23.601
-01/15/22,L,Best Possible,100%,Deaths,--,793
+01/15/22,L,Best Possible*,Any%,Deaths,--,14
+01/15/22,Marcos,Best Possible*,Any%,Deaths,--,31
+01/15/22,Melanie,Best Possible*,Any%,Deaths,--,53
+01/15/22,L,Best Possible*,Any% Split,Speed,--,51:31.025
+01/15/22,L,Best Possible*,Any% Split,Deaths,--,72
+01/15/22,Marcos,Best Possible*,Any% Split,Speed,--,49:16.351
+01/15/22,Marcos,Best Possible*,Any% Split,Deaths,--,86
+01/15/22,Melanie,Best Possible*,Any% Split,Speed,--,59:30.306
+01/15/22,Melanie,Best Possible*,Any% Split,Deaths,--,101
+01/15/22,L,Best Possible*,100%-,Speed,--,3:35:23.755
+01/15/22,L,Best Possible*,100%-,Deaths,--,554
+01/15/22,L,Best Possible*,100%,Speed,--,4:31:23.601
+01/15/22,L,Best Possible*,100%,Deaths,--,793

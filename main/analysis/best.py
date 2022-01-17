@@ -1,5 +1,5 @@
 from main.data.level import Mode, FullRun, FULL_RUNS
-from main.data.records import Records
+from main.data.player import Player
 from main.data.score import Score
 from main.data.scoreboard import Scoreboard
 
@@ -16,11 +16,11 @@ def check_updates(title: str, player_name: str, old: Score, new: Score) -> None:
 
 def best_possible(board: Scoreboard):
     for player_name in board.players():
-        records: Records = board.get(player_name)
+        player: Player = board.get(player_name)
         for full_run in FULL_RUNS:
             check_updates(
                 full_run.value,
                 player_name,
-                records.get(Mode.BEST_POSSIBLE.level(full_run)),
-                records.get_best_possible(full_run.get_levels())
+                player.get(Mode.BEST_POSSIBLE.level(full_run)),
+                player.get_best_possible(full_run.get_levels())
             )

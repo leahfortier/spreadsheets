@@ -10,6 +10,7 @@ RESERVED = [MODE, CHAPTER]
 
 PREVIOUS_FILE = with_path('previous.csv')
 DIFFS_FILE = with_path('changelog.txt')
+PROGRESS_FILE = with_path('progress.txt')
 
 CREDENTIALS_FILE = with_path('credentials.json')
 PICKLE_FILE = with_path('token.pickle')

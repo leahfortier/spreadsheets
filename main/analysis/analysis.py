@@ -1,5 +1,6 @@
 from main.analysis.best import best_possible
 from main.analysis.diffs import add_diffs
+from main.analysis.progress import handle_progress
 from main.data.data import read_item_sheet, Data
 from main.util.file_io import to_csv
 from main.data.scoreboard import Scoreboard
@@ -12,6 +13,7 @@ def main():
 
     add_diffs(board)
     best_possible(board)
+    handle_progress(board)
 
     to_csv(PREVIOUS_FILE, sheet_data.rows)
 

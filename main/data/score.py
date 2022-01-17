@@ -1,11 +1,23 @@
 from enum import Enum, auto
 
+from typing import List
+
 from main.util.time import millis_to_string, string_to_millis
 
 
 class ScoreType(Enum):
     SPEED = 'Speed'
-    DEATH = 'Death'
+    DEATH = 'Deaths'
+
+
+SCORE_TYPES: List[ScoreType] = list(ScoreType)
+
+
+def get_score_type(value: str) -> ScoreType:
+    for score_type in SCORE_TYPES:
+        if score_type.value == value:
+            return score_type
+    print(f'Unknown score type {value}')
 
 
 class Score:
