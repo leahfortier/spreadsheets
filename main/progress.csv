@@ -90,6 +90,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Any% Split,Old Site,Speed,--
 08/12/2018,L,Any% Split,Old Site,Speed,3:09.193
 01/31/2019,L,Any% Split,Old Site,Speed,3:05.997
+02/02/2019,L,Any% Split,Old Site,Speed,3:02.478
 01/01/2022,L,Any% Split,Old Site,Deaths,--
 08/12/2018,L,Any% Split,Old Site,Deaths,1
 01/01/2022,L,Any% Split,Celestial Resort,Speed,--
@@ -98,17 +99,22 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Any% Split,Celestial Resort,Deaths,14
 01/01/2022,L,Any% Split,Golden Ridge,Speed,--
 08/12/2018,L,Any% Split,Golden Ridge,Speed,6:32.853
+02/02/2019,L,Any% Split,Golden Ridge,Speed,6:05.279
 01/01/2022,L,Any% Split,Golden Ridge,Deaths,--
 08/12/2018,L,Any% Split,Golden Ridge,Deaths,12
 01/31/2019,L,Any% Split,Golden Ridge,Deaths,11
+02/02/2019,L,Any% Split,Golden Ridge,Deaths,7
 01/01/2022,L,Any% Split,Mirror Temple,Speed,--
 08/12/2018,L,Any% Split,Mirror Temple,Speed,9:59.998
+02/02/2019,L,Any% Split,Mirror Temple,Speed,9:14.965
 01/01/2022,L,Any% Split,Mirror Temple,Deaths,--
 08/12/2018,L,Any% Split,Mirror Temple,Deaths,12
+02/02/2019,L,Any% Split,Mirror Temple,Deaths,8
 01/01/2022,L,Any% Split,Reflection,Speed,--
 08/12/2018,L,Any% Split,Reflection,Speed,17:01.615
 01/31/2019,L,Any% Split,Reflection,Speed,15:42.990
 01/31/2019,L,Any% Split,Reflection,Speed,13:16.263
+02/02/2019,L,Any% Split,Reflection,Speed,12:49.267
 01/01/2022,L,Any% Split,Reflection,Deaths,--
 08/12/2018,L,Any% Split,Reflection,Deaths,61
 01/31/2019,L,Any% Split,Reflection,Deaths,53
@@ -117,9 +123,11 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Any% Split,The Summit,Speed,20:37.243
 01/31/2019,L,Any% Split,The Summit,Speed,20:30.511
 01/31/2019,L,Any% Split,The Summit,Speed,19:25.061
+02/02/2019,L,Any% Split,The Summit,Speed,17:02.261
 01/01/2022,L,Any% Split,The Summit,Deaths,--
 08/12/2018,L,Any% Split,The Summit,Deaths,47
 01/31/2019,L,Any% Split,The Summit,Deaths,39
+02/02/2019,L,Any% Split,The Summit,Deaths,29
 01/01/2022,L,Farewell,Clear,Speed,44:56.234
 01/01/2022,L,Farewell,Clear,Deaths,170
 01/01/2022,L,Farewell,Moon Berry,Speed,1:11:35.093
@@ -129,9 +137,11 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Full Run,Any%,Speed,--
 08/12/2018,L,Full Run,Any%,Speed,1:08:51.765
 01/31/2019,L,Full Run,Any%,Speed,1:06:59.327
+02/02/2019,L,Full Run,Any%,Speed,1:00:22.819
 01/01/2022,L,Full Run,Any%,Deaths,--
 08/12/2018,L,Full Run,Any%,Deaths,150
 01/31/2019,L,Full Run,Any%,Deaths,123
+02/02/2019,L,Full Run,Any%,Deaths,101
 01/01/2022,L,Full Run,100%-,Speed,--
 01/01/2022,L,Full Run,100%-,Deaths,--
 01/01/2022,L,Full Run,100%,Speed,--
@@ -140,10 +150,12 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Best Possible*,Any% Split,Speed,1:08:02.159
 01/31/2019,L,Best Possible*,Any% Split,Speed,1:06:35.391
 01/31/2019,L,Best Possible*,Any% Split,Speed,1:02:50.787
+02/02/2019,L,Best Possible*,Any% Split,Speed,58:44.865
 01/01/2022,L,Best Possible*,Any% Split,Deaths,--
 08/12/2018,L,Best Possible*,Any% Split,Deaths,150
 01/31/2019,L,Best Possible*,Any% Split,Deaths,140
 01/31/2019,L,Best Possible*,Any% Split,Deaths,107
+02/02/2019,L,Best Possible*,Any% Split,Deaths,89
 01/01/2022,L,Best Possible*,Any%,Speed,47:22.553
 01/01/2022,L,Best Possible*,Any%,Deaths,--
 01/15/2022,L,Best Possible*,Any%,Deaths,14
