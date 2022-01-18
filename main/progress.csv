@@ -75,6 +75,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Full Clear,Mirror Temple,Deaths,32
 01/01/2022,L,Full Clear,Reflection,Speed,11:55.513
 01/01/2022,L,Full Clear,Reflection,Deaths,16
+09/09/2020,L,Full Clear,Reflection,Deaths,13
 01/01/2022,L,Full Clear,The Summit,Speed,34:01.428
 01/01/2022,L,Full Clear,The Summit,Deaths,92
 01/01/2022,L,Full Clear,Core,Speed,15:11.572
@@ -186,7 +187,9 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Full Run,100%-,Deaths,--
 09/07/2019,L,Full Run,100%-,Deaths,878
 01/01/2022,L,Full Run,100%,Speed,--
+09/09/2020,L,Full Run,100%,Speed,7:44:56.966
 01/01/2022,L,Full Run,100%,Deaths,--
+09/09/2020,L,Full Run,100%,Deaths,1832
 01/01/2022,L,Best Possible*,Any% Split,Speed,--
 08/12/2018,L,Best Possible*,Any% Split,Speed,1:08:02.159
 01/31/2019,L,Best Possible*,Any% Split,Speed,1:06:35.391
@@ -283,14 +286,17 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Marcos,Full Clear,Forsaken City,Deaths,11
 01/01/2022,Marcos,Full Clear,Old Site,Speed,6:21.310
 01/01/2022,Marcos,Full Clear,Old Site,Deaths,10
+09/09/2020,Marcos,Full Clear,Old Site,Deaths,8
 01/01/2022,Marcos,Full Clear,Celestial Resort,Speed,15:38.808
 01/01/2022,Marcos,Full Clear,Celestial Resort,Deaths,55
 01/01/2022,Marcos,Full Clear,Golden Ridge,Speed,17:23.494
 01/01/2022,Marcos,Full Clear,Golden Ridge,Deaths,--
+09/09/2020,Marcos,Full Clear,Golden Ridge,Deaths,55
 01/01/2022,Marcos,Full Clear,Mirror Temple,Speed,24:06.122
 01/01/2022,Marcos,Full Clear,Mirror Temple,Deaths,54
 01/01/2022,Marcos,Full Clear,Reflection,Speed,10:29.748
 01/01/2022,Marcos,Full Clear,Reflection,Deaths,16
+09/09/2020,Marcos,Full Clear,Reflection,Deaths,14
 01/01/2022,Marcos,Full Clear,The Summit,Speed,45:58.420
 01/01/2022,Marcos,Full Clear,The Summit,Deaths,--
 01/01/2022,Marcos,Full Clear,Core,Speed,14:11.360
@@ -339,7 +345,9 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Marcos,Full Run,100%-,Deaths,--
 09/07/2019,Marcos,Full Run,100%-,Deaths,963
 01/01/2022,Marcos,Full Run,100%,Speed,--
+09/09/2020,Marcos,Full Run,100%,Speed,6:52:23.347
 01/01/2022,Marcos,Full Run,100%,Deaths,--
+09/09/2020,Marcos,Full Run,100%,Deaths,1727
 01/01/2022,Marcos,Best Possible*,Any% Split,Speed,--
 02/06/2019,Marcos,Best Possible*,Any% Split,Speed,55:21.137
 09/06/2020,Marcos,Best Possible*,Any% Split,Speed,54:29.593
