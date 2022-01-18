@@ -85,8 +85,6 @@ Date,Player,Mode,Chapter,Type,Old,New
 01/12/2022,L,A-Side,Golden Ridge,Speed,4:53.998,4:44.138
 01/12/2022,Marcos,A-Side,Celestial Resort,Speed,7:41.618,7:37.300
 01/12/2022,Marcos,A-Side,Celestial Resort,Deaths,12,10
-01/12/2022,Melanie,Full Run,Any%,Speed,--,1:03:12
-01/12/2022,Melanie,Full Run,Any%,Deaths,--,112
 01/14/2022,Melanie,A-Side,Old Site,Speed,2:42.877,2:34.666
 01/14/2022,Melanie,A-Side,Golden Ridge,Deaths,1,0
 01/14/2022,Melanie,A-Side,Mirror Temple,Speed,8:42.665,7:52.634
@@ -98,17 +96,9 @@ Date,Player,Mode,Chapter,Type,Old,New
 01/14/2022,Melanie,C-Side,Forsaken City,Deaths,--,28
 01/15/2022,Melanie,A-Side,Core,Speed,29:37.707,19:08.214
 01/15/2022,Melanie,A-Side,Core,Deaths,152,98
-01/15/2022,Melanie,Full Run,Any%,Speed,1:03:12,1:00:30.877
-01/15/2022,Melanie,Full Run,Any%,Deaths,112,101
 01/15/2022,L,Best Possible*,Any%,Deaths,--,14
 01/15/2022,Marcos,Best Possible*,Any%,Deaths,--,31
 01/15/2022,Melanie,Best Possible*,Any%,Deaths,--,53
-01/15/2022,L,Best Possible*,Any% Split,Speed,--,51:31.025
-01/15/2022,L,Best Possible*,Any% Split,Deaths,--,72
-01/15/2022,Marcos,Best Possible*,Any% Split,Speed,--,49:16.351
-01/15/2022,Marcos,Best Possible*,Any% Split,Deaths,--,86
-01/15/2022,Melanie,Best Possible*,Any% Split,Speed,--,59:30.306
-01/15/2022,Melanie,Best Possible*,Any% Split,Deaths,--,101
 01/15/2022,L,Best Possible*,100%-,Speed,--,3:35:23.755
 01/15/2022,L,Best Possible*,100%-,Deaths,--,554
 01/15/2022,L,Best Possible*,100%,Speed,--,4:31:23.601
@@ -116,3 +106,5 @@ Date,Player,Mode,Chapter,Type,Old,New
 01/17/2022,Melanie,A-Side,Celestial Resort,Speed,8:33.281,8:28.368
 01/17/2022,Melanie,A-Side,The Summit,Speed,16:53.387,15:19.938
 01/17/2022,Melanie,A-Side,The Summit,Deaths,24,15
+01/17/2022,Melanie,Best Possible*,Any%,Speed,52:02.135,50:23.773
+01/17/2022,Melanie,Best Possible*,Any%,Deaths,53,44

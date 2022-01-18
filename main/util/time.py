@@ -33,4 +33,4 @@ def millis_to_string(millis: int) -> str:
 
 
 def today_str() -> str:
-    return date.today().strftime("%m/%d/%y")
+    return date.today().strftime("%m/%d/%Y")

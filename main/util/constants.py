@@ -2,13 +2,16 @@ from main.util.file_io import with_path
 
 # Spreadsheet Link: https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>
 SPREADSHEET_ID = '1Sj8JsgVGipsAsHq5V4AIrLnBf_vzHmUbSWN2WnZAiZI'
-TAB_NAME = 'Scoreboard'
+BOARD_TAB = 'Scoreboard'
+SHOWDOWN_TABS = [
+    '08/12/2018 Any%'
+]
 
 MODE = 'Mode'
 CHAPTER = 'Chapter'
 RESERVED = [MODE, CHAPTER]
 
-DEFAULT_DATE = '01/01/22'
+DEFAULT_DATE = '01/01/2022'
 EMPTY_FIELD = '--'
 
 PREVIOUS_FILE = with_path('previous.csv')

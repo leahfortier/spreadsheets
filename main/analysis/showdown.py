@@ -5,19 +5,19 @@ from main.data.level import Level, Mode, FullRun
 from main.data.player import Player
 from main.data.score import Score, ScoreType, SCORE_TYPES
 from main.data.scoreboard import Scoreboard
+from main.util.constants import EMPTY_FIELD
 
 
 def add_update(updates: List[str], player_name: str, level: Level, score_type: ScoreType, current_score: Score, best_score: Score) -> None:
+    current: str = current_score.get(score_type)
+    best: str = best_score.get(score_type)
     current_value: int = current_score.get_value(score_type)
-    best_value: int = best_score.get_value(score_type)
+    best_value: int = current_value + 1 if best == EMPTY_FIELD else best_score.get_value(score_type)
     if current_value < best_value:
-        updates.append(
-            f'Update for {player_name}\'s {level} {score_type.value}!!:'
-            f' {best_score.get(score_type)} -> {current_score.get(score_type)}'
-        )
+        updates.append(f'Update for {player_name}\'s {level} {score_type.value}!!: {best} -> {current}')
 
 
-def read_showdown(tab_name, board: Scoreboard):
+def read_showdown(tab_name: str, board: Scoreboard):
     sheet_data: Data = read_item_sheet(tab_name)
     showdown: Scoreboard = sheet_data.to_board()
 
