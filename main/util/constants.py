@@ -22,6 +22,7 @@ SHOWDOWN_TABS = [
     '09/11/2020 Any%',
     '09/11/2020 Invisible Any%',
     '09/18/2020 Any%',
+    '09/18/2020 100%',
 ]
 
 MODE = 'Mode'
