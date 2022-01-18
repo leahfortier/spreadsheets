@@ -6,6 +6,7 @@ BOARD_TAB = 'Scoreboard'
 SHOWDOWN_TABS = [
     '08/12/2018 Any%',
     '01/31/2019 Any% (1)',
+    '01/31/2019 Any% (2)',
 ]
 
 MODE = 'Mode'

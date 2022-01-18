@@ -82,11 +82,14 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Any% Split,Forsaken City,Speed,--
 08/12/2018,L,Any% Split,Forsaken City,Speed,1:52.523
 01/31/2019,L,Any% Split,Forsaken City,Speed,1:51.112
+01/31/2019,L,Any% Split,Forsaken City,Speed,1:41.881
 01/01/2022,L,Any% Split,Forsaken City,Deaths,--
 08/12/2018,L,Any% Split,Forsaken City,Deaths,3
 01/31/2019,L,Any% Split,Forsaken City,Deaths,2
+01/31/2019,L,Any% Split,Forsaken City,Deaths,1
 01/01/2022,L,Any% Split,Old Site,Speed,--
 08/12/2018,L,Any% Split,Old Site,Speed,3:09.193
+01/31/2019,L,Any% Split,Old Site,Speed,3:05.997
 01/01/2022,L,Any% Split,Old Site,Deaths,--
 08/12/2018,L,Any% Split,Old Site,Deaths,1
 01/01/2022,L,Any% Split,Celestial Resort,Speed,--
@@ -105,14 +108,18 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Any% Split,Reflection,Speed,--
 08/12/2018,L,Any% Split,Reflection,Speed,17:01.615
 01/31/2019,L,Any% Split,Reflection,Speed,15:42.990
+01/31/2019,L,Any% Split,Reflection,Speed,13:16.263
 01/01/2022,L,Any% Split,Reflection,Deaths,--
 08/12/2018,L,Any% Split,Reflection,Deaths,61
 01/31/2019,L,Any% Split,Reflection,Deaths,53
+01/31/2019,L,Any% Split,Reflection,Deaths,29
 01/01/2022,L,Any% Split,The Summit,Speed,--
 08/12/2018,L,Any% Split,The Summit,Speed,20:37.243
 01/31/2019,L,Any% Split,The Summit,Speed,20:30.511
+01/31/2019,L,Any% Split,The Summit,Speed,19:25.061
 01/01/2022,L,Any% Split,The Summit,Deaths,--
 08/12/2018,L,Any% Split,The Summit,Deaths,47
+01/31/2019,L,Any% Split,The Summit,Deaths,39
 01/01/2022,L,Farewell,Clear,Speed,44:56.234
 01/01/2022,L,Farewell,Clear,Deaths,170
 01/01/2022,L,Farewell,Moon Berry,Speed,1:11:35.093
@@ -121,8 +128,10 @@ Date,Player,Mode,Chapter,Type,Value
 01/04/2022,L,Farewell,Moon Berry,Deaths,239
 01/01/2022,L,Full Run,Any%,Speed,--
 08/12/2018,L,Full Run,Any%,Speed,1:08:51.765
+01/31/2019,L,Full Run,Any%,Speed,1:06:59.327
 01/01/2022,L,Full Run,Any%,Deaths,--
 08/12/2018,L,Full Run,Any%,Deaths,150
+01/31/2019,L,Full Run,Any%,Deaths,123
 01/01/2022,L,Full Run,100%-,Speed,--
 01/01/2022,L,Full Run,100%-,Deaths,--
 01/01/2022,L,Full Run,100%,Speed,--
@@ -130,9 +139,11 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Best Possible*,Any% Split,Speed,--
 08/12/2018,L,Best Possible*,Any% Split,Speed,1:08:02.159
 01/31/2019,L,Best Possible*,Any% Split,Speed,1:06:35.391
+01/31/2019,L,Best Possible*,Any% Split,Speed,1:02:50.787
 01/01/2022,L,Best Possible*,Any% Split,Deaths,--
 08/12/2018,L,Best Possible*,Any% Split,Deaths,150
 01/31/2019,L,Best Possible*,Any% Split,Deaths,140
+01/31/2019,L,Best Possible*,Any% Split,Deaths,107
 01/01/2022,L,Best Possible*,Any%,Speed,47:22.553
 01/01/2022,L,Best Possible*,Any%,Deaths,--
 01/15/2022,L,Best Possible*,Any%,Deaths,14
