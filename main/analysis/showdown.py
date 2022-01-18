@@ -10,6 +10,8 @@ from main.util.constants import EMPTY_FIELD
 
 def add_update(updates: List[str], player_name: str, level: Level, score_type: ScoreType, current_score: Score, best_score: Score) -> None:
     current: str = current_score.get(score_type)
+    if current == EMPTY_FIELD:
+        return
     best: str = best_score.get(score_type)
     current_value: int = current_score.get_value(score_type)
     best_value: int = current_value + 1 if best == EMPTY_FIELD else best_score.get_value(score_type)
