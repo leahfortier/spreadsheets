@@ -26,6 +26,9 @@ class Score:
         self.speed: str = speed
         self.deaths: str = deaths
 
+    def __str__(self):
+        return f'{self.speed} {self.deaths}'
+
     def get(self, score_type: ScoreType) -> str:
         if score_type == ScoreType.SPEED:
             return self.speed

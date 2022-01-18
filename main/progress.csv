@@ -91,8 +91,10 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Any% Split,Old Site,Speed,3:09.193
 01/31/2019,L,Any% Split,Old Site,Speed,3:05.997
 02/02/2019,L,Any% Split,Old Site,Speed,3:02.478
+02/05/2019,L,Any% Split,Old Site,Speed,2:57.004
 01/01/2022,L,Any% Split,Old Site,Deaths,--
 08/12/2018,L,Any% Split,Old Site,Deaths,1
+02/05/2019,L,Any% Split,Old Site,Deaths,0
 01/01/2022,L,Any% Split,Celestial Resort,Speed,--
 08/12/2018,L,Any% Split,Celestial Resort,Speed,8:48.734
 02/03/2019,L,Any% Split,Celestial Resort,Speed,8:39.044
@@ -103,10 +105,12 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Any% Split,Golden Ridge,Speed,6:32.853
 02/02/2019,L,Any% Split,Golden Ridge,Speed,6:05.279
 02/03/2019,L,Any% Split,Golden Ridge,Speed,5:58.496
+02/05/2019,L,Any% Split,Golden Ridge,Speed,5:45.848
 01/01/2022,L,Any% Split,Golden Ridge,Deaths,--
 08/12/2018,L,Any% Split,Golden Ridge,Deaths,12
 01/31/2019,L,Any% Split,Golden Ridge,Deaths,11
 02/02/2019,L,Any% Split,Golden Ridge,Deaths,7
+02/05/2019,L,Any% Split,Golden Ridge,Deaths,5
 01/01/2022,L,Any% Split,Mirror Temple,Speed,--
 08/12/2018,L,Any% Split,Mirror Temple,Speed,9:59.998
 02/02/2019,L,Any% Split,Mirror Temple,Speed,9:14.965
@@ -129,6 +133,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/31/2019,L,Any% Split,The Summit,Speed,20:30.511
 01/31/2019,L,Any% Split,The Summit,Speed,19:25.061
 02/02/2019,L,Any% Split,The Summit,Speed,17:02.261
+02/05/2019,L,Any% Split,The Summit,Speed,16:53.778
 01/01/2022,L,Any% Split,The Summit,Deaths,--
 08/12/2018,L,Any% Split,The Summit,Deaths,47
 01/31/2019,L,Any% Split,The Summit,Deaths,39
@@ -143,6 +148,7 @@ Date,Player,Mode,Chapter,Type,Value
 08/12/2018,L,Full Run,Any%,Speed,1:08:51.765
 01/31/2019,L,Full Run,Any%,Speed,1:06:59.327
 02/02/2019,L,Full Run,Any%,Speed,1:00:22.819
+02/05/2019,L,Full Run,Any%,Speed,59:45.266
 01/01/2022,L,Full Run,Any%,Deaths,--
 08/12/2018,L,Full Run,Any%,Deaths,150
 01/31/2019,L,Full Run,Any%,Deaths,123
@@ -158,12 +164,14 @@ Date,Player,Mode,Chapter,Type,Value
 01/31/2019,L,Best Possible*,Any% Split,Speed,1:02:50.787
 02/02/2019,L,Best Possible*,Any% Split,Speed,58:44.865
 02/03/2019,L,Best Possible*,Any% Split,Speed,56:46.647
+02/05/2019,L,Best Possible*,Any% Split,Speed,56:20.042
 01/01/2022,L,Best Possible*,Any% Split,Deaths,--
 08/12/2018,L,Best Possible*,Any% Split,Deaths,150
 01/31/2019,L,Best Possible*,Any% Split,Deaths,140
 01/31/2019,L,Best Possible*,Any% Split,Deaths,107
 02/02/2019,L,Best Possible*,Any% Split,Deaths,89
 02/03/2019,L,Best Possible*,Any% Split,Deaths,72
+02/05/2019,L,Best Possible*,Any% Split,Deaths,69
 01/01/2022,L,Best Possible*,Any%,Speed,47:22.553
 01/01/2022,L,Best Possible*,Any%,Deaths,--
 01/15/2022,L,Best Possible*,Any%,Deaths,14
