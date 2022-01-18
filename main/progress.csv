@@ -125,6 +125,7 @@ Date,Player,Mode,Chapter,Type,Value
 02/02/2019,L,Any% Split,Mirror Temple,Speed,9:14.965
 02/06/2019,L,Any% Split,Mirror Temple,Speed,8:17.794
 09/04/2019,L,Any% Split,Mirror Temple,Speed,7:43.913
+09/11/2020,L,Any% Split,Mirror Temple,Speed,7:43.590
 01/01/2022,L,Any% Split,Mirror Temple,Deaths,--
 08/12/2018,L,Any% Split,Mirror Temple,Deaths,12
 02/02/2019,L,Any% Split,Mirror Temple,Deaths,8
@@ -203,6 +204,7 @@ Date,Player,Mode,Chapter,Type,Value
 02/15/2019,L,Best Possible*,Any% Split,Speed,53:14.045
 08/31/2019,L,Best Possible*,Any% Split,Speed,52:43.892
 09/04/2019,L,Best Possible*,Any% Split,Speed,50:18.401
+09/11/2020,L,Best Possible*,Any% Split,Speed,50:18.078
 01/01/2022,L,Best Possible*,Any% Split,Deaths,--
 08/12/2018,L,Best Possible*,Any% Split,Deaths,150
 01/31/2019,L,Best Possible*,Any% Split,Deaths,140
@@ -222,10 +224,12 @@ Date,Player,Mode,Chapter,Type,Value
 01/15/2022,L,Best Possible*,100%-,Speed,3:35:23.755
 01/01/2022,L,Best Possible*,100%-,Deaths,--
 01/15/2022,L,Best Possible*,100%-,Deaths,554
+09/09/2020,L,Best Possible*,100%-,Deaths,551
 01/01/2022,L,Best Possible*,100%,Speed,--
 01/15/2022,L,Best Possible*,100%,Speed,4:31:23.601
 01/01/2022,L,Best Possible*,100%,Deaths,--
 01/15/2022,L,Best Possible*,100%,Deaths,793
+09/09/2020,L,Best Possible*,100%,Deaths,790
 01/01/2022,Marcos,A-Side,Forsaken City,Speed,1:25.442
 01/06/2022,Marcos,A-Side,Forsaken City,Speed,1:21.294
 01/06/2022,Marcos,A-Side,Forsaken City,Speed,1:18.710
@@ -307,29 +311,36 @@ Date,Player,Mode,Chapter,Type,Value
 02/06/2019,Marcos,Any% Split,Forsaken City,Deaths,2
 01/01/2022,Marcos,Any% Split,Old Site,Speed,--
 02/06/2019,Marcos,Any% Split,Old Site,Speed,2:53.128
+09/11/2020,Marcos,Any% Split,Old Site,Speed,2:49.235
 01/01/2022,Marcos,Any% Split,Old Site,Deaths,--
 02/06/2019,Marcos,Any% Split,Old Site,Deaths,2
 01/01/2022,Marcos,Any% Split,Celestial Resort,Speed,--
 02/06/2019,Marcos,Any% Split,Celestial Resort,Speed,9:27.494
 09/06/2020,Marcos,Any% Split,Celestial Resort,Speed,9:16.427
+09/11/2020,Marcos,Any% Split,Celestial Resort,Speed,8:33.434
 01/01/2022,Marcos,Any% Split,Celestial Resort,Deaths,--
 02/06/2019,Marcos,Any% Split,Celestial Resort,Deaths,18
 01/01/2022,Marcos,Any% Split,Golden Ridge,Speed,--
 02/06/2019,Marcos,Any% Split,Golden Ridge,Speed,5:21.011
+09/11/2020,Marcos,Any% Split,Golden Ridge,Speed,5:12.545
 01/01/2022,Marcos,Any% Split,Golden Ridge,Deaths,--
 02/06/2019,Marcos,Any% Split,Golden Ridge,Deaths,5
 01/01/2022,Marcos,Any% Split,Mirror Temple,Speed,--
 02/06/2019,Marcos,Any% Split,Mirror Temple,Speed,8:18.457
+09/11/2020,Marcos,Any% Split,Mirror Temple,Speed,7:38.694
 01/01/2022,Marcos,Any% Split,Mirror Temple,Deaths,--
 02/06/2019,Marcos,Any% Split,Mirror Temple,Deaths,6
 01/01/2022,Marcos,Any% Split,Reflection,Speed,--
 02/06/2019,Marcos,Any% Split,Reflection,Speed,11:06.621
 09/06/2020,Marcos,Any% Split,Reflection,Speed,10:26.144
+09/11/2020,Marcos,Any% Split,Reflection,Speed,9:29.687
 01/01/2022,Marcos,Any% Split,Reflection,Deaths,--
 02/06/2019,Marcos,Any% Split,Reflection,Deaths,23
 09/06/2020,Marcos,Any% Split,Reflection,Deaths,17
+09/11/2020,Marcos,Any% Split,Reflection,Deaths,16
 01/01/2022,Marcos,Any% Split,The Summit,Speed,--
 02/06/2019,Marcos,Any% Split,The Summit,Speed,16:26.136
+09/11/2020,Marcos,Any% Split,The Summit,Speed,16:06.858
 01/01/2022,Marcos,Any% Split,The Summit,Deaths,--
 02/06/2019,Marcos,Any% Split,The Summit,Deaths,30
 01/01/2022,Marcos,Farewell,Clear,Speed,32:18.255
@@ -338,6 +349,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Marcos,Farewell,Moon Berry,Deaths,283
 01/01/2022,Marcos,Full Run,Any%,Speed,--
 02/06/2019,Marcos,Full Run,Any%,Speed,55:58.945
+09/11/2020,Marcos,Full Run,Any%,Speed,52:12.454
 01/01/2022,Marcos,Full Run,Any%,Deaths,--
 02/06/2019,Marcos,Full Run,Any%,Deaths,86
 01/01/2022,Marcos,Full Run,100%-,Speed,--
@@ -351,9 +363,11 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Marcos,Best Possible*,Any% Split,Speed,--
 02/06/2019,Marcos,Best Possible*,Any% Split,Speed,55:21.137
 09/06/2020,Marcos,Best Possible*,Any% Split,Speed,54:29.593
+09/11/2020,Marcos,Best Possible*,Any% Split,Speed,51:38.743
 01/01/2022,Marcos,Best Possible*,Any% Split,Deaths,--
 02/06/2019,Marcos,Best Possible*,Any% Split,Deaths,86
 09/06/2020,Marcos,Best Possible*,Any% Split,Deaths,80
+09/11/2020,Marcos,Best Possible*,Any% Split,Deaths,79
 01/01/2022,Marcos,Best Possible*,Any%,Speed,44:36.684
 01/01/2022,Marcos,Best Possible*,Any%,Deaths,--
 01/15/2022,Marcos,Best Possible*,Any%,Deaths,31
