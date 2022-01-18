@@ -109,11 +109,13 @@ Date,Player,Mode,Chapter,Type,Value
 02/02/2019,L,Any% Split,Golden Ridge,Speed,6:05.279
 02/03/2019,L,Any% Split,Golden Ridge,Speed,5:58.496
 02/05/2019,L,Any% Split,Golden Ridge,Speed,5:45.848
+02/08/2019,L,Any% Split,Golden Ridge,Speed,5:16.081
 01/01/2022,L,Any% Split,Golden Ridge,Deaths,--
 08/12/2018,L,Any% Split,Golden Ridge,Deaths,12
 01/31/2019,L,Any% Split,Golden Ridge,Deaths,11
 02/02/2019,L,Any% Split,Golden Ridge,Deaths,7
 02/05/2019,L,Any% Split,Golden Ridge,Deaths,5
+02/08/2019,L,Any% Split,Golden Ridge,Deaths,0
 01/01/2022,L,Any% Split,Mirror Temple,Speed,--
 08/12/2018,L,Any% Split,Mirror Temple,Speed,9:59.998
 02/02/2019,L,Any% Split,Mirror Temple,Speed,9:14.965
@@ -174,6 +176,7 @@ Date,Player,Mode,Chapter,Type,Value
 02/03/2019,L,Best Possible*,Any% Split,Speed,56:46.647
 02/05/2019,L,Best Possible*,Any% Split,Speed,56:20.042
 02/06/2019,L,Best Possible*,Any% Split,Speed,54:41.442
+02/08/2019,L,Best Possible*,Any% Split,Speed,54:11.675
 01/01/2022,L,Best Possible*,Any% Split,Deaths,--
 08/12/2018,L,Best Possible*,Any% Split,Deaths,150
 01/31/2019,L,Best Possible*,Any% Split,Deaths,140
@@ -182,6 +185,7 @@ Date,Player,Mode,Chapter,Type,Value
 02/03/2019,L,Best Possible*,Any% Split,Deaths,72
 02/05/2019,L,Best Possible*,Any% Split,Deaths,69
 02/06/2019,L,Best Possible*,Any% Split,Deaths,66
+02/08/2019,L,Best Possible*,Any% Split,Deaths,61
 01/01/2022,L,Best Possible*,Any%,Speed,47:22.553
 01/01/2022,L,Best Possible*,Any%,Deaths,--
 01/15/2022,L,Best Possible*,Any%,Deaths,14
