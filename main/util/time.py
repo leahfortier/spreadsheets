@@ -33,6 +33,4 @@ def millis_to_string(millis: int) -> str:
 
 
 def today_str() -> str:
-    from main.util.constants import SHOWDOWN_TABS
-    return SHOWDOWN_TABS[-1][:10]
     return date.today().strftime("%m/%d/%Y")
