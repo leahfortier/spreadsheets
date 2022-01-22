@@ -16,7 +16,7 @@ def add_update(updates: List[str], player_name: str, level: Level, score_type: S
     current_value: int = current_score.get_value(score_type)
     best_value: int = current_value + 1 if best == EMPTY_FIELD else best_score.get_value(score_type)
     if current_value < best_value:
-        updates.append(f'Update for {player_name}\'s {level} {score_type.value}!!: {best} -> {current}')
+        updates.append(f'{player_name}: {level} - {score_type.value}: {best} -> {current}')
 
 
 def read_showdown(tab_name: str, board: Scoreboard):
