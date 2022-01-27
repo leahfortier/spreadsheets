@@ -66,6 +66,8 @@ class Farewell(Enum):
 class FullRun(Enum):
     ANY_SPLIT = 'Any% Split'
     ANY_PERCENT = 'Any%'
+    B_SIDES = 'B-Sides'
+    C_SIDES = 'C-Sides'
     HUNDRED_MINUS = '100%-'
     FULL_HUNDRED = '100%'
 
@@ -86,6 +88,8 @@ _HUNDRED_MINUS_LEVELS: List[Level] = Mode.FULL_CLEAR.get_all_levels() \
 _FULL_RUN_MAP: Dict[FullRun, List[Level]] = {
     FullRun.ANY_SPLIT: Mode.ANY_SPLIT.get_any_percent_levels(),
     FullRun.ANY_PERCENT: Mode.A_SIDE.get_any_percent_levels(),
+    FullRun.B_SIDES: Mode.B_SIDE.get_all_levels(),
+    FullRun.C_SIDES: Mode.C_SIDE.get_all_levels(),
     FullRun.HUNDRED_MINUS: _HUNDRED_MINUS_LEVELS,
     FullRun.FULL_HUNDRED: _HUNDRED_MINUS_LEVELS + [Mode.FAREWELL.level(Farewell.MOON_BERRY)],
 }

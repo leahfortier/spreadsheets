@@ -1,5 +1,6 @@
 Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,A-Side,Forsaken City,Speed,1:27.499
+01/22/2022,L,A-Side,Forsaken City,Speed,1:26.547
 01/01/2022,L,A-Side,Forsaken City,Deaths,0
 01/01/2022,L,A-Side,Old Site,Speed,2:38.916
 01/09/2022,L,A-Side,Old Site,Speed,2:31.589
@@ -36,10 +37,15 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,B-Side,Old Site,Speed,2:45.699
 01/01/2022,L,B-Side,Old Site,Deaths,0
 01/01/2022,L,B-Side,Celestial Resort,Speed,8:26.821
+01/27/2022,L,B-Side,Celestial Resort,Speed,6:56.891
 01/01/2022,L,B-Side,Celestial Resort,Deaths,38
+01/27/2022,L,B-Side,Celestial Resort,Deaths,33
 01/01/2022,L,B-Side,Golden Ridge,Speed,9:50.563
+01/27/2022,L,B-Side,Golden Ridge,Speed,9:12.143
 01/01/2022,L,B-Side,Golden Ridge,Deaths,38
+01/27/2022,L,B-Side,Golden Ridge,Deaths,34
 01/01/2022,L,B-Side,Mirror Temple,Speed,11:20.221
+01/27/2022,L,B-Side,Mirror Temple,Speed,11:09.460
 01/01/2022,L,B-Side,Mirror Temple,Deaths,47
 01/01/2022,L,B-Side,Reflection,Speed,11:39.618
 01/01/2022,L,B-Side,Reflection,Deaths,37
@@ -178,7 +184,9 @@ Date,Player,Mode,Chapter,Type,Value
 08/31/2019,L,Any% Split,The Summit,Deaths,17
 09/18/2020,L,Any% Split,The Summit,Deaths,9
 01/01/2022,L,Farewell,Clear,Speed,44:56.234
+01/25/2022,L,Farewell,Clear,Speed,38:40.279
 01/01/2022,L,Farewell,Clear,Deaths,170
+01/25/2022,L,Farewell,Clear,Deaths,114
 01/01/2022,L,Farewell,Moon Berry,Speed,1:11:35.093
 01/04/2022,L,Farewell,Moon Berry,Speed,55:59.846
 01/01/2022,L,Farewell,Moon Berry,Deaths,354
@@ -201,6 +209,10 @@ Date,Player,Mode,Chapter,Type,Value
 08/31/2019,L,Full Run,Any%,Deaths,70
 09/04/2019,L,Full Run,Any%,Deaths,56
 09/18/2020,L,Full Run,Any%,Deaths,46
+01/01/2022,L,Full Run,B-Sides,Speed,--
+01/01/2022,L,Full Run,B-Sides,Deaths,--
+01/01/2022,L,Full Run,C-Sides,Speed,--
+01/01/2022,L,Full Run,C-Sides,Deaths,--
 01/01/2022,L,Full Run,100%-,Speed,--
 09/07/2019,L,Full Run,100%-,Speed,4:34:10.000
 09/18/2020,L,Full Run,100%-,Speed,4:26:05.822
@@ -251,16 +263,29 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,L,Best Possible*,Any%,Speed,47:22.553
 01/19/2022,L,Best Possible*,Any%,Speed,46:59.399
 01/21/2022,L,Best Possible*,Any%,Speed,46:39.900
+01/24/2022,L,Best Possible*,Any%,Speed,46:38.948
 01/01/2022,L,Best Possible*,Any%,Deaths,--
 01/15/2022,L,Best Possible*,Any%,Deaths,14
+01/01/2022,L,Best Possible*,B-Sides,Speed,--
+01/27/2022,L,Best Possible*,B-Sides,Speed,1:14:09.835
+01/01/2022,L,Best Possible*,B-Sides,Deaths,--
+01/27/2022,L,Best Possible*,B-Sides,Deaths,268
+01/01/2022,L,Best Possible*,C-Sides,Speed,--
+01/27/2022,L,Best Possible*,C-Sides,Speed,8:26.617
+01/01/2022,L,Best Possible*,C-Sides,Deaths,--
+01/27/2022,L,Best Possible*,C-Sides,Deaths,0
 01/01/2022,L,Best Possible*,100%-,Speed,--
 01/15/2022,L,Best Possible*,100%-,Speed,3:35:23.755
+01/27/2022,L,Best Possible*,100%-,Speed,3:33:04.644
 01/01/2022,L,Best Possible*,100%-,Deaths,--
 01/15/2022,L,Best Possible*,100%-,Deaths,551
+01/27/2022,L,Best Possible*,100%-,Deaths,542
 01/01/2022,L,Best Possible*,100%,Speed,--
 01/15/2022,L,Best Possible*,100%,Speed,4:31:23.601
+01/27/2022,L,Best Possible*,100%,Speed,4:29:04.490
 01/01/2022,L,Best Possible*,100%,Deaths,--
 01/15/2022,L,Best Possible*,100%,Deaths,790
+01/27/2022,L,Best Possible*,100%,Deaths,781
 01/01/2022,Marcos,A-Side,Forsaken City,Speed,1:25.442
 01/06/2022,Marcos,A-Side,Forsaken City,Speed,1:21.294
 01/06/2022,Marcos,A-Side,Forsaken City,Speed,1:18.710
@@ -279,6 +304,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Marcos,A-Side,Golden Ridge,Speed,4:29.212
 01/01/2022,Marcos,A-Side,Golden Ridge,Deaths,2
 01/01/2022,Marcos,A-Side,Mirror Temple,Speed,6:54.290
+01/23/2022,Marcos,A-Side,Mirror Temple,Speed,6:22.704
 01/01/2022,Marcos,A-Side,Mirror Temple,Deaths,2
 01/01/2022,Marcos,A-Side,Reflection,Speed,8:24.611
 01/19/2022,Marcos,A-Side,Reflection,Speed,8:10.892
@@ -368,12 +394,14 @@ Date,Player,Mode,Chapter,Type,Value
 09/11/2020,Marcos,Any% Split,Golden Ridge,Speed,5:12.545
 01/14/2022,Marcos,Any% Split,Golden Ridge,Speed,5:06.340
 01/19/2022,Marcos,Any% Split,Golden Ridge,Speed,5:05.014
+01/24/2022,Marcos,Any% Split,Golden Ridge,Speed,4:49.765
 01/01/2022,Marcos,Any% Split,Golden Ridge,Deaths,--
 02/06/2019,Marcos,Any% Split,Golden Ridge,Deaths,5
 01/01/2022,Marcos,Any% Split,Mirror Temple,Speed,--
 02/06/2019,Marcos,Any% Split,Mirror Temple,Speed,8:18.457
 09/11/2020,Marcos,Any% Split,Mirror Temple,Speed,7:38.694
 09/18/2020,Marcos,Any% Split,Mirror Temple,Speed,7:33.526
+01/24/2022,Marcos,Any% Split,Mirror Temple,Speed,7:20.453
 01/01/2022,Marcos,Any% Split,Mirror Temple,Deaths,--
 02/06/2019,Marcos,Any% Split,Mirror Temple,Deaths,6
 01/01/2022,Marcos,Any% Split,Reflection,Speed,--
@@ -382,12 +410,14 @@ Date,Player,Mode,Chapter,Type,Value
 09/11/2020,Marcos,Any% Split,Reflection,Speed,9:29.687
 09/18/2020,Marcos,Any% Split,Reflection,Speed,9:14.710
 01/12/2022,Marcos,Any% Split,Reflection,Speed,8:48.462
+01/24/2022,Marcos,Any% Split,Reflection,Speed,8:16.859
 01/01/2022,Marcos,Any% Split,Reflection,Deaths,--
 02/06/2019,Marcos,Any% Split,Reflection,Deaths,23
 09/06/2020,Marcos,Any% Split,Reflection,Deaths,17
 09/11/2020,Marcos,Any% Split,Reflection,Deaths,16
 09/18/2020,Marcos,Any% Split,Reflection,Deaths,14
 01/12/2022,Marcos,Any% Split,Reflection,Deaths,12
+01/24/2022,Marcos,Any% Split,Reflection,Deaths,10
 01/01/2022,Marcos,Any% Split,The Summit,Speed,--
 02/06/2019,Marcos,Any% Split,The Summit,Speed,16:26.136
 09/11/2020,Marcos,Any% Split,The Summit,Speed,16:06.858
@@ -403,10 +433,15 @@ Date,Player,Mode,Chapter,Type,Value
 02/06/2019,Marcos,Full Run,Any%,Speed,55:58.945
 09/11/2020,Marcos,Full Run,Any%,Speed,52:12.454
 09/18/2020,Marcos,Full Run,Any%,Speed,49:42.072
+01/24/2022,Marcos,Full Run,Any%,Speed,48:11.598
 01/01/2022,Marcos,Full Run,Any%,Deaths,--
 02/06/2019,Marcos,Full Run,Any%,Deaths,86
 09/18/2020,Marcos,Full Run,Any%,Deaths,77
 01/12/2022,Marcos,Full Run,Any%,Deaths,72
+01/01/2022,Marcos,Full Run,B-Sides,Speed,--
+01/01/2022,Marcos,Full Run,B-Sides,Deaths,--
+01/01/2022,Marcos,Full Run,C-Sides,Speed,--
+01/01/2022,Marcos,Full Run,C-Sides,Deaths,--
 01/01/2022,Marcos,Full Run,100%-,Speed,--
 09/07/2019,Marcos,Full Run,100%-,Speed,4:25:20.000
 09/18/2020,Marcos,Full Run,100%-,Speed,4:09:18.895
@@ -426,6 +461,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/12/2022,Marcos,Best Possible*,Any% Split,Speed,47:09.990
 01/14/2022,Marcos,Best Possible*,Any% Split,Speed,46:41.294
 01/19/2022,Marcos,Best Possible*,Any% Split,Speed,46:39.526
+01/24/2022,Marcos,Best Possible*,Any% Split,Speed,45:39.601
 01/01/2022,Marcos,Best Possible*,Any% Split,Deaths,--
 02/06/2019,Marcos,Best Possible*,Any% Split,Deaths,86
 09/06/2020,Marcos,Best Possible*,Any% Split,Deaths,80
@@ -433,11 +469,21 @@ Date,Player,Mode,Chapter,Type,Value
 09/18/2020,Marcos,Best Possible*,Any% Split,Deaths,64
 01/12/2022,Marcos,Best Possible*,Any% Split,Deaths,53
 01/14/2022,Marcos,Best Possible*,Any% Split,Deaths,52
+01/24/2022,Marcos,Best Possible*,Any% Split,Deaths,50
 01/01/2022,Marcos,Best Possible*,Any%,Speed,44:36.684
 01/19/2022,Marcos,Best Possible*,Any%,Speed,44:22.965
 01/20/2022,Marcos,Best Possible*,Any%,Speed,44:16.709
+01/24/2022,Marcos,Best Possible*,Any%,Speed,43:45.123
 01/01/2022,Marcos,Best Possible*,Any%,Deaths,--
 01/15/2022,Marcos,Best Possible*,Any%,Deaths,31
+01/01/2022,Marcos,Best Possible*,B-Sides,Speed,--
+01/27/2022,Marcos,Best Possible*,B-Sides,Speed,1:23:14.787
+01/01/2022,Marcos,Best Possible*,B-Sides,Deaths,--
+01/27/2022,Marcos,Best Possible*,B-Sides,Deaths,422
+01/01/2022,Marcos,Best Possible*,C-Sides,Speed,--
+01/27/2022,Marcos,Best Possible*,C-Sides,Speed,9:23.686
+01/01/2022,Marcos,Best Possible*,C-Sides,Deaths,--
+01/27/2022,Marcos,Best Possible*,C-Sides,Deaths,10
 01/01/2022,Marcos,Best Possible*,100%-,Speed,--
 01/01/2022,Marcos,Best Possible*,100%-,Deaths,--
 01/01/2022,Marcos,Best Possible*,100%,Speed,--
@@ -458,6 +504,8 @@ Date,Player,Mode,Chapter,Type,Value
 01/09/2022,Melanie,A-Side,Old Site,Speed,2:43.37
 01/12/2022,Melanie,A-Side,Old Site,Speed,2:42.877
 01/14/2022,Melanie,A-Side,Old Site,Speed,2:34.666
+01/22/2022,Melanie,A-Side,Old Site,Speed,2:34.377
+01/23/2022,Melanie,A-Side,Old Site,Speed,2:28.393
 01/01/2022,Melanie,A-Side,Old Site,Deaths,27
 01/05/2022,Melanie,A-Side,Old Site,Deaths,0
 01/01/2022,Melanie,A-Side,Celestial Resort,Speed,1:10:08.877
@@ -470,6 +518,8 @@ Date,Player,Mode,Chapter,Type,Value
 01/11/2022,Melanie,A-Side,Celestial Resort,Speed,8:33.281
 01/17/2022,Melanie,A-Side,Celestial Resort,Speed,8:28.368
 01/21/2022,Melanie,A-Side,Celestial Resort,Speed,8:16.060
+01/23/2022,Melanie,A-Side,Celestial Resort,Speed,7:53.671
+01/26/2022,Melanie,A-Side,Celestial Resort,Speed,7:32.846
 01/01/2022,Melanie,A-Side,Celestial Resort,Deaths,281
 01/06/2022,Melanie,A-Side,Celestial Resort,Deaths,61
 01/06/2022,Melanie,A-Side,Celestial Resort,Deaths,40
@@ -478,6 +528,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/09/2022,Melanie,A-Side,Celestial Resort,Deaths,20
 01/11/2022,Melanie,A-Side,Celestial Resort,Deaths,17
 01/11/2022,Melanie,A-Side,Celestial Resort,Deaths,10
+01/26/2022,Melanie,A-Side,Celestial Resort,Deaths,5
 01/01/2022,Melanie,A-Side,Golden Ridge,Speed,56:25.431
 01/06/2022,Melanie,A-Side,Golden Ridge,Speed,11:20.765
 01/06/2022,Melanie,A-Side,Golden Ridge,Speed,8:03.599
@@ -508,6 +559,7 @@ Date,Player,Mode,Chapter,Type,Value
 01/14/2022,Melanie,A-Side,Mirror Temple,Deaths,5
 01/19/2022,Melanie,A-Side,Mirror Temple,Deaths,3
 01/21/2022,Melanie,A-Side,Mirror Temple,Deaths,2
+01/26/2022,Melanie,A-Side,Mirror Temple,Deaths,0
 01/01/2022,Melanie,A-Side,Reflection,Speed,45:02.643
 01/09/2022,Melanie,A-Side,Reflection,Speed,13:09.412
 01/12/2022,Melanie,A-Side,Reflection,Speed,11:42.457
@@ -515,34 +567,46 @@ Date,Player,Mode,Chapter,Type,Value
 01/14/2022,Melanie,A-Side,Reflection,Speed,10:07.223
 01/21/2022,Melanie,A-Side,Reflection,Speed,9:34.855
 01/21/2022,Melanie,A-Side,Reflection,Speed,9:28.769
+01/22/2022,Melanie,A-Side,Reflection,Speed,9:23.771
+01/24/2022,Melanie,A-Side,Reflection,Speed,8:45.538
 01/01/2022,Melanie,A-Side,Reflection,Deaths,159
 01/09/2022,Melanie,A-Side,Reflection,Deaths,29
 01/12/2022,Melanie,A-Side,Reflection,Deaths,17
 01/14/2022,Melanie,A-Side,Reflection,Deaths,14
 01/21/2022,Melanie,A-Side,Reflection,Deaths,9
+01/24/2022,Melanie,A-Side,Reflection,Deaths,3
 01/01/2022,Melanie,A-Side,The Summit,Speed,1:11:10.655
 01/09/2022,Melanie,A-Side,The Summit,Speed,46:54.027
 01/10/2022,Melanie,A-Side,The Summit,Speed,23:00.043
 01/12/2022,Melanie,A-Side,The Summit,Speed,16:55.461
 01/14/2022,Melanie,A-Side,The Summit,Speed,16:53.387
 01/17/2022,Melanie,A-Side,The Summit,Speed,15:19.938
+01/24/2022,Melanie,A-Side,The Summit,Speed,14:46.244
+01/26/2022,Melanie,A-Side,The Summit,Speed,14:43.813
 01/01/2022,Melanie,A-Side,The Summit,Deaths,314
 01/09/2022,Melanie,A-Side,The Summit,Deaths,270
 01/10/2022,Melanie,A-Side,The Summit,Deaths,62
 01/12/2022,Melanie,A-Side,The Summit,Deaths,24
 01/17/2022,Melanie,A-Side,The Summit,Deaths,15
+01/26/2022,Melanie,A-Side,The Summit,Deaths,14
 01/01/2022,Melanie,A-Side,Core,Speed,29:37.707
 01/15/2022,Melanie,A-Side,Core,Speed,19:08.214
 01/01/2022,Melanie,A-Side,Core,Deaths,152
 01/15/2022,Melanie,A-Side,Core,Deaths,98
 01/01/2022,Melanie,B-Side,Forsaken City,Speed,34:17.051
 01/12/2022,Melanie,B-Side,Forsaken City,Speed,13:49.243
+01/26/2022,Melanie,B-Side,Forsaken City,Speed,12:12.598
 01/01/2022,Melanie,B-Side,Forsaken City,Deaths,251
 01/12/2022,Melanie,B-Side,Forsaken City,Deaths,93
+01/26/2022,Melanie,B-Side,Forsaken City,Deaths,72
 01/01/2022,Melanie,B-Side,Old Site,Speed,29:59.518
+01/26/2022,Melanie,B-Side,Old Site,Speed,3:06.779
 01/01/2022,Melanie,B-Side,Old Site,Deaths,153
+01/26/2022,Melanie,B-Side,Old Site,Deaths,0
 01/01/2022,Melanie,B-Side,Celestial Resort,Speed,1:15:46.055
+01/26/2022,Melanie,B-Side,Celestial Resort,Speed,25:00.369
 01/01/2022,Melanie,B-Side,Celestial Resort,Deaths,576
+01/26/2022,Melanie,B-Side,Celestial Resort,Deaths,179
 01/01/2022,Melanie,B-Side,Golden Ridge,Speed,59:18.967
 01/01/2022,Melanie,B-Side,Golden Ridge,Deaths,350
 01/01/2022,Melanie,B-Side,Mirror Temple,Speed,42:36.392
@@ -558,13 +622,25 @@ Date,Player,Mode,Chapter,Type,Value
 01/01/2022,Melanie,C-Side,Forsaken City,Deaths,--
 01/14/2022,Melanie,C-Side,Forsaken City,Deaths,28
 01/01/2022,Melanie,C-Side,Old Site,Speed,--
+01/26/2022,Melanie,C-Side,Old Site,Speed,9:46.602
+01/26/2022,Melanie,C-Side,Old Site,Speed,0:32.351
 01/01/2022,Melanie,C-Side,Old Site,Deaths,--
+01/26/2022,Melanie,C-Side,Old Site,Deaths,51
+01/26/2022,Melanie,C-Side,Old Site,Deaths,0
 01/01/2022,Melanie,C-Side,Celestial Resort,Speed,--
+01/24/2022,Melanie,C-Side,Celestial Resort,Speed,17:59.823
+01/26/2022,Melanie,C-Side,Celestial Resort,Speed,0:41.123
 01/01/2022,Melanie,C-Side,Celestial Resort,Deaths,--
+01/24/2022,Melanie,C-Side,Celestial Resort,Deaths,94
+01/26/2022,Melanie,C-Side,Celestial Resort,Deaths,0
 01/01/2022,Melanie,C-Side,Golden Ridge,Speed,--
+01/26/2022,Melanie,C-Side,Golden Ridge,Speed,17:30.158
 01/01/2022,Melanie,C-Side,Golden Ridge,Deaths,--
+01/26/2022,Melanie,C-Side,Golden Ridge,Deaths,137
 01/01/2022,Melanie,C-Side,Mirror Temple,Speed,--
+01/26/2022,Melanie,C-Side,Mirror Temple,Speed,33:53.166
 01/01/2022,Melanie,C-Side,Mirror Temple,Deaths,--
+01/26/2022,Melanie,C-Side,Mirror Temple,Deaths,278
 01/01/2022,Melanie,C-Side,Reflection,Speed,--
 01/01/2022,Melanie,C-Side,Reflection,Deaths,--
 01/01/2022,Melanie,C-Side,The Summit,Speed,--
@@ -591,10 +667,12 @@ Date,Player,Mode,Chapter,Type,Value
 01/12/2022,Melanie,Any% Split,Forsaken City,Speed,2:08.078
 01/14/2022,Melanie,Any% Split,Forsaken City,Speed,1:48.477
 01/21/2022,Melanie,Any% Split,Forsaken City,Speed,1:46.063
+01/24/2022,Melanie,Any% Split,Forsaken City,Speed,1:39.552
 01/01/2022,Melanie,Any% Split,Forsaken City,Deaths,--
 01/12/2022,Melanie,Any% Split,Forsaken City,Deaths,7
 01/14/2022,Melanie,Any% Split,Forsaken City,Deaths,4
 01/21/2022,Melanie,Any% Split,Forsaken City,Deaths,3
+01/24/2022,Melanie,Any% Split,Forsaken City,Deaths,1
 01/01/2022,Melanie,Any% Split,Old Site,Speed,--
 01/12/2022,Melanie,Any% Split,Old Site,Speed,2:57.820
 01/14/2022,Melanie,Any% Split,Old Site,Speed,2:54.947
@@ -658,6 +736,10 @@ Date,Player,Mode,Chapter,Type,Value
 01/14/2022,Melanie,Full Run,Any%,Deaths,101
 01/19/2022,Melanie,Full Run,Any%,Deaths,92
 01/21/2022,Melanie,Full Run,Any%,Deaths,85
+01/01/2022,Melanie,Full Run,B-Sides,Speed,--
+01/01/2022,Melanie,Full Run,B-Sides,Deaths,--
+01/01/2022,Melanie,Full Run,C-Sides,Speed,--
+01/01/2022,Melanie,Full Run,C-Sides,Deaths,--
 01/01/2022,Melanie,Full Run,100%-,Speed,--
 01/01/2022,Melanie,Full Run,100%-,Deaths,--
 01/01/2022,Melanie,Full Run,100%,Speed,--
@@ -668,21 +750,33 @@ Date,Player,Mode,Chapter,Type,Value
 01/19/2022,Melanie,Best Possible*,Any% Split,Speed,56:42.199
 01/21/2022,Melanie,Best Possible*,Any% Split,Speed,53:21.134
 01/21/2022,Melanie,Best Possible*,Any% Split,Speed,51:20.468
+01/24/2022,Melanie,Best Possible*,Any% Split,Speed,51:13.957
 01/01/2022,Melanie,Best Possible*,Any% Split,Deaths,--
 01/12/2022,Melanie,Best Possible*,Any% Split,Deaths,112
 01/14/2022,Melanie,Best Possible*,Any% Split,Deaths,92
 01/19/2022,Melanie,Best Possible*,Any% Split,Deaths,79
 01/21/2022,Melanie,Best Possible*,Any% Split,Deaths,71
 01/21/2022,Melanie,Best Possible*,Any% Split,Deaths,62
+01/24/2022,Melanie,Best Possible*,Any% Split,Deaths,60
 01/01/2022,Melanie,Best Possible*,Any%,Speed,52:02.135
 01/17/2022,Melanie,Best Possible*,Any%,Speed,50:23.773
 01/21/2022,Melanie,Best Possible*,Any%,Speed,48:47.825
 01/21/2022,Melanie,Best Possible*,Any%,Speed,48:41.739
+01/24/2022,Melanie,Best Possible*,Any%,Speed,46:56.152
+01/27/2022,Melanie,Best Possible*,Any%,Speed,46:32.896
 01/01/2022,Melanie,Best Possible*,Any%,Deaths,--
 01/15/2022,Melanie,Best Possible*,Any%,Deaths,53
 01/17/2022,Melanie,Best Possible*,Any%,Deaths,44
 01/19/2022,Melanie,Best Possible*,Any%,Deaths,42
 01/21/2022,Melanie,Best Possible*,Any%,Deaths,36
+01/24/2022,Melanie,Best Possible*,Any%,Deaths,30
+01/27/2022,Melanie,Best Possible*,Any%,Deaths,22
+01/01/2022,Melanie,Best Possible*,B-Sides,Speed,--
+01/27/2022,Melanie,Best Possible*,B-Sides,Speed,8:01:46.222
+01/01/2022,Melanie,Best Possible*,B-Sides,Deaths,--
+01/27/2022,Melanie,Best Possible*,B-Sides,Deaths,3027
+01/01/2022,Melanie,Best Possible*,C-Sides,Speed,--
+01/01/2022,Melanie,Best Possible*,C-Sides,Deaths,--
 01/01/2022,Melanie,Best Possible*,100%-,Speed,--
 01/01/2022,Melanie,Best Possible*,100%-,Deaths,--
 01/01/2022,Melanie,Best Possible*,100%,Speed,--
