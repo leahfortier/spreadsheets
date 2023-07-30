@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 from typing import List
 
-from main.util.constants import EMPTY_FIELD
+from main.celeste.constants import EMPTY_FIELD
 from main.util.time import millis_to_string, string_to_millis
 
 

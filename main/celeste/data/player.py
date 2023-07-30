@@ -1,7 +1,7 @@
 from typing import Dict, Iterable, List
 
-from main.data.level import Level
-from main.data.score import Score, ScoreCounter
+from main.celeste.data.level import Level
+from main.celeste.data.score import Score, ScoreCounter
 
 
 class Player:

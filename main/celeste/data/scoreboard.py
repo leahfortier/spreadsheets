@@ -1,6 +1,6 @@
 from typing import List, Dict, Iterable
 
-from main.data.player import Player
+from main.celeste.data.player import Player
 
 
 class Scoreboard:

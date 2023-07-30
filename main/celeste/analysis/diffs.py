@@ -1,10 +1,10 @@
 from typing import List
 
-from main.data.level import Level
-from main.data.player import Player
-from main.data.score import Score, ScoreType, get_score_type
-from main.data.scoreboard import Scoreboard
-from main.util.constants import PREVIOUS_FILE, DIFFS_FILE
+from main.celeste.constants import PREVIOUS_FILE, DIFFS_FILE
+from main.celeste.data.level import Level
+from main.celeste.data.player import Player
+from main.celeste.data.score import Score, ScoreType, get_score_type
+from main.celeste.data.scoreboard import Scoreboard
 from main.util.file_io import from_csv, from_file, to_file
 from main.util.time import today_str
 

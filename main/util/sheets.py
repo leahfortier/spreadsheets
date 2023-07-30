@@ -1,13 +1,12 @@
 import os.path
-import pickle
 from typing import List
 
 from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from main.util.constants import CREDENTIALS_FILE, PICKLE_FILE
-
+from main.util.constants import CREDENTIALS_FILE, TOKEN_FILE
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -16,11 +15,10 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 def get_credentials():
     creds = None
 
-    # The file token.pickle stores the user's access and refresh tokens, and is created
+    # The file token.json stores the user's access and refresh tokens, and is created
     # automatically when the authorization flow completes for the first time.
-    if os.path.exists(PICKLE_FILE):
-        with open(PICKLE_FILE, 'rb') as token:
-            creds = pickle.load(token)
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -31,8 +29,8 @@ def get_credentials():
             creds = flow.run_local_server(port=0)
 
         # Save the credentials for the next run
-        with open(PICKLE_FILE, 'wb') as token:
-            pickle.dump(creds, token)
+        with open(TOKEN_FILE, 'w') as token:
+            token.write(creds.to_json())
 
     return creds
 

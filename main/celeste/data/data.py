@@ -1,8 +1,7 @@
 from typing import List, Dict
 
-from main.data.scoreboard import Scoreboard
-from main.util.constants import CHAPTER, MODE, RESERVED, SPREADSHEET_ID
-from main.util.sheets import get_sheet_data
+from main.celeste.constants import CHAPTER, MODE, RESERVED
+from main.celeste.data.scoreboard import Scoreboard
 
 
 def is_empty(row: List[str]) -> bool:
@@ -13,9 +12,7 @@ def is_empty(row: List[str]) -> bool:
 
 
 class Data:
-    def __init__(self, spreadsheet_id: str, range_name: str):
-        values = get_sheet_data(spreadsheet_id, range_name)
-
+    def __init__(self, values: List[List[str]]):
         index = 0
         for index, row in enumerate(values):
             if not is_empty(values[index]):
@@ -45,7 +42,3 @@ class Data:
 
     def to_board(self) -> Scoreboard:
         return Scoreboard(self.player_names, self.rows)
-
-
-def read_item_sheet(tab_name: str) -> Data:
-    return Data(SPREADSHEET_ID, tab_name)

@@ -118,6 +118,9 @@ dmypy.json
 .idea/*
 
 # Google Sheets
-*/credentials.json
-*/token.pickle
+creds/
+
+# Output
+out/
+
 

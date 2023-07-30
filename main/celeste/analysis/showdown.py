@@ -1,11 +1,11 @@
 from typing import List
 
-from main.data.data import read_item_sheet, Data
-from main.data.level import Level, Mode, FullRun
-from main.data.player import Player
-from main.data.score import Score, ScoreType, SCORE_TYPES
-from main.data.scoreboard import Scoreboard
-from main.util.constants import EMPTY_FIELD
+from main.celeste.constants import EMPTY_FIELD, get_sheet_rows
+from main.celeste.data.data import Data
+from main.celeste.data.level import Level, Mode, FullRun
+from main.celeste.data.player import Player
+from main.celeste.data.score import Score, ScoreType, SCORE_TYPES
+from main.celeste.data.scoreboard import Scoreboard
 
 
 def add_update(updates: List[str], player_name: str, level: Level, score_type: ScoreType, current_score: Score, best_score: Score) -> None:
@@ -20,7 +20,7 @@ def add_update(updates: List[str], player_name: str, level: Level, score_type: S
 
 
 def read_showdown(tab_name: str, board: Scoreboard):
-    sheet_data: Data = read_item_sheet(tab_name)
+    sheet_data: Data = Data(get_sheet_rows(tab_name))
     showdown: Scoreboard = sheet_data.to_board()
 
     updates: List[str] = []

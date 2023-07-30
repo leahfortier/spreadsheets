@@ -1,9 +1,9 @@
 from typing import List, Dict
 
-from main.analysis.diffs import Diff
-from main.data.level import Level
-from main.data.score import Score, ScoreType
-from main.util.constants import DEFAULT_DATE
+from main.celeste.analysis.diffs import Diff
+from main.celeste.data.level import Level
+from main.celeste.data.score import Score, ScoreType
+from main.celeste.constants import DEFAULT_DATE
 
 
 class Event:

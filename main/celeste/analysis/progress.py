@@ -1,11 +1,11 @@
 from typing import List
 
-from main.analysis.diffs import Diff, read_diffs
-from main.data.player import Player
-from main.data.progress import Progress, ProgressMap
-from main.data.score import SCORE_TYPES
-from main.data.scoreboard import Scoreboard
-from main.util.constants import PROGRESS_FILE
+from main.celeste.analysis.diffs import Diff, read_diffs
+from main.celeste.data.player import Player
+from main.celeste.data.progress import Progress, ProgressMap
+from main.celeste.data.score import SCORE_TYPES
+from main.celeste.data.scoreboard import Scoreboard
+from main.celeste.constants import PROGRESS_FILE
 from main.util.file_io import to_csv
 
 

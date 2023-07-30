@@ -1,7 +1,7 @@
-from main.data.level import Mode, FullRun, FULL_RUNS
-from main.data.player import Player
-from main.data.score import Score
-from main.data.scoreboard import Scoreboard
+from main.celeste.data.level import Mode, FULL_RUNS
+from main.celeste.data.player import Player
+from main.celeste.data.score import Score
+from main.celeste.data.scoreboard import Scoreboard
 
 
 def print_update(title: str, player_name: str, old: str, new: str) -> None:
