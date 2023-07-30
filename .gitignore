@@ -119,8 +119,7 @@ dmypy.json
 
 # Google Sheets
 creds/
+sheet_id.py
 
 # Output
 out/
-
-

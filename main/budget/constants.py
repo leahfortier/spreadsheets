@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from main.sheet_id import BUDGET_ID
+from main.constants.sheet_id import BUDGET_ID
 
 TRANSACTIONS_FILE = str(Path.home() / "Downloads/transactions.csv")
 

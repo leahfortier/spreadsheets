@@ -1,7 +1,6 @@
 from typing import List
 
-from main.sheet_id import CELESTE_ID
-from main.util.file_io import with_path
+from main.constants.sheet_id import CELESTE_ID
 from main.util.sheets import get_sheet_data
 
 SPREADSHEET_ID = CELESTE_ID

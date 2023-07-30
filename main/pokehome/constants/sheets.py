@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List
 
-from main.sheet_id import POKEMON_ID
+from main.constants.sheet_id import POKEMON_ID
 from main.util.data import Sheet
 from main.util.sheets import get_sheet_data
 
