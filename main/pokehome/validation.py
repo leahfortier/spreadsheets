@@ -12,10 +12,16 @@ def validate_dex(sheet: Sheet):
         def get(field: DexFields) -> str:
             return sheet.get(row, field.value)
 
+        name = get(DexFields.NAME)
+
         caught: bool = get(DexFields.CAUGHT_PROGRESS) == "TRUE"
         nickname = get(DexFields.NICKNAME)
-        if nickname and not caught:
-            print(f"Uncaught with nickname {nickname}")
+        if nickname and not caught and not nickname.startswith("TODO"):
+            print(f"Uncaught with nickname {nickname} for {name}")
+
+        trainer = get(DexFields.TRAINER)
+        if trainer and not caught:
+            print(f"Uncaught with trainer {trainer} for {name}")
 
         region = get(DexFields.REGION)
         assert region in REGIONS

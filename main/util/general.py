@@ -40,7 +40,7 @@ def condition_as_count(progress_condition: str, required_condition: Optional[str
 
 
 def column_range(column: str, start_index: int = 2, tab: str = "") -> str:
-    tab_prefix = f"{tab}!" if tab else ""
+    tab_prefix = f"'{tab}'!" if tab else ""
     return f"{tab_prefix}{column}{start_index}:{column}"
 
 

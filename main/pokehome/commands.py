@@ -1,8 +1,7 @@
-from typing import List
-
-from main.pokehome.constants.io import FILE_PATH, EVOLUTIONS_INFILE
+from main.pokehome.constants.io import FILE_PATH
+from main.pokehome.constants.pokes import REGIONALS
 from main.pokehome.constants.sheets import EMPTY_ABILITY
-from main.pokehome.db import read_db, DBRow
+from main.pokehome.db import Database
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv, from_tsv
 
@@ -52,9 +51,9 @@ def write_abilities():
 
 
 def write_regions():
-    rows: List[DBRow] = read_db()
+    db: Database = Database()
     regions = []
-    for row in rows:
+    for row in db.rows:
         num = int(row.dex)
         region = "TODO"
         if row.regional_form == "Paldean":
@@ -98,10 +97,10 @@ def write_regions():
 
 
 def write_evolutions():
-    evolutions = from_tsv(EVOLUTIONS_INFILE)
-    rows: List[DBRow] = read_db()
+    evolutions = from_tsv(FILE_PATH + "evolutions-in.tsv")
+    db: Database = Database()
     out_rows = []
-    for row in rows:
+    for row in db.rows:
         name = row.species
         if row.regional_form:
             name = row.regional_form + " " + name
@@ -123,6 +122,47 @@ def write_evolutions():
 
     to_tsv(FILE_PATH + "evolutions-out.tsv", out_rows)
 
+
+def write_pla_names():
+    pla_rows = from_tsv(FILE_PATH + "pla-names.in")
+    db: Database = Database()
+    out_rows = []
+    for row in pla_rows:
+        assert len(row) == 1
+        name = row[0]
+
+        species = name.rstrip("♂").rstrip("♀").strip()
+        for region in REGIONALS:
+            if species.startswith(region):
+                species = species[len(region):].strip()
+
+        if species not in db.species_map:
+            species = species.split()[0].strip()
+
+        forms = db.species_map[species]
+        form_id = None
+        if name == species or species == "Arceus":
+            form_id = db.species_map.get(species)[0]
+        else:
+            for form in forms:
+                poke = db.get(form)
+                if poke.name == name:
+                    form_id = form
+                    break
+                if name.rstrip("♂").strip() == poke.name and poke.gender_form == "Male":
+                    form_id = form
+                    break
+                if name.rstrip("♀").strip() == poke.name and poke.gender_form == "Female":
+                    form_id = form
+                    break
+        assert form_id is not None
+        poke = db.get(form_id)
+
+        out_rows.append([form_id, name, poke.image, poke.shiny_image])
+
+    to_tsv(FILE_PATH + "pla-names.out", out_rows)
+
 # write_abilities()
 # write_regions()
-write_evolutions()
+# write_evolutions()
+write_pla_names()

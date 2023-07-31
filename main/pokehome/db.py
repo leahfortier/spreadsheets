@@ -1,10 +1,10 @@
 from typing import List, Dict
 
-from main.pokehome.constants.io import DB_OUTFILE, EVOLUTIONS_INFILE
+from main.pokehome.constants.io import DB_OUTFILE
 from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM
 from main.pokehome.constants.sheets import DbFields, get_db_sheet
 from main.util.data import Sheet
-from main.util.file_io import to_tsv, from_tsv
+from main.util.file_io import to_tsv
 
 
 class DBRow:

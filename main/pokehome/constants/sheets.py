@@ -11,7 +11,7 @@ SPREADSHEET_ID = POKEMON_ID
 EMPTY_ABILITY = "--"
 
 DB_TAB = "Database"
-DEX_TAB = "Dex"
+DEX_TAB = "Live Dex"
 
 
 class DexClassification(str, Enum):
@@ -58,6 +58,7 @@ class DexFields(str, Enum):
     HIDDEN_ABILITY = "Hidden"
     NOTES = "Notes"
     NICKNAME = "Nickname"
+    TRAINER = "OT"
     CAUGHT_PROGRESS = "Caught"
     HIDDEN_PROGRESS = "With Hidden"
     REGION = "Region"
@@ -71,8 +72,9 @@ SAME_ID_DIFFERENT_FIELDS: List[str] = [
     DexFields.ROW,
     DexFields.COL,
     DexFields.NICKNAME,
+    DexFields.TRAINER,
     DexFields.NOTES,
-    DexFields.CLASS
+    DexFields.CLASS,
 ]
 
 

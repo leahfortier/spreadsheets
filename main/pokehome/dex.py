@@ -34,6 +34,8 @@ class DexRow:
             print_diff = False
             update(DexFields.ID, self.row.id)
             update(DexFields.NOTES, "")
+            update(DexFields.TRAINER, "")
+            update(DexFields.NICKNAME, "")
             update(DexFields.HIDDEN_PROGRESS, HiddenAbilityProgress.UNOBTAINED.value)
             if self.is_form:
                 update(DexFields.ROW, "TODO")

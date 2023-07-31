@@ -6,7 +6,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from main.util.constants import CREDENTIALS_FILE, TOKEN_FILE
+from main.constants.constants import CREDENTIALS_FILE, TOKEN_FILE
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
