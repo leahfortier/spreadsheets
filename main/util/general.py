@@ -60,3 +60,10 @@ def column_name(col_index: int) -> str:
         value //= 26
 
     return answer
+
+
+def is_empty(row: List[str]) -> bool:
+    for val in row:
+        if val != '':
+            return False
+    return True

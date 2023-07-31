@@ -1,6 +1,8 @@
 from typing import List, Dict, Iterable
 
+from main.celeste.constants import RESERVED
 from main.celeste.data.player import Player
+from main.util.data import Sheet
 
 
 class Scoreboard:
@@ -31,4 +33,6 @@ class Scoreboard:
         return self.player_map.keys()
 
 
-
+def get_scoreboard(sheet: Sheet):
+    player_names = [name for name in sheet.schema_row if name != '' and name not in RESERVED]
+    return Scoreboard(player_names, sheet.rows)

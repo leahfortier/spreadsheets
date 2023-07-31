@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Dict, Optional, Tuple
 
-from main.util.strings import column_name
+from main.util.general import column_name, is_empty
 
 
 class Sheet:
@@ -11,7 +11,12 @@ class Sheet:
             escape_fields: List[str] = None,
             id_fields: List[str] = None,
     ):
-        self.schema_row = rows[0]
+        index = 0
+        for index, row in enumerate(rows):
+            if not is_empty(rows[index]):
+                break
+
+        self.schema_row = rows[index]
         self.schema: Dict[str, int] = {}
 
         self.escape_fields: List[str] = escape_fields or []
@@ -21,7 +26,7 @@ class Sheet:
         for i, val in enumerate(self.schema_row):
             self.schema[val] = i
 
-        self.rows: List[List[str]] = rows[1:]
+        self.rows: List[List[str]] = rows[(index + 1):]
         for row_index, row in enumerate(self.rows):
             if len(row) < len(self.schema_row):
                 row += [""] * (len(self.schema_row) - len(row))
@@ -30,7 +35,7 @@ class Sheet:
             row_id = self.get_id(row)
             if row_id:
                 self.id_map[row_id] = row_index
-            for field in escape_fields:
+            for field in escape_fields or []:
                 value = self.get(row, field)
                 self.set(row, field, value)
 

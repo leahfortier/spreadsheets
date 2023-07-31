@@ -1,6 +1,5 @@
-from typing import List
-
 from main.constants.sheet_id import CELESTE_ID
+from main.util.data import Sheet
 from main.util.sheets import get_sheet_data
 
 SPREADSHEET_ID = CELESTE_ID
@@ -50,5 +49,6 @@ DIFFS_FILE = OUT_FOLDER + 'changelog.csv'
 PROGRESS_FILE = OUT_FOLDER + 'progress.csv'
 
 
-def get_sheet_rows(tab_name: str) -> List[List[str]]:
-    return get_sheet_data(SPREADSHEET_ID, tab_name)
+def get_sheet_rows(tab_name: str) -> Sheet:
+    rows = get_sheet_data(SPREADSHEET_ID, tab_name)
+    return Sheet(rows)
