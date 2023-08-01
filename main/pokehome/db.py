@@ -2,13 +2,16 @@ from typing import List, Dict
 
 from main.pokehome.constants.io import DB_OUTFILE
 from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM
-from main.pokehome.constants.sheets import DbFields, get_db_sheet
+from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
+from main.util.general import remove_suffix
 
 
 class DBRow:
-    def __init__(self, sheet: Sheet, row: List[str]):
+    def __init__(self, sheet: Sheet, row: List[str], row_index: int):
+        sheet.update(row, DbFields.SORT_ID, str(row_index + 1))
+
         self.dex = sheet.get(row, DbFields.DEX)
         self.form_id = sheet.get(row, DbFields.FORM_ID)
         self.gender_id = sheet.get(row, DbFields.GENDER_ID)
@@ -37,10 +40,50 @@ class DBRow:
         self.name = " ".join(filter(None, [self.regional_form, self.species, name_form]))
         sheet.update(row, DbFields.NAME, self.name)
 
-        self.image = f'=image("https://pokejungle.net/sprites/normal/{self.id}.png")'
-        self.shiny_image = f'=image("https://pokejungle.net/sprites/shiny/{self.id}.png")'
+        self.image_id = self.get_image_id()
+        sheet.update(row, DbFields.IMAGE_ID, self.image_id)
+
+        shiny_id = self.image_id
+        if self.species == "Minior":
+            # All Minior cores have the same shiny
+            shiny_id = self.get_image_id("core")
+
+        def get_image_url(sprite_type: SpriteType, image_id: str) -> str:
+            return f'=image("https://img.pokemondb.net/sprites/home/{sprite_type}/1x/{image_id}.png")'
+
+        self.image = get_image_url(SpriteType.NORMAL, self.image_id)
+        self.shiny_image = get_image_url(SpriteType.SHINY, shiny_id)
+
         sheet.set(row, DbFields.IMAGE, self.image)
         sheet.set(row, DbFields.SHINY_IMAGE, self.shiny_image)
+
+    # Get the id in the format that pokemondb uses
+    # Go to https://pokemondb.net/sprites/<species_name> and look at the different
+    #   forms under "Home" if form is not appearing correctly
+    def get_image_id(self, image_form_id: str = "") -> str:
+        image_form_id = image_form_id or self.form or self.regional_form
+
+        image_form_id = remove_suffix(image_form_id, [" Sea", " Flower", " Style"])
+        if self.species == "Darmanitan":
+            image_form_id += "-standard"
+        elif self.species in ["Sinistea", "Polteageist"]:
+            # Sinistea/Polteageist do not have separate sprites for their antique forms
+            image_form_id = ""
+
+        if self.species in ["Meowstic", "Alcremie", "Indeedee", "Basculegion", "Oinkologne"]:
+            image_form_id += "-" + self.gender_form
+        else:
+            image_form_id += self.gender_id
+
+        image_id = "-".join(filter(None, [self.species, image_form_id])).lower() \
+            .replace("♂", "-m").replace("♀", "-f") \
+            .replace(" of three", "3").replace(" of four", "4") \
+            .replace("'", "").replace(".", "") \
+            .replace("%", "").replace(":", "") \
+            .replace("é", "e").replace("?", "qm").replace("!", "em") \
+            .replace(" ", "-").replace("--", "-")
+
+        return image_id
 
     def is_base_form(self, regional_is_base=False) -> bool:
         if self.id == self.dex:
@@ -69,7 +112,10 @@ class DBRow:
 class Database:
     def __init__(self):
         self.sheet: Sheet = get_db_sheet()
-        self.rows: List[DBRow] = [DBRow(self.sheet, row) for row in self.sheet.rows]
+        self.rows: List[DBRow] = [
+            DBRow(self.sheet, row, index)
+            for index, row in enumerate(self.sheet.rows)
+        ]
 
         self.id_map: Dict[str, int] = {}
         self.species_map: Dict[str, List[str]] = {}

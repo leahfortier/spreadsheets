@@ -10,6 +10,12 @@ def title(s: str) -> str:
     return s
 
 
+def remove_suffix(s: str, suffixes: List[str]) -> str:
+    for suffix in suffixes:
+        if s.endswith(suffix):
+            s = s[:-(len(suffix))]
+    return s
+
 def caught_total_progress(progress_condition: str, required_condition: str = None) -> List[str]:
     if not required_condition:
         count = f'COUNTIF({progress_condition})'

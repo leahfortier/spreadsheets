@@ -14,6 +14,11 @@ DB_TAB = "Database"
 DEX_TAB = "Live Dex"
 
 
+class SpriteType(str, Enum):
+    NORMAL = "normal"
+    SHINY = "shiny"
+
+
 class DexClassification(str, Enum):
     NATIONAL = "National",
     REGIONAL = "Regional",
@@ -29,10 +34,12 @@ class HiddenAbilityProgress(str, Enum):
 
 
 class DbFields(str, Enum):
+    SORT_ID = "sort"
     DEX = "dex"
     FORM_ID = "form id"
     GENDER_ID = "gender id"
     ID = "id"
+    IMAGE_ID = "img id"
     SPECIES = "species"
     REGIONAL_FORM = "regional"
     FORM = "form"
