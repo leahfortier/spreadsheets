@@ -8,7 +8,7 @@ def main():
     db: Database = Database()
     dex: Dex = Dex(db)
 
-    validate_dex(dex.sheet)
+    validate_dex(db, dex.sheet)
     db.write()
     dex.write()
     get_stats(dex)

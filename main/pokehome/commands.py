@@ -141,7 +141,7 @@ def write_pla_names():
 
         forms = db.species_map[species]
         form_id = None
-        if name == species or species == "Arceus":
+        if name == species:
             form_id = db.species_map.get(species)[0]
         else:
             for form in forms:
