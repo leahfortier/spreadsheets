@@ -2,7 +2,7 @@ from typing import List
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     EVOLUTIONS_INFILE, EVOLUTIONS_OUTFILE
-from main.pokehome.constants.pokes import REGIONALS
+from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON
 from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex, DexRow
@@ -87,7 +87,7 @@ def write_regions(db: Database):
             region = "Galar"
         elif num <= 905:
             region = "Hisui"
-        elif num <= 1010:
+        elif num <= TOTAL_POKEMON:
             region = "Paldea"
         else:
             print(f"Invalid dex num {num} for {row.name}")
@@ -245,6 +245,6 @@ def run_commands(db: Database, dex: Dex):
     write_regions(db)
     write_evolutions(db)
     write_pla_names(db)
-    compare_version_history(dex)
+    # compare_version_history(dex)
     # genshin_achievements_add_version_column()
     # gensin_recipes()

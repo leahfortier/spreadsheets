@@ -1,6 +1,6 @@
 from typing import List
 
-TOTAL_POKEMON: int = 1010
+TOTAL_POKEMON: int = 1017
 
 BOX_ROWS: int = 5
 BOX_COLS: int = 6
