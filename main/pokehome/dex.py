@@ -5,13 +5,13 @@ from main.pokehome.constants.io import DEX_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, BOX_COLS, FORM_BOXES
 from main.pokehome.constants.sheets import DexFields, get_dex_sheet, HiddenAbilityProgress, EMPTY_ABILITY, \
     DexClassification
-from main.pokehome.db import DBRow, Database
+from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
 
 
 class DexRow:
-    def __init__(self, index: int, box_name: str, dex_class: DexClassification, db_row: DBRow):
+    def __init__(self, index: int, box_name: str, dex_class: DexClassification, db_row: DbRow):
         self.box = box_name
         self.row_index = str(index // BOX_COLS + 1)
         self.col_index = str(index % BOX_COLS + 1)

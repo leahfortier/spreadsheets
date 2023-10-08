@@ -13,8 +13,8 @@ def update_spreadsheet(output_file: str, backup_file: str):
     current_rows: List[List[str]] = get_sheet_data(SPREADSHEET_ID, TRANSACTIONS_TAB)
 
     next_rows = combine(new_rows, current_rows)
-    to_tsv(output_file, next_rows)
-    to_tsv(backup_file, current_rows)
+    to_tsv(output_file, next_rows, show_diff=False)
+    to_tsv(backup_file, current_rows, show_diff=False)
 
 
 def combine(new_rows: List[List[str]], current_rows: List[List[str]]) -> List[List[str]]:
@@ -42,7 +42,7 @@ def combine(new_rows: List[List[str]], current_rows: List[List[str]]) -> List[Li
             current_iter.next()
         else:
             transformed_row = new_iter.transform(current.schema)
-            print("New row:", new_key, transformed_row)
+            # print("New row:", new_key, transformed_row)
             next_rows.append(transformed_row)
             new_iter.next()
 

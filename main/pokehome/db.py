@@ -8,7 +8,7 @@ from main.util.file_io import to_tsv
 from main.util.general import remove_suffix
 
 
-class DBRow:
+class DbRow:
     def __init__(self, sheet: Sheet, row: List[str], row_index: int):
         sheet.update(row, DbFields.SORT_ID, str(row_index + 1))
 
@@ -94,7 +94,6 @@ class DBRow:
             return False
         if regional_is_base and self.regional_form:
             return True
-        print(self.name, "end of base form")
         return False
 
     def is_alt_form(self, regional_is_alt=False) -> bool:
@@ -112,8 +111,8 @@ class DBRow:
 class Database:
     def __init__(self):
         self.sheet: Sheet = get_db_sheet()
-        self.rows: List[DBRow] = [
-            DBRow(self.sheet, row, index)
+        self.rows: List[DbRow] = [
+            DbRow(self.sheet, row, index)
             for index, row in enumerate(self.sheet.rows)
         ]
 
@@ -129,15 +128,15 @@ class Database:
             if row.regional_form and row.is_base_form(regional_is_base=True):
                 self.regionals.setdefault(row.regional_form, []).append(row.id)
 
-    def get(self, poke_id: str) -> DBRow:
+    def get(self, poke_id: str) -> DbRow:
         return self.rows[self.id_map[poke_id]]
 
-    def get_forms(self, names: List[str]) -> List[str]:
+    def get_forms(self, names: List[str], regional_is_alt=False) -> List[str]:
         forms: List[str] = []
         for name in names:
             for poke_id in self.species_map.get(name):
-                row: DBRow = self.get(poke_id)
-                if row.is_alt_form(regional_is_alt=False):
+                row: DbRow = self.get(poke_id)
+                if row.is_alt_form(regional_is_alt=regional_is_alt):
                     forms.append(poke_id)
         return forms
 

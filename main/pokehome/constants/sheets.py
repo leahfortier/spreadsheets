@@ -5,7 +5,6 @@ from main.constants.sheet_id import POKEMON_ID
 from main.util.data import Sheet
 from main.util.sheets import get_sheet_data
 
-
 SPREADSHEET_ID = POKEMON_ID
 
 EMPTY_ABILITY = "--"
@@ -71,6 +70,7 @@ class DexFields(str, Enum):
     REGION = "Region"
     CLASS = "Class"
     SHINY = "Shiny"
+    SIX_IV = "6IV"
 
 
 SAME_ID_DIFFERENT_FIELDS: List[str] = [

@@ -34,7 +34,14 @@ EXCLUDE_BASE_FORM: List[str] = [
 ]
 
 INCLUDE_GENDER_FORM: List[str] = [
-    "Unfezant", "Frillish", "Jellicent", "Meowstic", "Pyroar", "Indeedee", "Basculegion", "Oinkologne",
+    "Hippopotas", "Hippowdon",
+    "Unfezant",
+    "Frillish", "Jellicent",
+    "Meowstic",
+    "Pyroar",
+    "Indeedee",
+    "Basculegion",
+    "Oinkologne",
     "Alcremie",  # Special case where gender form is used for non-gender things
 ]
 

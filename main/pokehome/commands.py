@@ -1,23 +1,27 @@
-from main.pokehome.constants.io import FILE_PATH
+from typing import List
+
+from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
+    EVOLUTIONS_INFILE, EVOLUTIONS_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS
-from main.pokehome.constants.sheets import EMPTY_ABILITY
-from main.pokehome.db import Database
-from main.pokehome.dex import Dex
-from main.util.file_io import to_tsv, from_tsv
+from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet
+from main.pokehome.db import Database, DbRow
+from main.pokehome.dex import Dex, DexRow
+from main.util.data import Sheet
+from main.util.file_io import to_tsv, from_tsv, to_file, from_file
 
 
-def write_abilities():
+def write_abilities(db: Database):
     # Input file is copy-pasted table from Bulbapedia
     #   - Rows between generations are removed
     #   - Several form names have been edited to match
     #   - https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_Ability
-    rows = from_tsv(FILE_PATH + "abilities-in.tsv")
-    dex = Dex()
-    for index in range(0, len(rows), 2):
-        first = rows[index]
-        second = rows[index + 1]
+    bulba_rows = from_tsv(ABILITIES_INFILE)
+    for index in range(0, len(bulba_rows), 2):
+        first = bulba_rows[index]
+        second = bulba_rows[index + 1]
         species = first[1]
         form_name = ""
+        assert len(second) in [3, 4]
         if len(second) == 4:
             form_name = second[0]
             if form_name.startswith("Mega"):
@@ -25,37 +29,34 @@ def write_abilities():
             if form_name in ["Normal"]:
                 form_name = ""
 
-        def ab(s: str):
-            return (s or EMPTY_ABILITY).rstrip("*")
+        def set_abs(row: DbRow):
+            def ab_format(s: str):
+                return (s or EMPTY_ABILITY).rstrip("*")
 
-        ability1 = ab(second[-3])
-        ability2 = ab(second[-2])
-        hidden = ab(second[-1])
-        forms = dex.name_db[species]
+            row.ability1 = ab_format(second[-3])
+            row.ability2 = ab_format(second[-2])
+            row.hidden = ab_format(second[-1])
 
-        def set_abs(row):
-            row.ability1 = ability1
-            row.ability2 = ability2
-            row.hidden = hidden
-            # print(row.name, ability1, ability2, hidden)
-
+        forms = db.get_forms([species], regional_is_alt=True)
         for form in forms:
-            row = dex.db.get(form)
+            row = db.get(form)
             if form_name:
                 if form_name in [row.name, row.form, row.gender_form]:
                     set_abs(row)
             else:
                 set_abs(row)
 
-    to_tsv(FILE_PATH + "abilities-out.tsv", [[row.ability1, row.ability2, row.hidden] for row in dex.db_rows])
+    def get_abilities(row: DbRow) -> List[str]:
+        return [row.ability1, row.ability2, row.hidden]
+
+    to_tsv(ABILITIES_OUTFILE, [get_abilities(row) for row in db.rows])
 
 
-def write_regions():
-    db: Database = Database()
+def write_regions(db: Database):
     regions = []
     for row in db.rows:
         num = int(row.dex)
-        region = "TODO"
+        region = ""
         if row.regional_form == "Paldean":
             region = "Paldea"
         elif row.regional_form == "Hisuian":
@@ -91,14 +92,14 @@ def write_regions():
         else:
             print(f"Invalid dex num {num} for {row.name}")
 
+        assert region
         regions.append([region])
 
-    to_tsv(FILE_PATH + "regions-out.tsv", [row for row in regions])
+    to_tsv(REGIONS_OUTFILE, [row for row in regions])
 
 
-def write_evolutions():
-    evolutions = from_tsv(FILE_PATH + "evolutions-in.tsv")
-    db: Database = Database()
+def write_evolutions(db: Database):
+    evolutions = from_tsv(EVOLUTIONS_INFILE)
     out_rows = []
     for row in db.rows:
         name = row.species
@@ -120,12 +121,11 @@ def write_evolutions():
 
         out_rows.append(value or "--")
 
-    to_tsv(FILE_PATH + "evolutions-out.tsv", out_rows)
+    to_tsv(EVOLUTIONS_OUTFILE, out_rows)
 
 
-def write_pla_names():
+def write_pla_names(db: Database):
     pla_rows = from_tsv(FILE_PATH + "pla-names.in")
-    db: Database = Database()
     out_rows = []
     for row in pla_rows:
         assert len(row) == 1
@@ -162,7 +162,89 @@ def write_pla_names():
 
     to_tsv(FILE_PATH + "pla-names.out", out_rows)
 
-# write_abilities()
-# write_regions()
-# write_evolutions()
-write_pla_names()
+
+def compare_version_history(dex: Dex):
+    previous: Sheet = get_dex_sheet()
+    current: Sheet = dex.sheet
+
+    assert len(previous.rows) == len(current.rows)
+    diffs = []
+
+    for prev_row, current_row in zip(previous.rows, current.rows):
+        assert len(prev_row) == 36
+        prev_row.insert(-1, 'FALSE') # Quick
+        prev_row.insert(-3, 'FALSE') # Dusk
+        assert len(prev_row) == 38
+
+        if prev_row != current_row:
+            assert len(prev_row) == len(current_row)
+            rows_diffs = []
+            for index, (prev_val, current_val) in enumerate(zip(prev_row, current_row)):
+                if prev_val == "FALSE" and current_val == "TRUE":
+                    rows_diffs.append(f"\t{dex.sheet.schema_row[index]}++")
+                elif prev_val.replace("\n", " ") != current_val.replace("\n", " "):
+                    rows_diffs.append(f"\t{dex.sheet.schema_row[index]}: {prev_val} -> {current_val}".replace("\n", " "))
+
+            if len(rows_diffs) > 0:
+                diffs.append(f"Diff: {current_row[0]} {current_row[3]}")
+                diffs.extend(rows_diffs)
+
+    to_file(FILE_PATH + "diffs.out", diffs)
+
+
+def genshin_achievements_add_version_column():
+    wiki = from_tsv(FILE_PATH + "achievements.in")
+    version_map = {}
+    for row in wiki:
+        print(row)
+        assert len(row) in [6, 7]
+        name = row[0]
+        version = row[-2]
+        assert version_map.get(name, version) == version
+        version_map[name] = version
+
+    sheet = from_tsv(FILE_PATH + "GENSHIN IMPACT - Achievements.tsv")
+    name_index = 9
+
+    out = []
+    for row in sheet:
+        name = row[name_index]
+        version = version_map.get(name, "")
+        print(name, version)
+        out.append([version, name])
+
+    to_tsv(FILE_PATH + "versions-out.tsv", out)
+
+
+def gensin_recipes():
+    recipes = from_tsv(FILE_PATH + "recipes.in")
+    character_to_recipe = {}
+
+    for row in recipes:
+        assert len(row) == 2
+        recipe = row[0]
+        character = row[1]
+        if character:
+            character_to_recipe[character] = recipe
+
+    out = []
+    characters = from_file(FILE_PATH + "characters.in")
+    assert len(characters) == len(character_to_recipe)
+    for character in characters:
+        if character in ["Raiden Shogun", "Traveler"]:
+            recipe = "None"
+        else:
+            recipe = character_to_recipe[character]
+        out.append(recipe)
+
+    to_file(FILE_PATH + "recipes.out", out)
+
+
+def run_commands(db: Database, dex: Dex):
+    write_abilities(db)
+    write_regions(db)
+    write_evolutions(db)
+    write_pla_names(db)
+    compare_version_history(dex)
+    # genshin_achievements_add_version_column()
+    # gensin_recipes()
