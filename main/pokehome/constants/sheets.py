@@ -32,6 +32,17 @@ class HiddenAbilityProgress(str, Enum):
     GENDERED_NON_POKE_BALL = "Breed"
 
 
+class GenderRatio(str, Enum):
+    MALE_ONLY = "100% Male"
+    EIGHTH_FEMALE = "12.5% Female"
+    FOURTH_FEMALE = "25% Female"
+    EQUAL = "50% Female"
+    FOURTH_MALE = "75% Female"
+    EIGHTH_MALE = "87.5% Female"
+    FEMALE_ONLY = "100% Female"
+    GENDERLESS = "Genderless"
+
+
 class DbFields(str, Enum):
     SORT_ID = "sort"
     DEX = "dex"
@@ -51,6 +62,8 @@ class DbFields(str, Enum):
     HIDDEN_ABILITY = "hidden"
     FAMILY_EVOS = "family"
     OG_REGION = "og region"
+    GENDER_RATIO = "gender ratio"
+    CAN_BREED = "can breed"
 
 
 class DexFields(str, Enum):

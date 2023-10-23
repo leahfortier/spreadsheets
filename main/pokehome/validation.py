@@ -1,19 +1,21 @@
 from typing import Dict, List, Set
 
-from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, EVOLUTIONS_OUTFILE
-from main.pokehome.constants.pokes import REGIONS
+from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMILIES_OUTFILE, GENDER_OUTFILE, \
+    BALLS_OUTFILE
+from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
 from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, get_dex_sheet, \
     SAME_ID_DIFFERENT_FIELDS
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex, DexRow
 from main.util.data import Sheet
-from main.util.file_io import from_tsv
+from main.util.file_io import from_tsv, to_file
 
 
 def validate_dex(db: Database, sheet: Sheet):
     id_map: Dict[str, int] = {}
     hidden_families: Dict[str, bool] = {}
     ball_families: Dict[str, Set[str]] = {}
+    ball_map: Dict[str, List[str]] = {}
 
     main_fields = [field.value for field in DexFields]
     ball_fields = [field for field in sheet.schema_row if field not in main_fields]
@@ -50,14 +52,6 @@ def validate_dex(db: Database, sheet: Sheet):
         region = get(DexFields.REGION)
         assert region in REGIONS
 
-        # Assert only one family member per ball
-        for ball in ball_fields:
-            if is_caught(ball):
-                ball_families.setdefault(family, set())
-                if ball in ball_families.get(family):
-                    print(f"Duplicate {ball} Ball for {family}")
-                ball_families[family].add(ball)
-
         # Hidden ability matches family or N/A
         assert db_row.hidden == hidden_ability
         assert hidden_progress in [e for e in HiddenAbilityProgress]
@@ -66,7 +60,7 @@ def validate_dex(db: Database, sheet: Sheet):
         else:
             has_hidden = hidden_progress != HiddenAbilityProgress.UNOBTAINED
             if hidden_families.get(db_row.family, has_hidden) != has_hidden:
-                print(f"Hidden ability does not match family for {name}")
+                print(f"{name}: Hidden ability ({hidden_progress}) does not match family ({not has_hidden})")
             hidden_families[db_row.family] = has_hidden
 
         # Duplicate rows (in live dex and forms) should have matching values
@@ -84,20 +78,54 @@ def validate_dex(db: Database, sheet: Sheet):
         else:
             id_map[row_id] = index
 
+            for ball in ball_fields:
+                if is_caught(ball):
+                    ball_map.setdefault(ball, [])
+                    ball_map.get(ball).append(name)
+
+                    # Assert only one family member per ball
+                    ball_families.setdefault(family, set())
+                    if ball in ball_families.get(family):
+                        print(f"Duplicate {ball} Ball for {family}")
+                    ball_families[family].add(ball)
+
+                    # Only collecting balls for Pokemon that can pass them down
+                    if not db_row.can_breed() and db_row.species not in INCLUDE_UNBREEDABLE_POKEBALLS:
+                        print(f"{ball} Ball marked for Unbreedable Pokemon {name}")
+
+    for ball in BALL_NOTES.keys():
+        assert ball in ball_map
+
+    out: List[str] = []
+    for ball, names in ball_map.items():
+        out.append(f"{ball}: {len(names)}{BALL_NOTES.get(ball, '')}")
+        for name in names:
+            out.append("\t" + name)
+        out.append("")
+    to_file(BALLS_OUTFILE, out)
+
 
 def validate_command_out(db: Database):
     db_rows: List[DbRow] = db.rows
     ability_rows: List[List[str]] = from_tsv(ABILITIES_OUTFILE)
     region_rows: List[List[str]] = from_tsv(REGIONS_OUTFILE)
-    evolution_rows: List[List[str]] = from_tsv(EVOLUTIONS_OUTFILE)
+    evolution_rows: List[List[str]] = from_tsv(FAMILIES_OUTFILE)
+    gender_rows: List[List[str]] = from_tsv(GENDER_OUTFILE)
 
+    # Rows must correspond to each other
     assert len(ability_rows) == len(db_rows)
     assert len(region_rows) == len(db_rows)
     assert len(evolution_rows) == len(db_rows)
+    assert len(gender_rows) == len(db_rows)
+
     for index, row in enumerate(db_rows):
+        # If this fails you need to either:
+        #  - Update the respective DB columns with the output file
+        #  - Update the input file with new data to match
         assert ability_rows[index] == [row.ability1, row.ability2, row.hidden]
         assert region_rows[index] == [row.region]
         assert evolution_rows[index] == [row.family]
+        assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
 
 
 def run_validation(db: Database, dex: Dex):

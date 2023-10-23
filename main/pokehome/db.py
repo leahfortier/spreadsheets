@@ -27,6 +27,8 @@ class DbRow:
 
         self.family = sheet.get(row, DbFields.FAMILY_EVOS)
         self.region = sheet.get(row, DbFields.OG_REGION)
+        self.gender_ratio = sheet.get(row, DbFields.GENDER_RATIO)
+        self.can_breed_field = sheet.get(row, DbFields.CAN_BREED)
 
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)
@@ -106,6 +108,9 @@ class DbRow:
         if regional_is_alt and self.regional_form:
             return True
         return False
+
+    def can_breed(self):
+        return self.can_breed_field == "Yes"
 
 
 class Database:

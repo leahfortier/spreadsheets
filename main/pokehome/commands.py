@@ -1,13 +1,93 @@
-from typing import List
+from typing import List, Optional, Dict
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
-    EVOLUTIONS_INFILE, EVOLUTIONS_OUTFILE
-from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON
-from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet
+    FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE
+from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS
+from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet, GenderRatio
 from main.pokehome.db import Database, DbRow
-from main.pokehome.dex import Dex, DexRow
+from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
+from main.util.general import remove_suffix, has_prefix, remove_prefix
+
+
+def set_abs(db_row: DbRow, abilities: List[str]):
+    def ab_format(s: str):
+        if s.endswith("+"):
+            return s[:s.rindex("Gen ")]
+        return s or EMPTY_ABILITY
+
+    db_row.ability1 = ab_format(abilities[0])
+    db_row.ability2 = ab_format(abilities[1])
+    db_row.hidden = ab_format(abilities[2])
+
+
+def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row: List[str]):
+    num = bulba_row[0]
+    species = bulba_row[1]
+    abilities = bulba_row[-3:]
+
+    form_name = ""
+    regional_form = ""
+
+    if len(bulba_row) > 6:
+        form_name = " ".join(bulba_row[3:-3])
+        # print(form_name, bulba_row)
+
+        for regional in REGIONALS:
+            if form_name.startswith(regional):
+                regional_form = regional
+                prefixes = [regional + " Form", regional + " " + species]
+                assert has_prefix(form_name, prefixes)
+                form_name = remove_prefix(form_name, prefixes)
+                break
+
+        form_name = form_name.strip(" ()")
+        form_name = remove_suffix(form_name, [" Form", " Forme", " Cloak", " Rotom", " Plumage", " Style", " Breed"])
+        if form_name in ["Normal", "Standard Mode"]:
+            form_name = ""
+        if species == "Tauros" and regional_form == "Paldean" and form_name == "Combat":
+            form_name = ""
+
+        if has_prefix(form_name, ["Mega ", "Primal "]):
+            return
+        if form_name in NON_HOME_FORMS.get(species, []):
+            return
+
+    all_forms = db.species_map.get(species)
+    if num not in ability_map:
+        db_row = db.get(all_forms[0])
+        assert db_row.is_base_form(regional_is_base=False)
+        set_abs(db_row, abilities)
+        ability_map[num] = abilities
+
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if not form_db_row.regional_form:
+                set_abs(form_db_row, abilities)
+    elif regional_form and not form_name:
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if form_db_row.regional_form == regional_form:
+                assert form_db_row.ability1 == EMPTY_ABILITY
+                set_abs(form_db_row, abilities)
+    else:
+        assert form_name
+        db_row = None
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if regional_form and form_db_row.regional_form != regional_form:
+                continue
+
+            check_names = [form_db_row.name, form_db_row.form, form_db_row.gender_form]
+            if form_name in check_names:
+                db_row = form_db_row
+                break
+
+        if db_row:
+            set_abs(db_row, abilities)
+        elif abilities != ability_map[num]:
+            print("No match for", form_name, bulba_row)
 
 
 def write_abilities(db: Database):
@@ -15,41 +95,64 @@ def write_abilities(db: Database):
     #   - Rows between generations are removed
     #   - Several form names have been edited to match
     #   - https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_Ability
-    bulba_rows = from_tsv(ABILITIES_INFILE)
-    for index in range(0, len(bulba_rows), 2):
-        first = bulba_rows[index]
-        second = bulba_rows[index + 1]
-        species = first[1]
-        form_name = ""
-        assert len(second) in [3, 4]
-        if len(second) == 4:
-            form_name = second[0]
-            if form_name.startswith("Mega"):
-                continue
-            if form_name in ["Normal"]:
-                form_name = ""
+    bulba_rows: List[List[str]] = from_tsv(ABILITIES_INFILE)
+    ability_map: Dict[str, List[str]] = {}
+    merged_row: List[str] = []
 
-        def set_abs(row: DbRow):
-            def ab_format(s: str):
-                return (s or EMPTY_ABILITY).rstrip("*")
+    for db_row in db.rows:
+        set_abs(db_row, ["", "", ""])
 
-            row.ability1 = ab_format(second[-3])
-            row.ability2 = ab_format(second[-2])
-            row.hidden = ab_format(second[-1])
+    first = True
+    for row in bulba_rows:
+        if not first and row[0].isnumeric():
+            handle_abilities(db, ability_map, merged_row)
+            merged_row = []
+        first = False
+        merged_row.extend(row)
+    handle_abilities(db, ability_map, merged_row)
 
-        forms = db.get_forms([species], regional_is_alt=True)
-        for form in forms:
-            row = db.get(form)
-            if form_name:
-                if form_name in [row.name, row.form, row.gender_form]:
-                    set_abs(row)
-            else:
-                set_abs(row)
+    # Make sure every row has been set
+    for db_row in db.rows:
+        assert db_row.ability1 != EMPTY_ABILITY
 
     def get_abilities(row: DbRow) -> List[str]:
         return [row.ability1, row.ability2, row.hidden]
 
     to_tsv(ABILITIES_OUTFILE, [get_abilities(row) for row in db.rows])
+
+
+def write_genders(db: Database):
+    # Input file is copy-pasted table from Bulbapedia
+    #   - Manually created section titles with new lines between sections
+    #     - "[Can/Cannot] Breed: <GenderRatio>"
+    #   - A few special Pokemon rows have been removed (Cap Pikachu etc.)
+    #   - https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_gender_ratio
+    bulba_rows = from_tsv(GENDER_INFILE)
+    in_section = False
+    gender_ratio: GenderRatio = GenderRatio.GENDERLESS
+    can_breed: bool = False
+    for row in bulba_rows:
+        if len(row) == 0:
+            in_section = False
+        elif in_section:
+            assert len(row) == 3
+            assert row[1] == row[2]
+            species = row[1]
+            forms = db.species_map.get(species)
+            for form in forms:
+                row = db.get(form)
+                row.gender_ratio = gender_ratio
+                row.can_breed_field = "Yes" if can_breed else "No"
+        else:
+            section: str = row[0]
+            types = section.split(": ")
+            assert len(types) == 2
+            assert types[0] in ["Can Breed", "Cannot Breed"]
+            can_breed = types[0] == "Can Breed"
+            gender_ratio = GenderRatio(types[1])
+            in_section = True
+
+    to_tsv(GENDER_OUTFILE, [[row.can_breed_field, row.gender_ratio] for row in db.rows])
 
 
 def write_regions(db: Database):
@@ -98,30 +201,34 @@ def write_regions(db: Database):
     to_tsv(REGIONS_OUTFILE, [row for row in regions])
 
 
-def write_evolutions(db: Database):
-    evolutions = from_tsv(EVOLUTIONS_INFILE)
-    out_rows = []
-    for row in db.rows:
-        name = row.species
-        if row.regional_form:
-            name = row.regional_form + " " + name
+def write_families(db: Database):
+    evolutions = from_file(FAMILIES_INFILE)
 
+    def get_family(name: str) -> Optional[str]:
         value = None
         for evos in evolutions:
-            assert len(evos) == 1
-            pokes = evos[0].split(sep=", ")
+            pokes = evos.split(sep=", ")
             for poke in pokes:
                 if poke == name:
                     if value:
                         print("Duplicate family for " + name)
                     value = evos
+        return value
 
-        if not value:
+    out_rows: List[str] = []
+    for row in db.rows:
+        name = row.species
+
+        family = get_family(name)
+        if not family:
+            family = get_family(row.name)
+
+        if not family:
             print("No evolution found for " + name)
 
-        out_rows.append(value or "--")
+        out_rows.append(family or "--")
 
-    to_tsv(EVOLUTIONS_OUTFILE, out_rows)
+    to_file(FAMILIES_OUTFILE, out_rows)
 
 
 def write_pla_names(db: Database):
@@ -216,7 +323,7 @@ def genshin_achievements_add_version_column():
     to_tsv(FILE_PATH + "versions-out.tsv", out)
 
 
-def gensin_recipes():
+def genshin_recipes():
     recipes = from_tsv(FILE_PATH + "recipes.in")
     character_to_recipe = {}
 
@@ -242,9 +349,10 @@ def gensin_recipes():
 
 def run_commands(db: Database, dex: Dex):
     write_abilities(db)
+    write_genders(db)
     write_regions(db)
-    write_evolutions(db)
+    write_families(db)
     write_pla_names(db)
     # compare_version_history(dex)
     # genshin_achievements_add_version_column()
-    # gensin_recipes()
+    # genshin_recipes()

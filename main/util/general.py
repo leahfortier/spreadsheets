@@ -10,6 +10,20 @@ def title(s: str) -> str:
     return s
 
 
+def has_prefix(s: str, prefixes: List[str]) -> bool:
+    for prefix in prefixes:
+        if s.startswith(prefix):
+            return True
+    return False
+
+
+def remove_prefix(s: str, prefixes: List[str]) -> str:
+    for prefix in prefixes:
+        if s.startswith(prefix):
+            s = s[len(prefix):]
+    return s
+
+
 def remove_suffix(s: str, suffixes: List[str]) -> str:
     for suffix in suffixes:
         if s.endswith(suffix):
