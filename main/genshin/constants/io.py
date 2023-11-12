@@ -1,0 +1,7 @@
+FILE_PATH = "out/"
+
+ACHIEVEMENTS_INFILE = FILE_PATH + "wonders.in"
+RECIPES_INFILE = FILE_PATH + "recipes.in"
+RECIPES_OUTFILE = FILE_PATH + "recipes.out"
+VERSIONS_OUTFILE = FILE_PATH + "versions.out"
+CHARACTERS_INFILE = FILE_PATH + "characters.in"

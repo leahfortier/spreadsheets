@@ -72,9 +72,12 @@ FORM_BOXES: List[List[str]] = [
         "Rotom", "Minior"
     ],
     [
+        "Hippopotas", "Hippowdon",
+        "Unfezant", "Meowstic", "Pyroar", "Indeedee", "Basculegion", "Oinkologne"
+    ],
+    [
         "Sinistea", "Polteageist", "Dudunsparce", "Maushold",
         "Tauros", "Basculin", "Toxtricity", "Gimmighoul",
-        "Unfezant", "Meowstic", "Pyroar", "Indeedee", "Basculegion", "Oinkologne"
     ],
     [
         "Pikachu", "Furfrou"
@@ -92,6 +95,7 @@ BALL_NOTES: Dict[str, str] = {
     "Beast": " - 6IV Tyrogue, Ralts",
     "Safari": " - 6IV Teddiursa",
     "Fast": " - 6IV Torchic",
+    "Dusk": " - 6IV Jangmo-o",
     "Moon": " - 2 Eevee (Modest/Admant), 2 Rockruff (Own Tempo, Steadfast)",
 }
 

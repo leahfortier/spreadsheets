@@ -299,54 +299,6 @@ def compare_version_history(dex: Dex):
     to_file(FILE_PATH + "diffs.out", diffs)
 
 
-def genshin_achievements_add_version_column():
-    wiki = from_tsv(FILE_PATH + "achievements.in")
-    version_map = {}
-    for row in wiki:
-        print(row)
-        assert len(row) in [6, 7]
-        name = row[0]
-        version = row[-2]
-        assert version_map.get(name, version) == version
-        version_map[name] = version
-
-    sheet = from_tsv(FILE_PATH + "GENSHIN IMPACT - Achievements.tsv")
-    name_index = 9
-
-    out = []
-    for row in sheet:
-        name = row[name_index]
-        version = version_map.get(name, "")
-        print(name, version)
-        out.append([version, name])
-
-    to_tsv(FILE_PATH + "versions-out.tsv", out)
-
-
-def genshin_recipes():
-    recipes = from_tsv(FILE_PATH + "recipes.in")
-    character_to_recipe = {}
-
-    for row in recipes:
-        assert len(row) == 2
-        recipe = row[0]
-        character = row[1]
-        if character:
-            character_to_recipe[character] = recipe
-
-    out = []
-    characters = from_file(FILE_PATH + "characters.in")
-    assert len(characters) == len(character_to_recipe)
-    for character in characters:
-        if character in ["Raiden Shogun", "Traveler"]:
-            recipe = "None"
-        else:
-            recipe = character_to_recipe[character]
-        out.append(recipe)
-
-    to_file(FILE_PATH + "recipes.out", out)
-
-
 def run_commands(db: Database, dex: Dex):
     write_abilities(db)
     write_genders(db)
@@ -354,5 +306,3 @@ def run_commands(db: Database, dex: Dex):
     write_families(db)
     write_pla_names(db)
     # compare_version_history(dex)
-    # genshin_achievements_add_version_column()
-    # genshin_recipes()

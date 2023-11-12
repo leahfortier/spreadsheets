@@ -3,10 +3,9 @@ from typing import Dict, List, Set
 from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMILIES_OUTFILE, GENDER_OUTFILE, \
     BALLS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
-from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, get_dex_sheet, \
-    SAME_ID_DIFFERENT_FIELDS
+from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS
 from main.pokehome.db import Database, DbRow
-from main.pokehome.dex import Dex, DexRow
+from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
 
