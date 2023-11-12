@@ -1,5 +1,7 @@
-from main.genshin.achievements import update_wonders
+from main.genshin.achievements import update_achievements
 
 
 def main():
-    update_wonders()
+    update_achievements()
+
+main()

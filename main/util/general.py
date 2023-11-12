@@ -30,6 +30,7 @@ def remove_suffix(s: str, suffixes: List[str]) -> str:
             s = s[:-(len(suffix))]
     return s
 
+
 def caught_total_progress(progress_condition: str, required_condition: str = None) -> List[str]:
     if not required_condition:
         count = f'COUNTIF({progress_condition})'
@@ -87,3 +88,8 @@ def is_empty(row: List[str]) -> bool:
         if val != '':
             return False
     return True
+
+
+def generic_name(styled_name: str) -> str:
+    name = styled_name.lower().replace("\"", "")
+    return name
