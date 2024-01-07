@@ -2,7 +2,11 @@ FILE_PATH = "out/"
 
 # From Wonders of the World table
 # https://genshin-impact.fandom.com/wiki/Wonders_of_the_World#Achievement_List
-ACHIEVEMENTS_INFILE = FILE_PATH + "achievements-in.tsv"
+WONDERS_INFILE = FILE_PATH + "wonders-in.tsv"
+
+# From specific namecard acheivement pages table
+# Ex: https://genshin-impact.fandom.com/wiki/Fontaine:_Dance_of_the_Dew-White_Springs_(III)
+NAMECARD_INFILE = FILE_PATH + "namecard-in.tsv"
 
 # Column pasted from spreadshseet
 CHARACTERS_INFILE = FILE_PATH + "characters.in"
@@ -10,5 +14,6 @@ CHARACTERS_INFILE = FILE_PATH + "characters.in"
 # Character and recipe name columns copied from spreadsheet
 RECIPES_INFILE = FILE_PATH + "recipes.in"
 
+ACHIEVEMENTS_OUTFILE = FILE_PATH + "achievements-out.tsv"
 VERSIONS_OUTFILE = FILE_PATH + "versions.out"
 RECIPES_OUTFILE = FILE_PATH + "recipes.out"

@@ -13,13 +13,24 @@ ACHIEVEMENT_END = "You reached the end of your (achievement) journey ---- so far
 
 class AchievementFields(str, Enum):
     NAME = "Achievement"
+    DESCRIPTION = "Description"
+    NOTES = "Notes"
+    CATEGORY = "Category"
     VERSION = "Version"
     PLAYER_1_MAIN = "L2"
+    PLAYER_2_MAIN = "M2"
+    PLAYER_3_MAIN = "P2"
+
+
+class AchievementSections(str, Enum):
+    WONDERS = "Wonders of the World"
+    MEMORIES = "Memories of the Heart"
+    NAMECARD = "N/A"
 
 
 class AchievementCategories(str, Enum):
-    WONDERS = "Wonders of the World"
-    MEMORIES = "Memories of the Heart"
+    HANGOUT = "Hangout"
+    EXPLORATION = "Exploration"
 
 
 def get_achievements_sheet() -> Sheet:

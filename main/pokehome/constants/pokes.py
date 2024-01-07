@@ -92,11 +92,11 @@ FORM_BOXES: List[List[str]] = [
 BALL_NOTES: Dict[str, str] = {
     "Dream": " - 6IV Nidoran♂, Mudkip",
     "Premier": " - 6IV Beldum, Impidimp, Rellor",
-    "Beast": " - 6IV Tyrogue, Ralts",
+    "Beast": " - 6IV Tyrogue, Ralts, Dreepy",
     "Safari": " - 6IV Teddiursa",
     "Fast": " - 6IV Torchic",
     "Dusk": " - 6IV Jangmo-o",
-    "Moon": " - 2 Eevee (Modest/Admant), 2 Rockruff (Own Tempo, Steadfast)",
+    "Moon": " - 2 Rockruff (Own Tempo, Steadfast)",
 }
 
 NON_HOME_FORMS: Dict[str, List[str]] = {
