@@ -123,3 +123,6 @@ sheet_id.py
 
 # Output
 out/
+
+# Mac
+.DS_Store

@@ -5,8 +5,10 @@ from main.constants.sheet_id import BUDGET_ID
 
 TRANSACTIONS_FILE = str(Path.home() / "Downloads/transactions.csv")
 
+YEAR = 2024
+
 SPREADSHEET_ID = BUDGET_ID
-TRANSACTIONS_TAB = '2023 Transactions'
+TRANSACTIONS_TAB = f'{YEAR} Transactions'
 
 CATEGORY = "Category"
 MONTH = "Month"
@@ -25,4 +27,4 @@ NEGATIVE_TRANSACTION = "debit"
 DATE_FORMAT = "%m/%d/%Y"
 MONTH_FORMAT = "'%B %Y"
 
-START_DATE = datetime(year=2023, month=1, day=1)
+START_DATE = datetime(year=YEAR, month=1, day=1)
