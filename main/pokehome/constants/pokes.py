@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-TOTAL_POKEMON: int = 1017
+TOTAL_POKEMON: int = 1025
 
 BOX_ROWS: int = 5
 BOX_COLS: int = 6
@@ -68,11 +68,11 @@ FORM_BOXES: List[List[str]] = [
     ],
     [
         "Shellos", "Gastrodon",
-        "Frillish", "Jellicent",
         "Rotom", "Minior"
     ],
     [
         "Hippopotas", "Hippowdon",
+        "Frillish", "Jellicent",
         "Unfezant", "Meowstic", "Pyroar", "Indeedee", "Basculegion", "Oinkologne"
     ],
     [
