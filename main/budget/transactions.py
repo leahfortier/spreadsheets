@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Dict
 
-from main.budget.constants import KEY_FIELDS, DATE, MONTH, CATEGORY, AMOUNT, TRANSACTION_TYPE, POSITIVE_TRANSACTION, \
-    NEGATIVE_TRANSACTION, MONTH_FORMAT, DATE_FORMAT, START_DATE, ORIGINAL_DESCRIPTION, DESCRIPTION, LABELS
+from main.budget.constants import KEY_FIELDS, DATE, MONTH, CATEGORY, AMOUNT, MONTH_FORMAT, DATE_FORMAT, START_DATE, DESCRIPTION, LABELS
 
 
 class Transactions:
@@ -24,13 +23,10 @@ class Transactions:
             while len(self.rows[row_index]) < len(self.schema_row):
                 self.rows[row_index].append("")
 
-            # Positive amount for refunds, negative for charges
-            modifier = self.get_amount_modifier(row_index)
-            amount = abs(float(self.get_value(row_index, AMOUNT)))
-            self.set(row_index, AMOUNT, str(modifier*amount))
+            amount = self.get_amount(row_index)
+            self.set(row_index, AMOUNT, str(amount))
 
             # Trim all whitespace
-            self._trim_value(row_index, ORIGINAL_DESCRIPTION)
             self._trim_value(row_index, DESCRIPTION)
 
             # Uniform date format (zero-indexed month/day)
@@ -57,14 +53,26 @@ class Transactions:
         date_field = self.get_value(row_index, DATE)
         return datetime.strptime(date_field, "%m/%d/%Y")
 
-    def get_amount_modifier(self, index: int) -> int:
-        transaction_type = self.get_value(index, TRANSACTION_TYPE)
-        if transaction_type == POSITIVE_TRANSACTION:
-            return 1
-        elif transaction_type == NEGATIVE_TRANSACTION:
-            return -1
-        print("Unknown transaction type:", transaction_type)
-        return -1
+    # Positive amounts are in the format "$<amount>"
+    # Negative amounts are in the format "($<amount>)"
+    def get_amount(self, index: int) -> float:
+        amount = self.get_value(index, AMOUNT)
+        stripped = amount.strip("($)")
+
+        if len(stripped) == len(amount) - 3:
+            modifier = -1
+        elif len(stripped) == len(amount) - 1:
+            modifier = 1
+        elif amount == stripped:
+            modifier = 1
+        else:
+            print("Unknown amount format:", amount)
+            return 0
+
+        if float(stripped) < 0 and amount != stripped:
+            print("Unexpected negative amount")
+
+        return modifier * float(stripped)
 
     def get_value(self, row_index: int, field: str) -> str:
         return self.rows[row_index][self.schema[field]]

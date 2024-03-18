@@ -1,5 +1,5 @@
 import re
-from datetime import date
+from datetime import date, timedelta
 
 SECOND_MILLIS = 1000
 MINUTE_MILLIS = 60 * SECOND_MILLIS
@@ -32,5 +32,9 @@ def millis_to_string(millis: int) -> str:
     return f'{hours_minutes}:{seconds:02}.{millis:03}'
 
 
-def today_str() -> str:
-    return date.today().strftime("%m/%d/%Y")
+def today_str(date_format: str = "%m/%d/%Y") -> str:
+    return date_str(0, date_format)
+
+
+def date_str(day_delta: int, date_format: str) -> str:
+    return (date.today() + timedelta(days=day_delta)).strftime(date_format)
