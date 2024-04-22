@@ -1,10 +1,11 @@
 from typing import Tuple, Dict, List
 
-from main.genshin.constants.io import WONDERS_INFILE, VERSIONS_OUTFILE, ACHIEVEMENTS_OUTFILE, NAMECARD_INFILE
+from main.genshin.constants.io import WONDERS_INFILE, VERSIONS_OUTFILE, NAMECARD_INFILE, \
+    MEMORIES_INFILE
 from main.genshin.constants.sheets import get_achievements_sheet, AchievementFields, ACHIEVEMENT_END, \
     AchievementSections, AchievementCategories
 from main.util.data import Sheet
-from main.util.file_io import from_tsv, to_tsv
+from main.util.file_io import from_tsv, to_tsv, from_file
 from main.util.general import generic_name
 
 
@@ -107,24 +108,9 @@ def add_version_column(sheet: AchievementsSheet, wiki: AchievementsWiki):
 
 
 def new_achievements(sheet: AchievementsSheet, wiki: AchievementsWiki):
-    out: List[List[str]] = []
-
     for row in wiki.rows:
-        if not sheet.has(row.name) or sheet.category(row.name) != AchievementSections.WONDERS:
-            print(row.version, row.name)
-            out_row = [""] * len(sheet.sheet.schema_row)
-            sheet.sheet.set(out_row, AchievementFields.NAME, row.name)
-            sheet.sheet.set(out_row, AchievementFields.DESCRIPTION, row.description)
-            sheet.sheet.set(out_row, AchievementFields.NOTES, row.requirements)
-            sheet.sheet.set(out_row, AchievementFields.CATEGORY, row.category)
-            sheet.sheet.set(out_row, AchievementFields.VERSION, row.version)
-            sheet.sheet.set(out_row, AchievementFields.PLAYER_1_MAIN, "FALSE")
-            sheet.sheet.set(out_row, AchievementFields.PLAYER_2_MAIN, "FALSE")
-            sheet.sheet.set(out_row, AchievementFields.PLAYER_3_MAIN, "FALSE")
-
-            out.append(out_row)
-
-    to_tsv(ACHIEVEMENTS_OUTFILE, out)
+        if not sheet.has(row.name):
+            print("Missing:", row.version, row.name)
 
 
 def achievement_order(sheet: AchievementsSheet, wiki: AchievementsWiki):
@@ -140,6 +126,7 @@ def achievement_order(sheet: AchievementsSheet, wiki: AchievementsWiki):
 
         if sheet_index in sheet.jump_indices:
             sheet_index = sheet.index(wiki_name)
+
         sheet_row = sheet.sheet.rows[sheet_index]
         sheet_name = generic_name(sheet.sheet.get(sheet_row, AchievementFields.NAME))
 
@@ -153,10 +140,12 @@ def achievement_order(sheet: AchievementsSheet, wiki: AchievementsWiki):
 def update_achievements():
     sheet = AchievementsSheet()
     wonders = AchievementsWiki(WONDERS_INFILE, AchievementSections.WONDERS)
-    # namecard = AchievementsWiki(NAMECARD_INFILE, AchievementSections.NAMECARD, version="4.2")
+    memories = AchievementsWiki(MEMORIES_INFILE, AchievementSections.MEMORIES)
+    namecard = AchievementsWiki(NAMECARD_INFILE, AchievementSections.NAMECARD, version="4.2")
 
     achievement_order(sheet, wonders)
 
     new_achievements(sheet, wonders)
-    # new_achievements(sheet, namecard)
+    new_achievements(sheet, memories)
+    new_achievements(sheet, namecard)
 
