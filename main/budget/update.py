@@ -15,6 +15,8 @@ def update_spreadsheet(output_file: str, backup_file: str):
     to_tsv(output_file, next_rows, show_diff=False)
     to_tsv(backup_file, current_rows, show_diff=False)
 
+    print("Update complete. Results outputted to", output_file)
+
 
 def combine(new_rows: List[List[str]], current_rows: List[List[str]]) -> List[List[str]]:
     new: Transactions = Transactions(new_rows)
