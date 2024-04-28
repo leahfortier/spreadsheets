@@ -5,7 +5,7 @@ from main.pokehome.constants.pokes import REGIONS
 from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX_TAB, DexClassification
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
-from main.util.general import column_range, caught_total_progress, count_with_percentage, condition_as_count
+from main.util.sheets_formulas import caught_total_progress, count_with_percentage, condition_as_count, column_range
 
 
 def get_stats(dex: Dex):

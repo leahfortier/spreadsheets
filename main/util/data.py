@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import List, Dict, Optional, Tuple
 
-from main.util.general import column_name, is_empty
+from main.util.general import is_empty
+from util.sheets_formulas import column_name
 
 
 class Sheet:

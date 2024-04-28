@@ -1,9 +1,9 @@
-from constants.sheets import SPREADSHEET_ID
+from constants.sheets import SWIZZLES
 from tierlist import sort_tiers
 
 
 def main():
-    sort_tiers(SPREADSHEET_ID)
+    sort_tiers(SWIZZLES)
 
 
 main()

@@ -4,7 +4,7 @@ from main.budget.constants import SPREADSHEET_ID, transactions_file
 from main.budget.constants import TRANSACTIONS_TAB
 from main.budget.transactions import Transactions, TransactionsIterator
 from main.util.file_io import from_csv, to_tsv
-from main.util.sheets import get_sheet_data
+from main.util.sheets_parse import get_sheet_data
 
 
 def update_spreadsheet(output_file: str, backup_file: str):

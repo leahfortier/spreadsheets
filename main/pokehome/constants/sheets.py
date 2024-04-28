@@ -3,7 +3,7 @@ from typing import List
 
 from main.constants.sheet_id import POKEMON_ID
 from main.util.data import Sheet
-from main.util.sheets import get_sheet_data
+from main.util.sheets_parse import get_sheet_data
 
 SPREADSHEET_ID = POKEMON_ID
 
