@@ -36,14 +36,10 @@ class TierList:
 
         # Sort first based on tier, and second based on current ordering
         tier_index = self.tiers[rating]
-        old_value = int(self.sheet.get(row, self.config.rank_field))
-        return tier_index, old_value
+        rank = int(self.sheet.get(row, self.config.new_rank_field))
+        return tier_index, rank
 
     def sort_tiers(self) -> List[List[str]]:
-        # Update old sort value with current ordering
-        for i, row in enumerate(self.sheet.rows):
-            self.sheet.update(row, self.config.rank_field, str(i + 1))
-
         keys: List[Tuple[str, ...]] = list(self.sheet.id_map.keys())
         keys.sort(key=self.sort_key)
 
@@ -52,8 +48,20 @@ class TierList:
             index = self.sheet.id_map[key]
             row = self.sheet.rows[index]
 
-            # Update new sort index -- +1 because not zero-indexed
-            self.sheet.update(row, self.config.rank_field, str(i + 1), print_diff=False)
+            # Update new sort index to dynamically get row order
+            self.sheet.update(row, self.config.new_rank_field, f'=ROW(A{i + 2}) - 1', print_diff=False)
+
+            # Update old sort index with current ordering -- +1 because zero-indexed
+            if self.config.old_rank_field:
+                self.sheet.update(row, self.config.old_rank_field, str(i + 1), print_diff=False)
+
+            # =IF(C2-B2>0, CONCAT("↑", C2-B2), IF(C2-B2<0, CONCAT("↓", -(C2-B2)), ""))
+            new_rank_row = f'{self.sheet.column(self.config.new_rank_field)}{i + 2}'
+            old_rank_row = f'{self.sheet.column(self.config.old_rank_field)}{i + 2}'
+            diff_row = f'{new_rank_row}-{old_rank_row}'
+            diff_formula = (f'=IF({diff_row}>0, CONCAT("↓", {diff_row}), '
+                            f'IF({diff_row}<0, CONCAT("↑", -({diff_row})), ""))')
+            self.sheet.update(row, self.config.diff_field, diff_formula, print_diff=False)
 
             self.config.on_update(self.sheet, i, row)
             rows.append(row)
