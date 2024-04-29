@@ -1,7 +1,9 @@
 from typing import List
 
 from main.constants.sheet_id import L_SWIZZLE_ID
-from constants.sheets import TierSheet
+from data import ShowDiffs, TierSheet
+
+from data import RatingField
 from util.data import Sheet
 from util.general import remove_suffix
 from util.sheets_formulas import column_range
@@ -28,15 +30,21 @@ def update_swizzle(sheet: Sheet, index: int, row: List[str]) -> None:
     sheet.update(row, RATING_FIELD, rating_formula, print_diff=False)
 
 
-SWIZZLES: TierSheet = TierSheet(
-    spreadsheet_id=L_SWIZZLE_ID,
-    id_fields=["Sort"],
-    tiers_tab="Notes",
-    tiers_field="Ratings",
-    sort_tab="Discography",
-    rating_field=RATING_FIELD,
-    new_rank_field="Rank",
-    old_rank_field="Old",
-    diff_field="+/-",
-    on_update=update_swizzle,
-)
+def get_swizzles(spreadsheet_id: str) -> TierSheet:
+    return TierSheet(
+        spreadsheet_id=spreadsheet_id,
+        id_fields=["Sort"],
+        tiers_tab="Notes",
+        tiers_field="Ratings",
+        sort_tab="Discography",
+        rating_fields=[
+            RatingField(
+                RATING_FIELD, "Rank",
+                show_diffs=ShowDiffs(
+                    old_rank_field="Old",
+                    diff_field="+/-",
+                ),
+            )
+        ],
+        on_update=update_swizzle,
+    )
