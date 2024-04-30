@@ -3,18 +3,11 @@ from typing import List, Callable
 from util.data import Sheet
 
 
-class ShowDiffs:
-    def __init__(self, old_rank_field: str, diff_field: str):
-        self.old_rank_field = old_rank_field
-        self.diff_field = diff_field
-
-
 class RatingField:
-    def __init__(self, rating_field: str, rank_field: str, show_diffs: ShowDiffs = None,):
+    def __init__(self, rating_field: str, rank_field: str, diff_field: str = None):
         self.rating = rating_field
         self.rank = rank_field
-
-        self.show_diffs = show_diffs
+        self.diff = diff_field
 
 
 class TierSheet:
@@ -26,9 +19,9 @@ class TierSheet:
             tiers_field: str,
             sort_tab: str,
             rating_fields: List[RatingField],
+            dynamic_rank_field: str = None,
             num_tier_categories: int = 1,
-            # Specific updates can go in here
-            on_update: Callable[[Sheet, int, List[str]], None] = None,
+            manual_update: Callable[[Sheet, int, List[str]], None] = lambda sheet, output_index, row: None,
     ):
         self.spreadsheet_id = spreadsheet_id
         self.id_fields = id_fields
@@ -39,6 +32,7 @@ class TierSheet:
 
         self.sort_tab = sort_tab
         self.rating_fields = rating_fields
+        self.dynamic_rank_field = dynamic_rank_field
 
-        self.on_update = on_update or (lambda *args, **kwargs: None)
+        self.manual_update = manual_update
 

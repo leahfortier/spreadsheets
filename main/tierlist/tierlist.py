@@ -38,53 +38,70 @@ class TierList:
         self.tiers = get_tiers(config.spreadsheet_id, config.tiers_tab, config.tiers_field, config.num_tier_categories)
         self.sheet = Sheet(get_sheet_data(config.spreadsheet_id, config.sort_tab), id_fields=config.id_fields)
 
-        self._rating_field = self.config.rating_fields[0]
-
     def sort_by_id(self, key: Tuple[str, ...]) -> Any:
         return self.sheet.id_map[key]
 
-    def sort_by_rank(self, key: Tuple[str, ...]) -> Tuple[int, int]:
-        index = self.sheet.id_map[key]
-        row = self.sheet.rows[index]
-        rating = self.sheet.get(row, self._rating_field.rating)
-        if rating == "":
-            rating = EMPTY_CHAR
+    def sorted_keys(self, rating_field: RatingField) -> List[Tuple[str, ...]]:
+        def sort_by_rank(key: Tuple[str, ...]) -> Tuple[int, int]:
+            index = self.sheet.id_map[key]
+            row = self.sheet.rows[index]
+            rating = self.sheet.get(row, rating_field.rating)
+            if rating == "":
+                rating = EMPTY_CHAR
 
-        # Sort first based on tier, and second based on current ordering
-        tier_index = self.tiers[rating]
-        rank = int(self.sheet.get(row, self._rating_field.rank))
-        return tier_index, rank
-
-    # Outputs a full sheet replacement in the new ordering
-    def rank(self, rating_field: RatingField = None) -> List[List[str]]:
-        rating_field = rating_field or self._rating_field
-        self._rating_field = rating_field
+            # Sort first based on tier, and second based on current ordering
+            tier_index = self.tiers[rating]
+            rank = int(self.sheet.get(row, rating_field.rank))
+            return tier_index, rank
 
         keys: List[Tuple[str, ...]] = list(self.sheet.id_map.keys())
-        keys.sort(key=self.sort_by_rank)
+        keys.sort(key=sort_by_rank)
 
-        rows = []
+        return keys
+
+    # Handles manual functions that are dependent on the output order
+    def handle_dynamic(self, rating_field: RatingField, output_index: int, row: List[str]) -> None:
+        # Update new sort index to dynamically get row order
+        if self.config.dynamic_rank_field:
+            self.sheet.update(row, self.config.dynamic_rank_field, f'=ROW(A{output_index + 2}) - 1', print_diff=False)
+
+        # =IF(C2-B2>0, CONCAT("↑", C2-B2), IF(C2-B2<0, CONCAT("↓", -(C2-B2)), ""))
+        if rating_field.diff:
+            assert self.config.dynamic_rank_field
+
+            current_rank_row = f'{self.sheet.column(self.config.dynamic_rank_field)}{output_index + 2}'
+            previous_rank_row = f'{self.sheet.column(rating_field.rank)}{output_index + 2}'
+            diff_row = f'{current_rank_row}-{previous_rank_row}'
+            diff_formula = (f'=IF({diff_row}>0, CONCAT("↓", {diff_row}), '
+                            f'IF({diff_row}<0, CONCAT("↑", -({diff_row})), ""))')
+            self.sheet.update(row, rating_field.diff, diff_formula, print_diff=False)
+
+        self.config.manual_update(self.sheet, output_index, row)
+
+    def rank(self, rating_field: RatingField = None) -> None:
+        keys = self.sorted_keys(rating_field)
         for i, key in enumerate(keys):
             index = self.sheet.id_map[key]
             row = self.sheet.rows[index]
 
             # Update sort index with current ordering -- +1 because zero-indexed
-            self.sheet.update(row, rating_field.rating, str(i + 1), print_diff=False)
+            self.sheet.update(row, rating_field.rank, str(i + 1), print_diff=False)
 
-            if rating_field.show_diffs:
-                # Update new sort index to dynamically get row order
-                self.sheet.update(row, rating_field.rank, f'=ROW(A{i + 2}) - 1', print_diff=False)
-                self.sheet.update(row, rating_field.show_diffs.old_rank_field, str(i + 1), print_diff=False)
+    # Outputs a full sheet replacement in the new ordering
+    def get_rank_sheet(self) -> List[List[str]]:
+        assert len(self.config.rating_fields) == 1
 
-                # =IF(C2-B2>0, CONCAT("↑", C2-B2), IF(C2-B2<0, CONCAT("↓", -(C2-B2)), ""))
-                new_rank_row = f'{self.sheet.column(rating_field.rank)}{i + 2}'
-                old_rank_row = f'{self.sheet.column(rating_field.show_diffs.old_rank_field)}{i + 2}'
-                diff_row = f'{new_rank_row}-{old_rank_row}'
-                diff_formula = (f'=IF({diff_row}>0, CONCAT("↓", {diff_row}), '
-                                f'IF({diff_row}<0, CONCAT("↑", -({diff_row})), ""))')
-                self.sheet.update(row, rating_field.show_diffs.diff_field, diff_formula, print_diff=False)
+        rating_field = self.config.rating_fields[0]
+        self.rank(rating_field)
 
-            self.config.on_update(self.sheet, i, row)
+        # Output order changes to updated rank order
+        keys = self.sorted_keys(rating_field)
+        rows = []
+        for i, key in enumerate(keys):
+            index = self.sheet.id_map[key]
+            row = self.sheet.rows[index]
+
+            self.handle_dynamic(rating_field, i, row)
             rows.append(row)
 
         return rows
@@ -98,17 +115,21 @@ class TierList:
         schema_fields = []
         for rating_field in self.config.rating_fields:
             schema_fields.append(rating_field.rank)
-            if rating_field.show_diffs:
-                schema_fields.append(rating_field.show_diffs.old_rank_field)
-                schema_fields.append(rating_field.show_diffs.diff_field)
+            if rating_field.diff:
+                schema_fields.append(rating_field.diff)
+        if self.config.dynamic_rank_field:
+            schema_fields.append(self.config.dynamic_rank_field)
         schema_fields.sort(key=lambda field_name: self.sheet.schema[field_name])
 
         # Columns must be adjacent in the sheet or pasting is annoying
         for i in range(1, len(schema_fields)):
             assert self.sheet.schema[schema_fields[i]] == self.sheet.schema[schema_fields[i - 1]] + 1
 
+        # Output stays in the same exact order as the input
         rows = []
-        for row in self.sheet.rows:
+        for i, row in enumerate(self.sheet.rows):
+            for rating_field in self.config.rating_fields:
+                self.handle_dynamic(rating_field, i, row)
             ranks = [self.sheet.get(row, field) for field in schema_fields]
             rows.append(ranks)
         return rows
@@ -117,7 +138,7 @@ class TierList:
 def sort_tiers(sheet: TierSheet):
     tierlist = TierList(sheet)
 
-    sorted_sheet = tierlist.rank()
+    sorted_sheet = tierlist.get_rank_sheet()
     to_tsv(SORTED_OUTFILE, sorted_sheet, show_diff=False)
 
 

@@ -1,8 +1,8 @@
-from constants.swizzles import get_swizzles
-from tierlist import sort_tiers, sort_columns
-from main.constants.sheet_id import L_SWIZZLE_ID, MEL_SWIZZLE_ID
 from constants.genshin import get_genshin
-from data import RatingField, ShowDiffs
+from constants.swizzles import get_swizzles
+from data import RatingField
+from main.constants.sheet_id import L_SWIZZLE_ID, MEL_SWIZZLE_ID
+from tierlist import sort_columns, sort_tiers
 
 
 def main():
@@ -12,30 +12,27 @@ def main():
     l_genshin = get_genshin(
         "L Ranking",
         [
-            RatingField("Overall", "Ovrall Rank"),
-            RatingField("Gameplay (Abyss)", "Kit (A) Rank"),
-            RatingField("Gameplay (Casual)", "Kit (C) Rank"),
-            RatingField("Personality", "Pers. Rank"),
-            RatingField("Lore", "Lore Rank"),
-            RatingField("Design Overall", "Curr Rank", show_diffs=ShowDiffs(
-                old_rank_field="Design Rank",
-                diff_field="+/-",
-            )),
+            RatingField("Overall", "Ovrl Rank", "Ovrl +/-"),
+            RatingField("Gameplay (Abyss)", "Kit A Rank", "Kit A +/-"),
+            RatingField("Gameplay (Casual)", "Kit C Rank", "Kit C +/-"),
+            RatingField("Personality", "Pers. Rank", "Pers. +/-"),
+            RatingField("Lore", "Lore Rank", "Lore +/-"),
+            RatingField("Design Overall", "Dsgn Rank", "Dsgn +/-"),
         ]
     )
     mel_genshin = get_genshin(
         "Mel Ranking",
         [
-            RatingField("Overall", "Ovrall Rank"),
-            RatingField("Gameplay", "Kit Rank"),
-            RatingField("Personality/Lore", "Lore Rank"),
-            RatingField("Design", "Design Rank"),
+            RatingField("Overall", "Ovrl Rank", "Ovrl +/-"),
+            RatingField("Gameplay", "Kit Rank", "Kit +/-"),
+            RatingField("Personality/Lore", "Lore Rank", "Lore +/-"),
+            RatingField("Design", "Dsgn Rank", "Dsgn +/-"),
         ]
     )
 
-    # sort_tiers(l_swizzles)
+    sort_tiers(l_swizzles)
     # sort_tiers(mel_swizzles)
-    sort_columns(l_genshin)
+    # sort_columns(l_genshin)
     # sort_columns(mel_genshin)
 
 

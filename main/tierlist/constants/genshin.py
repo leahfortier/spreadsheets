@@ -13,5 +13,6 @@ def get_genshin(sort_tab: str, rating_fields: List[RatingField]) -> TierSheet:
         tiers_field="Tiers",
         sort_tab=sort_tab,
         rating_fields=rating_fields,
+        dynamic_rank_field="Curr Rank",
         num_tier_categories=2,
     )
