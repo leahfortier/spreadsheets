@@ -3,6 +3,7 @@ from constants.swizzles import get_swizzles
 from data import RatingField
 from main.constants.sheet_id import L_SWIZZLE_ID, MEL_SWIZZLE_ID
 from tierlist import sort_columns, sort_tiers
+from swizzles import check_order
 
 
 def main():
@@ -15,8 +16,7 @@ def main():
             RatingField("Overall", "Ovrl Rank", "Ovrl +/-"),
             RatingField("Gameplay (Abyss)", "Kit A Rank", "Kit A +/-"),
             RatingField("Gameplay (Casual)", "Kit C Rank", "Kit C +/-"),
-            RatingField("Personality", "Pers. Rank", "Pers. +/-"),
-            RatingField("Lore", "Lore Rank", "Lore +/-"),
+            RatingField("Vibe", "Vibe Rank", "Vibe +/-"),
             RatingField("Design Overall", "Dsgn Rank", "Dsgn +/-"),
         ]
     )
@@ -30,8 +30,9 @@ def main():
         ]
     )
 
-    sort_tiers(l_swizzles)
+    # sort_tiers(l_swizzles)
     # sort_tiers(mel_swizzles)
+    check_order(l_swizzles)
     # sort_columns(l_genshin)
     # sort_columns(mel_genshin)
 

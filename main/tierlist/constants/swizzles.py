@@ -10,6 +10,20 @@ RATING_FIELD = "Rating"
 TITLE_FIELD = "Title"
 ERA_FIELD = "Era"
 
+ERAS = [
+    "Debut",
+    "Fearless",
+    "Speak Now",
+    "Red",
+    "1989",
+    "Reputation",
+    "Lover",
+    "Folklore",
+    "Evermore",
+    "Midnights",
+    "TTPD"
+]
+
 
 # Manual formulas -- +2 because not zero-indexed and ignore schema row
 def update_swizzle(sheet: Sheet, output_index: int, row: List[str]) -> None:
@@ -30,9 +44,9 @@ def update_swizzle(sheet: Sheet, output_index: int, row: List[str]) -> None:
 def get_swizzles(spreadsheet_id: str) -> TierSheet:
     return TierSheet(
         spreadsheet_id=spreadsheet_id,
-        id_fields=["Sort"],
-        tiers_tab="Notes",
-        tiers_field="Ratings",
+        id_fields=["Sort Era"],
+        tiers_tab="Tiers",
+        tiers_field="Tiers",
         sort_tab="Discography",
         rating_fields=[RatingField(RATING_FIELD, "Old", "+/-")],
         dynamic_rank_field="Rank",

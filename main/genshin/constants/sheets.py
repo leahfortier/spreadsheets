@@ -6,7 +6,16 @@ from main.util.sheets_parse import get_sheet_data
 
 SPREADSHEET_ID = GENSHIN_ID
 
+CHARACTER_TAB = "L Chars"
 ACHIEVEMENTS_TAB = "Achievements"
+
+CHARACTER_NAME_FIELD = "Character"
+ABYSS_RANDOMIZE_CHARACTERS = {
+    9: 2,
+    10: 2,
+    11: 2,
+    12: 0,
+}
 
 ACHIEVEMENT_END = "You reached the end of your (achievement) journey ---- so far. Hehe!"
 
@@ -36,4 +45,10 @@ class AchievementCategories(str, Enum):
 def get_achievements_sheet() -> Sheet:
     return Sheet(
         get_sheet_data(SPREADSHEET_ID, ACHIEVEMENTS_TAB)
+    )
+
+
+def get_character_sheet() -> Sheet:
+    return Sheet(
+        get_sheet_data(SPREADSHEET_ID, CHARACTER_TAB)
     )
