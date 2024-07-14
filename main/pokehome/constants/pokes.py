@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from pokehome.constants.sheets import EMPTY_ABILITY
+
 TOTAL_POKEMON: int = 1025
 
 BOX_ROWS: int = 5
@@ -27,6 +29,13 @@ REGIONALS: List[str] = [
     "Galarian",
     "Hisuian",
     "Paldean"
+]
+
+DIGIMON: List[str] = [
+    "Mega",
+    "Primal",
+    "Gigantamax",
+    "Ultra",  # Necrozma
 ]
 
 EXCLUDE_BASE_FORM: List[str] = [
@@ -100,15 +109,34 @@ BALL_NOTES: Dict[str, str] = {
 }
 
 NON_HOME_FORMS: Dict[str, List[str]] = {
-    "Pikachu": ["Cosplay Pikachu", "Pikachu in a cap"],
     "Darmanitan": ["Zen Mode"],
     "Kyurem": ["White Kyurem", "Black Kyurem"],
-    "Greninja": ["Battle Bond", "Ash-Greninja"],
+    "Greninja": ["Ash"],
     "Floette": ["Eternal Flower"],
     "Zygarde": ["Complete"],
-    "Necrozma": ["Ultra Necrozma"],
     "Calyrex": ["Ice Rider", "Shadow Rider"],
+}
 
-    # This should eventually be removed
-    "Ursaluna": ["Bloodmoon"],
+ALL_TYPES: List[str] = [
+    "Fire", "Water", "Grass",
+    "Electric", "Ice", "Fighting",
+    "Poison", "Ground", "Flying",
+    "Psychic", "Bug", "Rock",
+    "Ghost", "Dark", "Dragon",
+    "Steel", "Fairy", "Normal",
+]
+
+# Megas are not included in the Types list so handling manually for those that differs
+DIGIMON_TYPES: Dict[str, List[str]] = {
+    "Mega Charizard X": ["Fire", "Dragon"],
+    "Mega Pinsir": ["Bug", "Flying"],
+    "Mega Gyarados": ["Water", "Dark"],
+    "Mega Mewtwo X": ["Psychic", "Fighting"],
+    "Mega Ampharos": ["Electric", "Dragon"],
+    "Mega Aggron": ["Steel", EMPTY_ABILITY],
+    "Mega Altaria": ["Dragon", "Fairy"],
+    "Primal Groudon": ["Ground", "Fire"],
+    "Mega Lopunny": ["Normal", "Fighting"],
+    "Mega Audino": ["Normal", "Fairy"],
+    "Ultra Necrozma": ["Psychic", "Dragon"],
 }

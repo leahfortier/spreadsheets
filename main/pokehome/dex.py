@@ -92,9 +92,9 @@ class Dex:
         for index, forms in enumerate(FORM_BOXES):
             add_form_box(f"Forms ({index + 1})", db.get_forms(forms))
 
-        add_form_box("Unown", db.species_map["Unown"])
-        add_form_box("Vivillon", db.species_map["Vivillon"])
-        add_form_box("Alcremie", db.species_map["Alcremie"])
+        add_form_box("Unown", db.get_forms(["Unown"]))
+        add_form_box("Vivillon", db.get_forms(["Vivillon"]))
+        add_form_box("Alcremie", db.get_forms(["Alcremie"]))
 
         for row in db.rows:
             if row.id in form_to_box:

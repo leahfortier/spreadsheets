@@ -5,7 +5,8 @@ from genshin.constants.sheets import get_character_sheet, CHARACTER_NAME_FIELD, 
 
 
 def print_floor(floor: str, characters: List[str]) -> None:
-    print(f'\n{floor}:\n\t{"\n\t".join(characters)}')
+    print(f'\n{floor}: {", ".join(characters)}')
+    print(f'{floor}:\n\t{"\n\t".join(characters)}')
 
 
 def randomize_abyss():
@@ -18,6 +19,8 @@ def randomize_abyss():
 
     total_randomize = sum(num for num in ABYSS_RANDOMIZE_CHARACTERS.values())
     sample = random.sample(characters, total_randomize)
+    print(sample)
+
     start = 0
     for floor, num in ABYSS_RANDOMIZE_CHARACTERS.items():
         print_floor(f'Floor {floor}', sample[start:start + num])

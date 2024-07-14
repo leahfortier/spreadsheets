@@ -38,6 +38,15 @@ def is_empty(row: List[str]) -> bool:
     return True
 
 
+def all_unique(row: List[str], exceptions: List[str] = None) -> bool:
+    exceptions = exceptions or []
+    for i in range(0, len(row)):
+        for j in range(i + 1, len(row)):
+            if row[i] == row[j] and row[i] not in exceptions:
+                return False
+    return True
+
+
 def generic_name(styled_name: str) -> str:
     name = styled_name.lower().replace("\"", "")
     return name

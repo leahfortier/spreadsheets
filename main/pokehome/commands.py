@@ -1,14 +1,117 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Callable
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
-    FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE
-from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS
+    FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE
+from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES
 from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet, GenderRatio
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
 from main.util.general import remove_suffix, has_prefix, remove_prefix
+
+
+class FormName:
+    def __init__(self, species: str, form_name: str):
+        self.species = species
+        self.form_name = form_name
+        self.regional = ""
+        self.digimon = ""
+
+        if self.form_name:
+            for regional in REGIONALS:
+                if self.form_name.startswith(regional):
+                    self.regional = regional
+                    prefixes = [regional + " Form", regional + " " + species]
+                    assert has_prefix(self.form_name, prefixes)
+                    self.form_name = remove_prefix(self.form_name, prefixes)
+                    break
+
+            for digimon in DIGIMON:
+                if self.form_name.startswith(f"{digimon} "):
+                    prefixes = [digimon + " " + species]
+                    assert has_prefix(self.form_name, prefixes)
+                    self.digimon = digimon + remove_prefix(self.form_name, prefixes)
+                    self.form_name = ""
+                    break
+
+            self.form_name = self.form_name.strip(" ()")
+            self.form_name = remove_suffix(
+                self.form_name,
+                [
+                    f" {species}",
+                    " Form", " Forme",
+                    " Cloak", " Rotom", " Plumage", " Style", " Breed",
+                ]
+            )
+            if self.form_name in ["Normal", "Standard Mode"]:
+                self.form_name = ""
+            if species == "Tauros" and self.regional == "Paldean" and self.form_name == "Combat":
+                self.form_name = ""
+            if species == "Oricorio":
+                self.form_name += " Style"
+
+
+def handle_values(
+        db: Database,
+        species: str,
+        num: str,
+        form: FormName,
+        values_map: Dict[str, List[str]],
+        values: List[str],
+        set_values: Callable[[DbRow, List[str]], None],
+        get_first: Callable[[DbRow], str]
+) -> List[DbRow]:
+    all_forms = db.species_map.get(species)
+    updated = []
+
+    def update_values(db_row: DbRow):
+        set_values(db_row, values)
+        updated.append(db_row)
+
+    # Base form is always first -- fill in all forms with their default values
+    if num not in values_map:
+        db_row = db.get(all_forms[0])
+        assert db_row.is_base_form(regional_is_base=False)
+        update_values(db_row)
+        values_map[num] = values
+        updated.append(db_row)
+
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if not form_db_row.regional_form:
+                update_values(form_db_row)
+    elif form.digimon:
+        assert not form.regional
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if form_db_row.digimon_form == form.digimon and form_db_row.form == form.form_name:
+                update_values(form_db_row)
+    elif form.regional and not form.form_name:
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if form_db_row.regional_form == form.regional:
+                assert get_first(form_db_row) == EMPTY_ABILITY
+                update_values(form_db_row)
+    else:
+        assert form.form_name
+        db_row = None
+        for form_id in all_forms[1:]:
+            form_db_row = db.get(form_id)
+            if form.regional and form_db_row.regional_form != form.regional:
+                continue
+
+            check_names = [form_db_row.name, form_db_row.form, form_db_row.gender_form]
+            if form.form_name in check_names:
+                db_row = form_db_row
+                break
+
+        if db_row:
+            update_values(db_row)
+        elif values != values_map[num]:
+            print("No match for", species, form.form_name)
+
+    return updated
 
 
 def set_abs(db_row: DbRow, abilities: List[str]):
@@ -28,66 +131,19 @@ def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row:
     abilities = bulba_row[-3:]
 
     form_name = ""
-    regional_form = ""
-
     if len(bulba_row) > 6:
         form_name = " ".join(bulba_row[3:-3])
-        # print(form_name, bulba_row)
 
-        for regional in REGIONALS:
-            if form_name.startswith(regional):
-                regional_form = regional
-                prefixes = [regional + " Form", regional + " " + species]
-                assert has_prefix(form_name, prefixes)
-                form_name = remove_prefix(form_name, prefixes)
-                break
+    form_name = FormName(species, form_name)
+    updated = handle_values(
+        db, species, num,
+        form_name,
+        ability_map, abilities,
+        set_abs, lambda db_row: db_row.ability1
+    )
+    if form_name.digimon and not updated:
+        print(f"Ability not found for {form_name.digimon} {species}")
 
-        form_name = form_name.strip(" ()")
-        form_name = remove_suffix(form_name, [" Form", " Forme", " Cloak", " Rotom", " Plumage", " Style", " Breed"])
-        if form_name in ["Normal", "Standard Mode"]:
-            form_name = ""
-        if species == "Tauros" and regional_form == "Paldean" and form_name == "Combat":
-            form_name = ""
-
-        if has_prefix(form_name, ["Mega ", "Primal "]):
-            return
-        if form_name in NON_HOME_FORMS.get(species, []):
-            return
-
-    all_forms = db.species_map.get(species)
-    if num not in ability_map:
-        db_row = db.get(all_forms[0])
-        assert db_row.is_base_form(regional_is_base=False)
-        set_abs(db_row, abilities)
-        ability_map[num] = abilities
-
-        for form_id in all_forms[1:]:
-            form_db_row = db.get(form_id)
-            if not form_db_row.regional_form:
-                set_abs(form_db_row, abilities)
-    elif regional_form and not form_name:
-        for form_id in all_forms[1:]:
-            form_db_row = db.get(form_id)
-            if form_db_row.regional_form == regional_form:
-                assert form_db_row.ability1 == EMPTY_ABILITY
-                set_abs(form_db_row, abilities)
-    else:
-        assert form_name
-        db_row = None
-        for form_id in all_forms[1:]:
-            form_db_row = db.get(form_id)
-            if regional_form and form_db_row.regional_form != regional_form:
-                continue
-
-            check_names = [form_db_row.name, form_db_row.form, form_db_row.gender_form]
-            if form_name in check_names:
-                db_row = form_db_row
-                break
-
-        if db_row:
-            set_abs(db_row, abilities)
-        elif abilities != ability_map[num]:
-            print("No match for", form_name, bulba_row)
 
 
 def write_abilities(db: Database):
@@ -119,6 +175,73 @@ def write_abilities(db: Database):
         return [row.ability1, row.ability2, row.hidden]
 
     to_tsv(ABILITIES_OUTFILE, [get_abilities(row) for row in db.rows])
+
+
+def set_types(db_row: DbRow, types: List[str]):
+    def type_format(s: str):
+        assert s in ALL_TYPES or s == EMPTY_ABILITY
+        return s
+
+    assert types[0] != types[1] or types[0] == EMPTY_ABILITY
+    db_row.type1 = type_format(types[0])
+    db_row.type2 = type_format(types[1])
+
+
+def handle_types(db: Database, types_map: Dict[str, List[str]], num: str, bulba_row: List[str]):
+    species = bulba_row[0]
+
+    if bulba_row[-2] not in ALL_TYPES:
+        bulba_row.append(EMPTY_ABILITY)
+    types = bulba_row[-2:]
+
+    form_name = ""
+    if bulba_row[2] not in ALL_TYPES:
+        form_name = bulba_row[2]
+
+    form_name = FormName(species, form_name)
+    updated = handle_values(
+        db, species, num,
+        form_name,
+        types_map, types,
+        set_types, lambda db_row: db_row.type1
+    )
+    for updated_row in updated:
+        if updated_row.name in DIGIMON_TYPES:
+            set_types(updated_row, DIGIMON_TYPES[updated_row.name])
+
+
+def write_types(db: Database):
+    # Input file is copy-pasted table from Bulbapedia
+    #   - Rows between generations are removed
+    #   - Several form names have been edited to match
+    #   - https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_National_Pok%C3%A9dex_number
+    bulba_rows: List[List[str]] = from_tsv(TYPES_INFILE)
+    types_map: Dict[str, List[str]] = {}
+    merged_row: List[str] = []
+
+    for db_row in db.rows:
+        set_types(db_row, [EMPTY_ABILITY, EMPTY_ABILITY])
+
+    odd = True
+    num = 1
+    for row in bulba_rows:
+        if row[0].strip("#").isnumeric():
+            num = row[0].strip("#")
+            row = row[1:]
+        merged_row.extend(row)
+        if not odd:
+            handle_types(db, types_map, num, merged_row)
+            merged_row = []
+        odd = not odd
+
+    # Make sure every row has been set
+    for db_row in db.rows:
+        assert db_row.type1 != EMPTY_ABILITY
+
+    def get_types(row: DbRow) -> List[str]:
+        return [row.type1, row.type2]
+
+    to_tsv(TYPES_OUTFILE, [get_types(row) for row in db.rows])
 
 
 def write_genders(db: Database):
@@ -170,6 +293,8 @@ def write_regions(db: Database):
             region = "Alola"
         elif row.regional_form:
             print(f"Unknown regional form {row.regional_form} for {row.name}")
+        elif row.form == "Bloodmoon":
+            region = "Paldea"
         elif num < 1:
             print(f"Invalid dex num {num} for {row.name}")
         elif num <= 151:
@@ -301,6 +426,7 @@ def compare_version_history(dex: Dex):
 
 def run_commands(db: Database, dex: Dex):
     write_abilities(db)
+    write_types(db)
     write_genders(db)
     write_regions(db)
     write_families(db)

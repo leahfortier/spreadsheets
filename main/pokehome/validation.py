@@ -1,13 +1,15 @@
 from typing import Dict, List, Set
 
 from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMILIES_OUTFILE, GENDER_OUTFILE, \
-    BALLS_OUTFILE
+    BALLS_OUTFILE, TYPES_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
-from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS
+from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
+    DbFields
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
+from util.general import all_unique
 
 
 def validate_dex(db: Database, sheet: Sheet):
@@ -106,25 +108,47 @@ def validate_dex(db: Database, sheet: Sheet):
 
 def validate_command_out(db: Database):
     db_rows: List[DbRow] = db.rows
+    sheet_rows: List[List[str]] = db.sheet.rows
     ability_rows: List[List[str]] = from_tsv(ABILITIES_OUTFILE)
+    type_rows: List[List[str]] = from_tsv(TYPES_OUTFILE)
     region_rows: List[List[str]] = from_tsv(REGIONS_OUTFILE)
     evolution_rows: List[List[str]] = from_tsv(FAMILIES_OUTFILE)
     gender_rows: List[List[str]] = from_tsv(GENDER_OUTFILE)
 
     # Rows must correspond to each other
     assert len(ability_rows) == len(db_rows)
+    assert len(type_rows) == len(db_rows)
     assert len(region_rows) == len(db_rows)
     assert len(evolution_rows) == len(db_rows)
     assert len(gender_rows) == len(db_rows)
+
+    assert len(sheet_rows) == len(db_rows)
 
     for index, row in enumerate(db_rows):
         # If this fails you need to either:
         #  - Update the respective DB columns with the output file
         #  - Update the input file with new data to match
         assert ability_rows[index] == [row.ability1, row.ability2, row.hidden]
+        assert type_rows[index] == [row.type1, row.type2]
         assert region_rows[index] == [row.region]
         assert evolution_rows[index] == [row.family]
         assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
+
+        assert row.ability1 != EMPTY_ABILITY and all_unique(ability_rows[index], exceptions=[EMPTY_ABILITY])
+        assert row.type1 != EMPTY_ABILITY and all_unique(type_rows[index])
+        assert row.region in REGIONS
+        sheet_row = sheet_rows[index]
+
+        def print_mismatch(label: str, sheet_fields: List[DbFields], row_values: List[str]):
+            sheet_values = [db.sheet.get(sheet_row, field) for field in sheet_fields]
+            if sheet_values != row_values:
+                print(f"{label} mismatch for {row.name}:", sheet_values, row_values)
+
+        print_mismatch("Ability", [DbFields.ABILITY1, DbFields.ABILITY2, DbFields.HIDDEN_ABILITY], ability_rows[index])
+        print_mismatch("Type", [DbFields.TYPE1, DbFields.TYPE2], type_rows[index])
+        print_mismatch("Region", [DbFields.OG_REGION], region_rows[index])
+        print_mismatch("Family", [DbFields.FAMILY_EVOS], evolution_rows[index])
+        print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
 
 
 def run_validation(db: Database, dex: Dex):

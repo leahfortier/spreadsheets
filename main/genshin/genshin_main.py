@@ -3,8 +3,8 @@ from main.genshin.achievements import update_achievements
 
 
 def main():
-    # update_achievements()
-    randomize_abyss()
+    update_achievements()
+    # randomize_abyss()
 
 
 main()

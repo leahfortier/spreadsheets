@@ -1,11 +1,11 @@
 from typing import List, Dict
 
 from main.pokehome.constants.io import DB_OUTFILE
-from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM
+from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS
 from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
-from main.util.general import remove_suffix
+from main.util.general import remove_suffix, has_prefix, remove_prefix
 
 
 class DbRow:
@@ -17,6 +17,7 @@ class DbRow:
         self.gender_id = sheet.get(row, DbFields.GENDER_ID)
 
         self.species = sheet.get(row, DbFields.SPECIES)
+        self.digimon_form = sheet.get(row, DbFields.DIGIMON_FORM)
         self.regional_form = sheet.get(row, DbFields.REGIONAL_FORM)
         self.form = sheet.get(row, DbFields.FORM)
         self.gender_form = sheet.get(row, DbFields.GENDER_FORM)
@@ -24,6 +25,9 @@ class DbRow:
         self.ability1 = sheet.get(row, DbFields.ABILITY1)
         self.ability2 = sheet.get(row, DbFields.ABILITY2)
         self.hidden = sheet.get(row, DbFields.HIDDEN_ABILITY)
+
+        self.type1 = sheet.get(row, DbFields.TYPE1)
+        self.type2 = sheet.get(row, DbFields.TYPE2)
 
         self.family = sheet.get(row, DbFields.FAMILY_EVOS)
         self.region = sheet.get(row, DbFields.OG_REGION)
@@ -34,12 +38,17 @@ class DbRow:
         sheet.update(row, DbFields.ID, self.id)
 
         name_form = self.form
-        if self.species == "Alcremie":
+        digimon_form = self.digimon_form
+        if self.species == "Alcremie" and self.gender_form:
             name_form += " - " + self.gender_form
         if name_form:
             name_form = f"({name_form})"
+        if digimon_form:
+            assert has_prefix(digimon_form, DIGIMON)
+            name_form = remove_prefix(digimon_form, DIGIMON).strip()
+            digimon_form = remove_suffix(digimon_form, [" " + name_form])
 
-        self.name = " ".join(filter(None, [self.regional_form, self.species, name_form]))
+        self.name = " ".join(filter(None, [digimon_form, self.regional_form, self.species, name_form]))
         sheet.update(row, DbFields.NAME, self.name)
 
         self.image_id = self.get_image_id()
@@ -51,7 +60,9 @@ class DbRow:
             shiny_id = self.get_image_id("core")
 
         def get_image_url(sprite_type: SpriteType, image_id: str) -> str:
-            return f'=image("https://img.pokemondb.net/sprites/home/{sprite_type}/1x/{image_id}.png")'
+            if self.name == "Floette (Eternal Flower)":
+                return f'=image("https://img.pokemondb.net/sprites/bank/{sprite_type.value}/{image_id}.png")'
+            return f'=image("https://img.pokemondb.net/sprites/home/{sprite_type.value}/1x/{image_id}.png")'
 
         self.image = get_image_url(SpriteType.NORMAL, self.image_id)
         self.shiny_image = get_image_url(SpriteType.SHINY, shiny_id)
@@ -63,16 +74,20 @@ class DbRow:
     # Go to https://pokemondb.net/sprites/<species_name> and look at the different
     #   forms under "Home" if form is not appearing correctly
     def get_image_id(self, image_form_id: str = "") -> str:
-        image_form_id = image_form_id or self.form or self.regional_form
-
-        image_form_id = remove_suffix(image_form_id, [" Sea", " Flower", " Style"])
+        form_name = remove_suffix(self.form, [" Sea", " Flower", " Style", " Mask", " Mode"])
         if self.species == "Darmanitan":
-            image_form_id += "-standard"
+            if not form_name:
+                form_name = "Standard"
+            # Darmanitan is the only regional with a variant that includes the regional name in the id
+            if self.regional_form:
+                form_name = self.regional_form + "-" + form_name
         elif self.species in ["Sinistea", "Polteageist"]:
             # Sinistea/Polteageist do not have separate sprites for their antique forms
-            image_form_id = ""
+            form_name = ""
 
-        if self.species in ["Meowstic", "Alcremie", "Indeedee", "Basculegion", "Oinkologne"]:
+        image_form_id += "-".join(filter(None, [self.digimon_form, form_name or self.regional_form]))
+
+        if self.gender_form and self.species in ["Meowstic", "Alcremie", "Indeedee", "Basculegion", "Oinkologne"]:
             image_form_id += "-" + self.gender_form
         else:
             image_form_id += self.gender_id
@@ -101,6 +116,10 @@ class DbRow:
     def is_alt_form(self, regional_is_alt=False) -> bool:
         if self.is_base_form(not regional_is_alt) and self.species in EXCLUDE_BASE_FORM:
             return False
+        if self.species in NON_HOME_FORMS and self.form in NON_HOME_FORMS[self.species]:
+            return False
+        if self.digimon_form:
+            return False
         if self.gender_id:
             return self.species in INCLUDE_GENDER_FORM
         if self.form:
@@ -126,6 +145,7 @@ class Database:
         self.regionals: Dict[str, List[str]] = {}
 
         for index, row in enumerate(self.rows):
+            # print(row.id, row.name)
             assert row.id not in self.id_map
             self.id_map[row.id] = index
 

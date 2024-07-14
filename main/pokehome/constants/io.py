@@ -7,6 +7,8 @@ STATS_OUTFILE = FILE_PATH + "stats-out.tsv"
 # Commands
 ABILITIES_INFILE = FILE_PATH + "abilities-in.tsv"
 ABILITIES_OUTFILE = FILE_PATH + "abilities-out.tsv"
+TYPES_INFILE = FILE_PATH + "types-in.tsv"
+TYPES_OUTFILE = FILE_PATH + "types-out.tsv"
 REGIONS_OUTFILE = FILE_PATH + "regions-out.tsv"
 FAMILIES_INFILE = FILE_PATH + "families.in"
 FAMILIES_OUTFILE = FILE_PATH + "families.out"

@@ -120,6 +120,7 @@ def achievement_order(sheet: AchievementsSheet, wiki: AchievementsWiki):
 
     for wiki_row in wiki.rows:
         wiki_name = generic_name(wiki_row.name)
+        wiki_name.strip()
         if wiki_name in seen:
             continue
         seen.add(wiki_name)
