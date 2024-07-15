@@ -11,6 +11,7 @@ EMPTY_ABILITY = "--"
 
 DB_TAB = "Database"
 DEX_TAB = "Live Dex"
+DOKU_TAB = "Doku"
 
 
 class SpriteType(str, Enum):
@@ -89,6 +90,16 @@ class DexFields(str, Enum):
     SIX_IV = "6IV"
 
 
+class DokuFields(str, Enum):
+    ID = "Id"
+    NAME = "Name"
+    IMAGE = "Image"
+    DEX = "Dex"
+    REGION = "Region"
+    TYPE1 = "Type 1"
+    TYPE2 = "Type 2"
+
+
 SAME_ID_DIFFERENT_FIELDS: List[str] = [
     DexFields.CAUGHT_PROGRESS,
     DexFields.HIDDEN_PROGRESS,
@@ -114,4 +125,12 @@ def get_dex_sheet() -> Sheet:
         get_sheet_data(SPREADSHEET_ID, DEX_TAB),
         escape_fields=[DexFields.ID],
         id_fields=[DexFields.ID, DexFields.BOX]
+    )
+
+
+def get_doku_sheet() -> Sheet:
+    return Sheet(
+        get_sheet_data(SPREADSHEET_ID, DOKU_TAB),
+        escape_fields=[DokuFields.ID],
+        id_fields=[DokuFields.ID]
     )

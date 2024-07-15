@@ -51,6 +51,8 @@ class FormName:
             if species == "Oricorio":
                 self.form_name += " Style"
 
+    def __repr__(self):
+        return [self.species, self.form_name, self.regional, self.digimon].__repr__()
 
 def handle_values(
         db: Database,
@@ -91,11 +93,10 @@ def handle_values(
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form_db_row.regional_form == form.regional:
-                assert get_first(form_db_row) == EMPTY_ABILITY
+                assert get_first(form_db_row) == EMPTY_ABILITY or species == "Darmanitan"
                 update_values(form_db_row)
     else:
         assert form.form_name
-        db_row = None
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form.regional and form_db_row.regional_form != form.regional:
@@ -103,12 +104,9 @@ def handle_values(
 
             check_names = [form_db_row.name, form_db_row.form, form_db_row.gender_form]
             if form.form_name in check_names:
-                db_row = form_db_row
-                break
+                update_values(form_db_row)
 
-        if db_row:
-            update_values(db_row)
-        elif values != values_map[num]:
+        if not updated and values != values_map[num]:
             print("No match for", species, form.form_name)
 
     return updated

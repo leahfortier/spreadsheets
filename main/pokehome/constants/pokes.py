@@ -35,6 +35,7 @@ DIGIMON: List[str] = [
     "Mega",
     "Primal",
     "Gigantamax",
+    "Cowboy",  # Caterpie
     "Ultra",  # Necrozma
 ]
 
@@ -114,8 +115,25 @@ NON_HOME_FORMS: Dict[str, List[str]] = {
     "Greninja": ["Ash"],
     "Floette": ["Eternal Flower"],
     "Zygarde": ["Complete"],
+    "Minior": ["Meteor"],
     "Calyrex": ["Ice Rider", "Shadow Rider"],
 }
+
+NON_DOKU_FORMS: List[str] = [
+    "Pikachu", "Unown", "Burmy",
+    "Shellos", "Gastrodon", "Arceus",
+    "Deerling", "Sawsbuck", "Vivillon",
+    "Flabébé", "Floette", "Florges",
+    "Furfrou", "Sinistea", "Polteageist",
+    "Alcremie"
+]
+
+DOKU_INCLUDE_GENDER_FORM: List[str] = [
+    "Meowstic",
+    "Indeedee",
+    "Basculegion",
+    "Oinkologne",
+]
 
 ALL_TYPES: List[str] = [
     "Fire", "Water", "Grass",

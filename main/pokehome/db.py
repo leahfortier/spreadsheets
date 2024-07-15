@@ -1,7 +1,8 @@
 from typing import List, Dict
 
 from main.pokehome.constants.io import DB_OUTFILE
-from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS
+from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS, \
+    NON_DOKU_FORMS, DOKU_INCLUDE_GENDER_FORM
 from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
@@ -45,8 +46,12 @@ class DbRow:
             name_form = f"({name_form})"
         if digimon_form:
             assert has_prefix(digimon_form, DIGIMON)
-            name_form = remove_prefix(digimon_form, DIGIMON).strip()
-            digimon_form = remove_suffix(digimon_form, [" " + name_form])
+            # Ex: This would be the "X" of "Mega X"
+            digimon_variant = remove_prefix(digimon_form, DIGIMON).strip()
+            assert not (name_form and digimon_variant)  # Can add support for this if it comes up
+            if digimon_variant:
+                digimon_form = remove_suffix(digimon_form, [" " + digimon_variant])
+                name_form = digimon_variant
 
         self.name = " ".join(filter(None, [digimon_form, self.regional_form, self.species, name_form]))
         sheet.update(row, DbFields.NAME, self.name)
@@ -60,6 +65,8 @@ class DbRow:
             shiny_id = self.get_image_id("core")
 
         def get_image_url(sprite_type: SpriteType, image_id: str) -> str:
+            if self.name == "Cowboy Caterpie":
+                return '=image("https://pokedoku-space.nyc3.cdn.digitaloceanspaces.com/resources/pokemon/99901.png")'
             if self.name == "Floette (Eternal Flower)":
                 return f'=image("https://img.pokemondb.net/sprites/bank/{sprite_type.value}/{image_id}.png")'
             return f'=image("https://img.pokemondb.net/sprites/home/{sprite_type.value}/1x/{image_id}.png")'
@@ -74,7 +81,14 @@ class DbRow:
     # Go to https://pokemondb.net/sprites/<species_name> and look at the different
     #   forms under "Home" if form is not appearing correctly
     def get_image_id(self, image_form_id: str = "") -> str:
-        form_name = remove_suffix(self.form, [" Sea", " Flower", " Style", " Mask", " Mode"])
+        form_name = remove_suffix(
+            self.form,
+            [
+                " Form", " Sea", " Flower",
+                " Style", " Mask", " Mode",
+                " Face"
+            ]
+        )
         if self.species == "Darmanitan":
             if not form_name:
                 form_name = "Standard"
@@ -84,8 +98,12 @@ class DbRow:
         elif self.species in ["Sinistea", "Polteageist"]:
             # Sinistea/Polteageist do not have separate sprites for their antique forms
             form_name = ""
+        elif self.species == "Toxtricity" and self.digimon_form:
+            # Amped and Low Key Gigantamax images are the same
+            form_name = ""
 
-        image_form_id += "-".join(filter(None, [self.digimon_form, form_name or self.regional_form]))
+        if not image_form_id:
+            image_form_id = "-".join(filter(None, [form_name or self.regional_form, self.digimon_form]))
 
         if self.gender_form and self.species in ["Meowstic", "Alcremie", "Indeedee", "Basculegion", "Oinkologne"]:
             image_form_id += "-" + self.gender_form
@@ -125,6 +143,23 @@ class DbRow:
         if self.form:
             return True
         if regional_is_alt and self.regional_form:
+            return True
+        return False
+
+    def is_doku_form(self) -> bool:
+        if self.is_base_form(regional_is_base=True):
+            return True
+        if self.digimon_form:
+            return True
+        if self.name == "Floette (Eternal Flower)":
+            return True
+        if self.species in NON_DOKU_FORMS:
+            return False
+        if self.gender_id:
+            return self.species in DOKU_INCLUDE_GENDER_FORM
+        if self.form:
+            return True
+        if self.regional_form:
             return True
         return False
 
