@@ -1,17 +1,34 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 
-def caught_total_progress(progress_condition: str, required_condition: str = None) -> List[str]:
-    if not required_condition:
+def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tuple[str, str]:
+    if len(required_conditions) == 0:
         count = f'COUNTIF({progress_condition})'
         total = f'COUNTA({progress_condition[:progress_condition.index(",")]})'
     else:
-        count = f'COUNTIFS({progress_condition}, {required_condition})'
-        total = f'COUNTIF({required_condition})'
+        joined_conditions = ", ".join(required_conditions)
+        count = f'COUNTIFS({progress_condition}, {joined_conditions})'
+        total = f'COUNTIFS({joined_conditions})'
+    return count, total
+
+
+def caught_total_progress(progress_condition: str, *required_conditions: str) -> List[str]:
+    count, total = _raw_count_total(progress_condition, *required_conditions)
     return [
         f'={count}',
         f'={total}',
         f'={count} / {total}',
+    ]
+
+
+# Used when either first condition OR second condition can be true for progress
+def or_caught_total_progress(progress_condition: str, first_condition: str, second_condition: str) -> List[str]:
+    count1, total1 = _raw_count_total(progress_condition, first_condition)
+    count2, total2 = _raw_count_total(progress_condition, second_condition)
+    return [
+        f'={count1} + {count2}',
+        f'={total1} + {total2}',
+        f'=({count1} + {count2}) / ({total1} + {total2})',
     ]
 
 
@@ -26,8 +43,8 @@ def count_with_percentage(progress_condition: str, required_condition: Optional[
     return f'=JOIN("", {count}, " (", TO_PERCENT({percentage}), ")")'
 
 
-def condition_as_count(progress_condition: str, required_condition: Optional[str]) -> str:
-    return caught_total_progress(progress_condition, required_condition)[0]
+def condition_as_count(progress_condition: str, *required_conditions: str) -> str:
+    return caught_total_progress(progress_condition, *required_conditions)[0]
 
 
 def column_range(column: str, start_index: int = 2, tab: str = "", fixed=False) -> str:

@@ -3,6 +3,7 @@ from typing import List, Dict
 from pokehome.constants.sheets import EMPTY_FIELD
 
 TOTAL_POKEMON: int = 1025
+CURRENT_GENERATION = 9
 
 BOX_ROWS: int = 5
 BOX_COLS: int = 6

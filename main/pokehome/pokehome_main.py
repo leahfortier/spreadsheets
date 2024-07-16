@@ -1,7 +1,7 @@
 from main.pokehome.commands import run_commands
 from main.pokehome.db import Database
 from main.pokehome.dex import Dex
-from main.pokehome.stats import get_stats
+from main.pokehome.stats import write_stats
 from main.pokehome.validation import run_validation
 from pokehome.doku import Doku
 
@@ -17,7 +17,7 @@ def main():
     db.write()
     dex.write()
     doku.write()
-    get_stats(dex)
+    write_stats(dex, doku)
 
 
 main()

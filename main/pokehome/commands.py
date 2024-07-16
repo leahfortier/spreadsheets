@@ -3,7 +3,8 @@ import re
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE
-from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES
+from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
+    CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
@@ -293,12 +294,11 @@ def get_generation(num: int) -> int:
         return 6
     elif num <= 809:
         return 7
-    elif num <= 898:
-        return 8
     elif num <= 905:
+        # Includes Galar and Hisui
         return 8
     else:
-        return 9
+        return CURRENT_GENERATION
 
 
 def write_regions(db: Database):
@@ -341,7 +341,7 @@ def write_regions(db: Database):
         else:
             region = "Paldea"
 
-        assert 1 <= gen <= 9
+        assert 1 <= gen <= CURRENT_GENERATION
         assert region
         regions.append([str(gen), region])
 
