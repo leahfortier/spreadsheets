@@ -1,9 +1,10 @@
-from typing import List, Optional, Dict, Callable
+from typing import List, Optional, Dict, Callable, Set
+import re
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES
-from main.pokehome.constants.sheets import EMPTY_ABILITY, get_dex_sheet, GenderRatio
+from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
@@ -93,7 +94,7 @@ def handle_values(
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form_db_row.regional_form == form.regional:
-                assert get_first(form_db_row) == EMPTY_ABILITY or species == "Darmanitan"
+                assert get_first(form_db_row) == EMPTY_FIELD or species == "Darmanitan"
                 update_values(form_db_row)
     else:
         assert form.form_name
@@ -116,7 +117,7 @@ def set_abs(db_row: DbRow, abilities: List[str]):
     def ab_format(s: str):
         if s.endswith("+"):
             return s[:s.rindex("Gen ")]
-        return s or EMPTY_ABILITY
+        return s or EMPTY_FIELD
 
     db_row.ability1 = ab_format(abilities[0])
     db_row.ability2 = ab_format(abilities[1])
@@ -167,7 +168,7 @@ def write_abilities(db: Database):
 
     # Make sure every row has been set
     for db_row in db.rows:
-        assert db_row.ability1 != EMPTY_ABILITY
+        assert db_row.ability1 != EMPTY_FIELD
 
     def get_abilities(row: DbRow) -> List[str]:
         return [row.ability1, row.ability2, row.hidden]
@@ -177,10 +178,10 @@ def write_abilities(db: Database):
 
 def set_types(db_row: DbRow, types: List[str]):
     def type_format(s: str):
-        assert s in ALL_TYPES or s == EMPTY_ABILITY
+        assert s in ALL_TYPES or s == EMPTY_FIELD
         return s
 
-    assert types[0] != types[1] or types[0] == EMPTY_ABILITY
+    assert types[0] != types[1] or types[0] == EMPTY_FIELD
     db_row.type1 = type_format(types[0])
     db_row.type2 = type_format(types[1])
 
@@ -189,7 +190,7 @@ def handle_types(db: Database, types_map: Dict[str, List[str]], num: str, bulba_
     species = bulba_row[0]
 
     if bulba_row[-2] not in ALL_TYPES:
-        bulba_row.append(EMPTY_ABILITY)
+        bulba_row.append(EMPTY_FIELD)
     types = bulba_row[-2:]
 
     form_name = ""
@@ -218,7 +219,7 @@ def write_types(db: Database):
     merged_row: List[str] = []
 
     for db_row in db.rows:
-        set_types(db_row, [EMPTY_ABILITY, EMPTY_ABILITY])
+        set_types(db_row, [EMPTY_FIELD, EMPTY_FIELD])
 
     odd = True
     num = 1
@@ -234,7 +235,7 @@ def write_types(db: Database):
 
     # Make sure every row has been set
     for db_row in db.rows:
-        assert db_row.type1 != EMPTY_ABILITY
+        assert db_row.type1 != EMPTY_FIELD
 
     def get_types(row: DbRow) -> List[str]:
         return [row.type1, row.type2]
@@ -276,10 +277,35 @@ def write_genders(db: Database):
     to_tsv(GENDER_OUTFILE, [[row.can_breed_field, row.gender_ratio] for row in db.rows])
 
 
+def get_generation(num: int) -> int:
+    assert 1 <= num <= TOTAL_POKEMON
+    if num <= 151:
+        return 1
+    elif num <= 251:
+        return 2
+    elif num <= 386:
+        return 3
+    elif num <= 493:
+        return 4
+    elif num <= 649:
+        return 5
+    elif num <= 721:
+        return 6
+    elif num <= 809:
+        return 7
+    elif num <= 898:
+        return 8
+    elif num <= 905:
+        return 8
+    else:
+        return 9
+
+
 def write_regions(db: Database):
     regions = []
     for row in db.rows:
         num = int(row.dex)
+        gen = get_generation(num)
         region = ""
         if row.regional_form == "Paldean":
             region = "Paldea"
@@ -293,65 +319,117 @@ def write_regions(db: Database):
             print(f"Unknown regional form {row.regional_form} for {row.name}")
         elif row.form == "Bloodmoon":
             region = "Paldea"
-        elif num < 1:
-            print(f"Invalid dex num {num} for {row.name}")
-        elif num <= 151:
+        elif gen == 1:
             region = "Kanto"
-        elif num <= 251:
+        elif gen == 2:
             region = "Johto"
-        elif num <= 386:
+        elif gen == 3:
             region = "Hoenn"
-        elif num <= 493:
+        elif gen == 4:
             region = "Sinnoh"
-        elif num <= 649:
+        elif gen == 5:
             region = "Unova"
-        elif num <= 721:
+        elif gen == 6:
             region = "Kalos"
-        elif num <= 809:
+        elif gen == 7:
             region = "Alola"
-        elif num <= 898:
-            region = "Galar"
-        elif num <= 905:
-            region = "Hisui"
-        elif num <= TOTAL_POKEMON:
-            region = "Paldea"
+        elif gen == 8:
+            if num <= 898:
+                region = "Galar"
+            else:
+                region = "Hisui"
         else:
-            print(f"Invalid dex num {num} for {row.name}")
+            region = "Paldea"
 
+        assert 1 <= gen <= 9
         assert region
-        regions.append([region])
+        regions.append([str(gen), region])
 
-    to_tsv(REGIONS_OUTFILE, [row for row in regions])
+    to_tsv(REGIONS_OUTFILE, regions)
+
+
+# Ex:
+#   Input: Wurmple -> Silcoon, Cascoon | Silcoon -> Beautifly | Cascoon -> Dustox
+#   Output: {"Wurmple", "Silcoon", "Cascoon", "Beautifly", "Dustox"}
+def get_family_pokes(family: str) -> Set[str]:
+    return set(re.split(r' -> |, | \| ', family))
+
+
+def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
+    pre_pokes = get_family_pokes(pre_evs)
+    post_pokes = get_family_pokes(post_evs)
+    assert not (name in pre_pokes and name in post_pokes)
+
+    if name in pre_pokes:
+        if row.evolution_type == EvolutionType.NONE:
+            row.evolution_type = EvolutionType.FIRST
+        elif row.evolution_type == EvolutionType.FINAL:
+            row.evolution_type = EvolutionType.MIDDLE
+        else:
+            print(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
+
+        if len(post_pokes) > 1:
+            row.has_branch_evo = "Yes"
+
+    if name in post_pokes:
+        if row.evolution_type == EvolutionType.NONE:
+            row.evolution_type = EvolutionType.FINAL
+        elif row.evolution_type == EvolutionType.FIRST:
+            row.evolution_type = EvolutionType.MIDDLE
+        else:
+            print(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
+
+
+def handle_evolution(name: str, family: str, row: DbRow):
+    row.has_branch_evo = "No"
+    row.evolution_type = EvolutionType.NONE
+
+    # Ex:
+    #    ['Bulbasaur -> Ivysaur -> Venusaur']
+    #    ['Wurmple -> Silcoon, Cascoon', 'Silcoon -> Beautifly', 'Cascoon -> Dustox']
+    lines = family.split(" | ")
+    for line in lines:
+        pokes = get_family_pokes(line)
+        if name in pokes:
+            stages = line.split(" -> ")
+            if len(stages) == 2:
+                handle_stage(name, stages[0], stages[1], row)
+            elif len(stages) == 3:
+                handle_stage(name, stages[0], stages[1], row)
+                handle_stage(name, stages[1], stages[2], row)
+            elif len(stages) != 1:
+                print(f"Unable to parse stages for {name}: {family}")
 
 
 def write_families(db: Database):
     evolutions = from_file(FAMILIES_INFILE)
+    family_map: Dict[str, Set[str]] = {family: get_family_pokes(family) for family in evolutions}
 
     def get_family(name: str) -> Optional[str]:
         value = None
-        for evos in evolutions:
-            pokes = evos.split(sep=", ")
-            for poke in pokes:
-                if poke == name:
-                    if value:
-                        print("Duplicate family for " + name)
-                    value = evos
+        for family, pokes in family_map.items():
+            if name in pokes:
+                if value:
+                    print("Duplicate family for " + name)
+                value = family
         return value
 
-    out_rows: List[str] = []
     for row in db.rows:
-        name = row.species
+        name = row.regional_name()
 
         family = get_family(name)
         if not family:
             family = get_family(row.name)
-
         if not family:
             print("No evolution found for " + name)
 
-        out_rows.append(family or "--")
+        row.family = family or EMPTY_FIELD
+        handle_evolution(name, family, row)
 
-    to_file(FAMILIES_OUTFILE, out_rows)
+    def to_row(row: DbRow) -> List[str]:
+        return [row.has_branch_evo, row.evolution_type, row.family]
+
+    to_tsv(FAMILIES_OUTFILE, [to_row(row) for row in db.rows])
 
 
 def write_pla_names(db: Database):

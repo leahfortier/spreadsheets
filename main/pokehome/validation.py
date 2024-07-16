@@ -3,7 +3,7 @@ from typing import Dict, List, Set
 from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMILIES_OUTFILE, GENDER_OUTFILE, \
     BALLS_OUTFILE, TYPES_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
-from main.pokehome.constants.sheets import DexFields, EMPTY_ABILITY, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
+from main.pokehome.constants.sheets import DexFields, EMPTY_FIELD, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
     DbFields
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
@@ -56,7 +56,7 @@ def validate_dex(db: Database, sheet: Sheet):
         # Hidden ability matches family or N/A
         assert db_row.hidden == hidden_ability
         assert hidden_progress in [e for e in HiddenAbilityProgress]
-        if hidden_ability == EMPTY_ABILITY or name == "Pangoro":
+        if hidden_ability == EMPTY_FIELD or name == "Pangoro":
             assert hidden_progress == HiddenAbilityProgress.NO_HIDDEN_ABILITY
         else:
             has_hidden = hidden_progress != HiddenAbilityProgress.UNOBTAINED
@@ -130,12 +130,12 @@ def validate_command_out(db: Database):
         #  - Update the input file with new data to match
         assert ability_rows[index] == [row.ability1, row.ability2, row.hidden]
         assert type_rows[index] == [row.type1, row.type2]
-        assert region_rows[index] == [row.region]
-        assert evolution_rows[index] == [row.family]
+        assert region_rows[index] == [row.generation, row.region]
+        assert evolution_rows[index] == [row.has_branch_evo, row.evolution_type, row.family]
         assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
 
-        assert row.ability1 != EMPTY_ABILITY and all_unique(ability_rows[index], exceptions=[EMPTY_ABILITY])
-        assert row.type1 != EMPTY_ABILITY and all_unique(type_rows[index])
+        assert row.ability1 != EMPTY_FIELD and all_unique(ability_rows[index], exceptions=[EMPTY_FIELD])
+        assert row.type1 != EMPTY_FIELD and all_unique(type_rows[index])
         assert row.region in REGIONS
         sheet_row = sheet_rows[index]
 
@@ -146,8 +146,8 @@ def validate_command_out(db: Database):
 
         print_mismatch("Ability", [DbFields.ABILITY1, DbFields.ABILITY2, DbFields.HIDDEN_ABILITY], ability_rows[index])
         print_mismatch("Type", [DbFields.TYPE1, DbFields.TYPE2], type_rows[index])
-        print_mismatch("Region", [DbFields.OG_REGION], region_rows[index])
-        print_mismatch("Family", [DbFields.FAMILY_EVOS], evolution_rows[index])
+        print_mismatch("Region", [DbFields.GENERATION, DbFields.OG_REGION], region_rows[index])
+        print_mismatch("Family", [DbFields.BRANCH_EVO, DbFields.EVO_TYPE, DbFields.FAMILY_EVOS], evolution_rows[index])
         print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
 
 

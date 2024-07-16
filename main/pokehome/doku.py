@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from main.pokehome.boxes import Boxes, Box
 from main.pokehome.constants.io import DEX_OUTFILE, DOKU_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, BOX_COLS, FORM_BOXES, NON_DOKU_FORMS
-from main.pokehome.constants.sheets import DexFields, get_dex_sheet, HiddenAbilityProgress, EMPTY_ABILITY, \
+from main.pokehome.constants.sheets import DexFields, get_dex_sheet, HiddenAbilityProgress, EMPTY_FIELD, \
     DexClassification, DokuFields, get_doku_sheet
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
@@ -28,9 +28,12 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
         sheet_row = sheet.rows[index]
 
     update(DokuFields.NAME, db_row.name)
+    update(DokuFields.GENERATION, db_row.generation)
     update(DokuFields.REGION, db_row.region)
     update(DokuFields.TYPE1, db_row.type1)
     update(DokuFields.TYPE2, db_row.type2)
+    update(DokuFields.BRANCH_EVO, db_row.has_branch_evo)
+    update(DokuFields.EVO_TYPE, db_row.evolution_type)
 
     sheet.set(sheet_row, DokuFields.IMAGE, db_row.image)
 

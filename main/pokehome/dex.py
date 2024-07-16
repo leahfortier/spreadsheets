@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from main.pokehome.boxes import Boxes, Box
 from main.pokehome.constants.io import DEX_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, BOX_COLS, FORM_BOXES
-from main.pokehome.constants.sheets import DexFields, get_dex_sheet, HiddenAbilityProgress, EMPTY_ABILITY, \
+from main.pokehome.constants.sheets import DexFields, get_dex_sheet, HiddenAbilityProgress, EMPTY_FIELD, \
     DexClassification
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
@@ -53,7 +53,7 @@ class DexRow:
             update(DexFields.COL, self.col_index)
 
         update(DexFields.HIDDEN_ABILITY, self.row.hidden)
-        if self.row.hidden == EMPTY_ABILITY:
+        if self.row.hidden == EMPTY_FIELD:
             update(DexFields.HIDDEN_PROGRESS, HiddenAbilityProgress.NO_HIDDEN_ABILITY.value)
 
         sheet.set(sheet_row, DexFields.IMAGE, self.row.image)

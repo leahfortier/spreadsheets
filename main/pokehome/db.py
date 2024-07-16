@@ -30,10 +30,15 @@ class DbRow:
         self.type1 = sheet.get(row, DbFields.TYPE1)
         self.type2 = sheet.get(row, DbFields.TYPE2)
 
-        self.family = sheet.get(row, DbFields.FAMILY_EVOS)
+        self.generation = sheet.get(row, DbFields.GENERATION)
         self.region = sheet.get(row, DbFields.OG_REGION)
-        self.gender_ratio = sheet.get(row, DbFields.GENDER_RATIO)
+
         self.can_breed_field = sheet.get(row, DbFields.CAN_BREED)
+        self.gender_ratio = sheet.get(row, DbFields.GENDER_RATIO)
+
+        self.has_branch_evo = sheet.get(row, DbFields.BRANCH_EVO)
+        self.evolution_type = sheet.get(row, DbFields.EVO_TYPE)
+        self.family = sheet.get(row, DbFields.FAMILY_EVOS)
 
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)
@@ -165,6 +170,11 @@ class DbRow:
 
     def can_breed(self):
         return self.can_breed_field == "Yes"
+
+    def regional_name(self):
+        if self.regional_form:
+            return self.regional_form + " " + self.species
+        return self.species
 
 
 class Database:

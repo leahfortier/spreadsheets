@@ -7,7 +7,7 @@ from main.util.sheets_parse import get_sheet_data
 
 SPREADSHEET_ID = POKEMON_ID
 
-EMPTY_ABILITY = "--"
+EMPTY_FIELD = "--"
 
 DB_TAB = "Database"
 DEX_TAB = "Live Dex"
@@ -31,6 +31,13 @@ class HiddenAbilityProgress(str, Enum):
     NO_HIDDEN_ABILITY = "N/A"
     FAMILY_OBTAINED = "Family"
     GENDERED_NON_POKE_BALL = "Breed"
+
+
+class EvolutionType(str, Enum):
+    FIRST = "First",
+    MIDDLE = "Middle",
+    FINAL = "Final"
+    NONE = "None"
 
 
 class GenderRatio(str, Enum):
@@ -64,7 +71,10 @@ class DbFields(str, Enum):
     HIDDEN_ABILITY = "hidden"
     TYPE1 = "type1"
     TYPE2 = "type2"
+    BRANCH_EVO = "branch evo"
+    EVO_TYPE = "evolution"
     FAMILY_EVOS = "family"
+    GENERATION = "generation"
     OG_REGION = "og region"
     GENDER_RATIO = "gender ratio"
     CAN_BREED = "can breed"
@@ -95,9 +105,12 @@ class DokuFields(str, Enum):
     NAME = "Name"
     IMAGE = "Image"
     DEX = "Dex"
+    GENERATION = "Gen"
     REGION = "Region"
     TYPE1 = "Type 1"
     TYPE2 = "Type 2"
+    BRANCH_EVO = "Has Branch"
+    EVO_TYPE = "Evolution"
 
 
 SAME_ID_DIFFERENT_FIELDS: List[str] = [

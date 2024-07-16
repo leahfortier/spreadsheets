@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from pokehome.constants.sheets import EMPTY_ABILITY
+from pokehome.constants.sheets import EMPTY_FIELD
 
 TOTAL_POKEMON: int = 1025
 
@@ -151,7 +151,7 @@ DIGIMON_TYPES: Dict[str, List[str]] = {
     "Mega Gyarados": ["Water", "Dark"],
     "Mega Mewtwo X": ["Psychic", "Fighting"],
     "Mega Ampharos": ["Electric", "Dragon"],
-    "Mega Aggron": ["Steel", EMPTY_ABILITY],
+    "Mega Aggron": ["Steel", EMPTY_FIELD],
     "Mega Altaria": ["Dragon", "Fairy"],
     "Primal Groudon": ["Ground", "Fire"],
     "Mega Lopunny": ["Normal", "Fighting"],
