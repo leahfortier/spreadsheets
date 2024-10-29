@@ -1,8 +1,7 @@
 from typing import List, Dict
 
 from main.pokehome.constants.io import DB_OUTFILE
-from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS, \
-    NON_DOKU_FORMS, DOKU_INCLUDE_GENDER_FORM
+from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS
 from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
@@ -148,23 +147,6 @@ class DbRow:
         if self.form:
             return True
         if regional_is_alt and self.regional_form:
-            return True
-        return False
-
-    def is_doku_form(self) -> bool:
-        if self.is_base_form(regional_is_base=True):
-            return True
-        if self.digimon_form:
-            return True
-        if self.name == "Floette (Eternal Flower)":
-            return True
-        if self.species in NON_DOKU_FORMS:
-            return False
-        if self.gender_id:
-            return self.species in DOKU_INCLUDE_GENDER_FORM
-        if self.form:
-            return True
-        if self.regional_form:
             return True
         return False
 

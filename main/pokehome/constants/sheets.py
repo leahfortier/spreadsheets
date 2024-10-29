@@ -40,6 +40,15 @@ class EvolutionType(str, Enum):
     NONE = "None"
 
 
+class DokuFormType(str, Enum):
+    BASE = "Base"
+    ALT = "Alt"
+    GENDER = "Gender"
+    REGIONAL = "Regional"
+    MEGA = "Mega"
+    GMAX = "Gmax"
+
+
 class GenderRatio(str, Enum):
     MALE_ONLY = "100% Male"
     EIGHTH_FEMALE = "12.5% Female"
@@ -105,11 +114,13 @@ class DokuFields(str, Enum):
     NAME = "Name"
     IMAGE = "Image"
     DEX = "Dex"
+    SHINY = "Shiny"
     GENERATION = "Gen"
     REGION = "Region"
     TYPE1 = "Type 1"
     TYPE2 = "Type 2"
     BRANCH_EVO = "Has Branch"
+    FORM = "Form"
     EVO_TYPE = "Evolution"
 
 

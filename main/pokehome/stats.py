@@ -4,11 +4,11 @@ from typing import List, Optional, Self, Generic, TypeVar, Callable
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
 from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX_TAB, DexClassification, DokuFields, \
-    DOKU_TAB, EvolutionType, EMPTY_FIELD
+    DOKU_TAB, EvolutionType, EMPTY_FIELD, DokuFormType
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
 from main.util.sheets_formulas import caught_total_progress, count_with_percentage, condition_as_count, column_range, \
-    or_caught_total_progress
+    or_caught_total_progress, Progress
 from pokehome.doku import Doku
 from util.data import Sheet
 
@@ -33,17 +33,20 @@ class Column(Generic[FieldsEnum]):
     def with_checkbox(self) -> Self:
         return self._with_value("TRUE")
 
-    def progress(self, *conditions: str) -> str:
-        return condition_as_count(self.condition, *conditions)
+    def with_false_checkbox(self) -> Self:
+        return self._with_value("FALSE")
 
-    def caught_total_progress(self, *conditions: str) -> List[str]:
+    def count(self, *conditions: str) -> str:
+        return caught_total_progress(self.condition, *conditions).count
+
+    def progress(self, *conditions: str) -> Progress:
         return caught_total_progress(self.condition, *conditions)
 
-    def or_caught_total_progress(self, first_condition: str, second_condition: str) -> List[str]:
+    def or_progress(self, first_condition: str, second_condition: str) -> Progress:
         return or_caught_total_progress(self.condition, first_condition, second_condition)
 
 
-class OutStats:
+class OutStatsHorizontal:
     def __init__(self):
         self.rows: List[List[str]] = []
         self.column_index = 0
@@ -65,6 +68,18 @@ class OutStats:
         self.index += 1
 
 
+class OutStatsVertical:
+    def __init__(self):
+        self.rows: List[List[str]] = []
+
+    def blank_row(self):
+        self.rows.append([""] * len(self.rows[0]))
+
+    def append(self, name: str, values: List[str]):
+        values.insert(0, name)
+        self.rows.append(values)
+
+
 def get_dex_stats(dex: Dex):
     def col(field: DexFields) -> Column:
         return Column(dex.sheet, DEX_TAB, field)
@@ -75,13 +90,13 @@ def get_dex_stats(dex: Dex):
     shiny_col = col(DexFields.SHINY).with_checkbox()
 
     def get_values(*conditions: str) -> List[str]:
-        have_values = caught_col.caught_total_progress(*conditions)
-        hidden_value = hidden_col.progress(*conditions)
-        nickname_value = nickname_col.progress(*conditions)
-        shiny_value = shiny_col.progress(*conditions)
+        have_values = caught_col.progress(*conditions).values()
+        hidden_value = hidden_col.count(*conditions)
+        nickname_value = nickname_col.count(*conditions)
+        shiny_value = shiny_col.count(*conditions)
         return [*have_values, hidden_value, nickname_value, shiny_value]
 
-    out: OutStats = OutStats()
+    out = OutStatsHorizontal()
     out.append("All", get_values())
 
     class_col = col(DexFields.CLASS)
@@ -110,27 +125,42 @@ def get_doku_stats(doku: Doku):
         return Column(doku.sheet, DOKU_TAB, field)
 
     dex_col = col(DokuFields.DEX).with_checkbox()
+    empty_dex_col = col(DokuFields.DEX).with_false_checkbox()
+    shiny_dex_col = col(DokuFields.SHINY).with_checkbox()
 
     def get_values(*conditions: str) -> List[str]:
-        return dex_col.caught_total_progress(*conditions)
+        caught_vals = dex_col.progress(*conditions)
+        empty_vals = empty_dex_col.progress(*conditions)
+        shiny_vals = shiny_dex_col.progress(*conditions)
+        return [
+            caught_vals.count, empty_vals.count, shiny_vals.count,
+            caught_vals.total, caught_vals.percent, shiny_vals.percent
+        ]
 
     def get_values_or(first_condition: str, second_condition: str) -> List[str]:
-        return dex_col.or_caught_total_progress(first_condition, second_condition)
+        caught_vals = dex_col.or_progress(first_condition, second_condition)
+        empty_vals = empty_dex_col.or_progress(first_condition, second_condition)
+        shiny_vals = shiny_dex_col.or_progress(first_condition, second_condition)
+        return [
+            caught_vals.count, empty_vals.count, shiny_vals.count,
+            caught_vals.total, caught_vals.percent, shiny_vals.percent
+        ]
 
-    out: OutStats = OutStats()
+    out = OutStatsVertical()
     out.append("All", get_values())
+    out.blank_row()
 
     generation_col = col(DokuFields.GENERATION)
     for gen in range(1, CURRENT_GENERATION + 1):
         generation_col.with_string(str(gen))
         out.append(f"Gen {gen}", get_values(generation_col.condition))
-    out.new_column()
+    out.blank_row()
 
     region_col = col(DokuFields.REGION)
     for region in REGIONS:
         region_col.with_string(region)
         out.append(region, get_values(region_col.condition))
-    out.new_column()
+    out.blank_row()
 
     type1_col = col(DokuFields.TYPE1)
     type2_col = col(DokuFields.TYPE2)
@@ -138,7 +168,7 @@ def get_doku_stats(doku: Doku):
         type1_col.with_string(poke_type)
         type2_col.with_string(poke_type)
         out.append(poke_type, get_values_or(type1_col.condition, type2_col.condition))
-    out.new_column()
+    out.blank_row()
 
     type2_col.with_string(EMPTY_FIELD)
     out.append("Mono-Type", get_values(type2_col.condition))
@@ -153,6 +183,12 @@ def get_doku_stats(doku: Doku):
     for evo_type in EvolutionType:
         evolution_col.with_string(evo_type)
         out.append(evo_type, get_values(evolution_col.condition))
+
+    form_col = col(DokuFields.FORM)
+    form_col.with_string(DokuFormType.MEGA)
+    out.append("Mega", get_values(form_col.condition))
+    form_col.with_string(DokuFormType.GMAX)
+    out.append("Gmax", get_values(form_col.condition))
 
     to_tsv(DOKU_STATS_OUTFILE, out.rows)
 

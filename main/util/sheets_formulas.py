@@ -1,6 +1,16 @@
 from typing import List, Optional, Tuple
 
 
+class Progress:
+    def __init__(self, count: str, total: str, percent: str):
+        self.count = count
+        self.total = total
+        self.percent = percent
+
+    def values(self) -> List[str]:
+        return [self.count, self.total, self.percent]
+
+
 def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tuple[str, str]:
     if len(required_conditions) == 0:
         count = f'COUNTIF({progress_condition})'
@@ -12,39 +22,39 @@ def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tupl
     return count, total
 
 
-def caught_total_progress(progress_condition: str, *required_conditions: str) -> List[str]:
+def caught_total_progress(progress_condition: str, *required_conditions: str) -> Progress:
     count, total = _raw_count_total(progress_condition, *required_conditions)
-    return [
+    return Progress(
         f'={count}',
         f'={total}',
         f'={count} / {total}',
-    ]
+    )
 
 
 # Used when either first condition OR second condition can be true for progress
-def or_caught_total_progress(progress_condition: str, first_condition: str, second_condition: str) -> List[str]:
+def or_caught_total_progress(progress_condition: str, first_condition: str, second_condition: str) -> Progress:
     count1, total1 = _raw_count_total(progress_condition, first_condition)
     count2, total2 = _raw_count_total(progress_condition, second_condition)
-    return [
+    return Progress(
         f'={count1} + {count2}',
         f'={total1} + {total2}',
         f'=({count1} + {count2}) / ({total1} + {total2})',
-    ]
+    )
 
 
 def column_progress(col_range: str, col_value: str) -> str:
-    return caught_total_progress(f'{col_range}, {col_value}', None)[2]
+    return caught_total_progress(f'{col_range}, {col_value}', None).percent
 
 
 def count_with_percentage(progress_condition: str, required_condition: Optional[str]) -> str:
     progress = caught_total_progress(progress_condition, required_condition)
-    count = progress[0].lstrip('=')
-    percentage = progress[2].lstrip('=')
+    count = progress.count.lstrip('=')
+    percentage = progress.percent.lstrip('=')
     return f'=JOIN("", {count}, " (", TO_PERCENT({percentage}), ")")'
 
 
 def condition_as_count(progress_condition: str, *required_conditions: str) -> str:
-    return caught_total_progress(progress_condition, *required_conditions)[0]
+    return caught_total_progress(progress_condition, *required_conditions).count
 
 
 def column_range(column: str, start_index: int = 2, tab: str = "", fixed=False) -> str:
