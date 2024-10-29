@@ -6,10 +6,10 @@ from main.util.sheets_parse import get_sheet_data
 
 SPREADSHEET_ID = GENSHIN_ID
 
-CHARACTER_TAB = "L Chars"
-ACHIEVEMENTS_TAB = "Achievements"
 
 CHARACTER_NAME_FIELD = "Character"
+
+
 ABYSS_RANDOMIZE_CHARACTERS = {
     9: 2,
     10: 2,
@@ -42,13 +42,29 @@ class AchievementCategories(str, Enum):
     EXPLORATION = "Exploration"
 
 
-def get_achievements_sheet() -> Sheet:
-    return Sheet(
-        get_sheet_data(SPREADSHEET_ID, ACHIEVEMENTS_TAB)
-    )
+class CharacterFields(str, Enum):
+    NAME = "Character"
+    BOSS_MATERIAL = "Boss Material"
+    ENEMY_MATERIAL = "Enemy Material"
+    LOCAL_SPECIALTY = "Local Specialty"
+    TALENT_BOOK = "Talent Book"
+    TROUNCE_TALENT = "Trounce Talent"
+    RECIPE = "Recipe"
 
 
-def get_character_sheet() -> Sheet:
+class Tab(str, Enum):
+    CHARACTER_DATA = "Character Data"
+    L_CHARS = "L Chars"
+    ACHIEVEMENTS = "Achievements"
+    TROUNCES = "Talent Trounces"
+    RECIPES = "Recipes"
+    TALENTS = "Talent Books"
+    BOSS_DROPS = "Boss Drops"
+    ENEMY_DROPS = "Enemy Drops"
+    LOCALS = "Locals"
+
+
+def get_sheet(tab_name: Tab) -> Sheet:
     return Sheet(
-        get_sheet_data(SPREADSHEET_ID, CHARACTER_TAB)
+        get_sheet_data(SPREADSHEET_ID, tab_name.value)
     )

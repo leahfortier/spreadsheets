@@ -2,10 +2,10 @@ from typing import Tuple, Dict, List
 
 from main.genshin.constants.io import WONDERS_INFILE, VERSIONS_OUTFILE, NAMECARD_INFILE, \
     MEMORIES_INFILE
-from main.genshin.constants.sheets import get_achievements_sheet, AchievementFields, ACHIEVEMENT_END, \
-    AchievementSections, AchievementCategories
+from main.genshin.constants.sheets import AchievementFields, ACHIEVEMENT_END, \
+    AchievementSections, AchievementCategories, Tab, get_sheet
 from main.util.data import Sheet
-from main.util.file_io import from_tsv, to_tsv, from_file
+from main.util.file_io import from_tsv, to_tsv
 from main.util.general import generic_name
 
 
@@ -41,7 +41,7 @@ class AchievementsWiki:
 
 class AchievementsSheet:
     def __init__(self):
-        self.sheet: Sheet = get_achievements_sheet()
+        self.sheet: Sheet = get_sheet(Tab.ACHIEVEMENTS)
 
         # Maps from lowercase removed special achievement name to category and index
         self.map: Dict[str, Tuple[str, int]] = {}

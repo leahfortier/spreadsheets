@@ -1,7 +1,7 @@
 import random
 from typing import List
 
-from genshin.constants.sheets import get_character_sheet, CHARACTER_NAME_FIELD, ABYSS_RANDOMIZE_CHARACTERS
+from genshin.constants.sheets import CHARACTER_NAME_FIELD, ABYSS_RANDOMIZE_CHARACTERS, get_sheet, Tab
 
 
 def print_floor(floor: str, characters: List[str]) -> None:
@@ -10,7 +10,7 @@ def print_floor(floor: str, characters: List[str]) -> None:
 
 
 def randomize_abyss():
-    sheet = get_character_sheet()
+    sheet = get_sheet(Tab.L_CHARS)
     characters = []
     for row in sheet.rows:
         name = sheet.get(row, CHARACTER_NAME_FIELD)
