@@ -39,7 +39,9 @@ def transactions_file() -> List[List[str]]:
         date_suffix = date_str(-delta, "%Y_%m_%d")
         file_path = str(Path.home() / TRANSACTIONS_HOME_PATH / f"transactions_{date_suffix}.csv")
         try:
-            return from_csv(file_path)
+            file = from_csv(file_path)
+            print("Transaction file found:", file_path)
+            return file
         except FileNotFoundError:
             continue
 

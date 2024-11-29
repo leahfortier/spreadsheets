@@ -32,6 +32,7 @@ class DbRow:
         self.generation = sheet.get(row, DbFields.GENERATION)
         self.region = sheet.get(row, DbFields.OG_REGION)
 
+        self.catch_rate = sheet.get(row, DbFields.CATCH_RATE)
         self.can_breed_field = sheet.get(row, DbFields.CAN_BREED)
         self.gender_ratio = sheet.get(row, DbFields.GENDER_RATIO)
 

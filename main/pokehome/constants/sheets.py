@@ -11,7 +11,7 @@ EMPTY_FIELD = "--"
 
 DB_TAB = "Database"
 DEX_TAB = "Live Dex"
-DOKU_TAB = "Doku"
+DOKU_TAB = "Doku Dex"
 
 
 class SpriteType(str, Enum):
@@ -20,8 +20,8 @@ class SpriteType(str, Enum):
 
 
 class DexClassification(str, Enum):
-    NATIONAL = "National",
-    REGIONAL = "Regional",
+    NATIONAL = "National"
+    REGIONAL = "Regional"
     FORMS = "Forms"
 
 
@@ -34,8 +34,8 @@ class HiddenAbilityProgress(str, Enum):
 
 
 class EvolutionType(str, Enum):
-    FIRST = "First",
-    MIDDLE = "Middle",
+    FIRST = "First"
+    MIDDLE = "Middle"
     FINAL = "Final"
     NONE = "None"
 
@@ -87,6 +87,7 @@ class DbFields(str, Enum):
     OG_REGION = "og region"
     GENDER_RATIO = "gender ratio"
     CAN_BREED = "can breed"
+    CATCH_RATE = "catch rate"
 
 
 class DexFields(str, Enum):

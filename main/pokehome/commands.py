@@ -2,7 +2,8 @@ from typing import List, Optional, Dict, Callable, Set
 import re
 
 from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
-    FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE
+    FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
+    CATCH_RATE_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType
@@ -143,7 +144,6 @@ def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row:
     )
     if form_name.digimon and not updated:
         print(f"Ability not found for {form_name.digimon} {species}")
-
 
 
 def write_abilities(db: Database):
@@ -432,6 +432,34 @@ def write_families(db: Database):
     to_tsv(FAMILIES_OUTFILE, [to_row(row) for row in db.rows])
 
 
+def write_catch_rates(db: Database):
+    # Input file is copy-pasted table from Bulbapedia
+    #   - https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_catch_rate
+    bulba_rows: List[List[str]] = from_tsv(CATCH_RATE_INFILE)
+
+    for db_row in db.rows:
+        db_row.catch_rate = EMPTY_FIELD
+
+    for row in bulba_rows:
+        assert len(row) == 4
+        assert row[0].isnumeric()
+        assert row[1] == row[2]
+
+        species = row[1]
+        catch_rate = row[3].rstrip("*")
+
+        all_forms = db.species_map.get(species)
+        for form_id in all_forms:
+            form_db_row = db.get(form_id)
+            form_db_row.catch_rate = catch_rate
+
+    # Make sure every row has been set
+    for db_row in db.rows:
+        assert db_row.catch_rate != EMPTY_FIELD
+
+    to_tsv(CATCH_RATE_OUTFILE, [[row.catch_rate] for row in db.rows])
+
+
 def write_pla_names(db: Database):
     pla_rows = from_tsv(FILE_PATH + "pla-names.in")
     out_rows = []
@@ -506,5 +534,6 @@ def run_commands(db: Database, dex: Dex):
     write_genders(db)
     write_regions(db)
     write_families(db)
+    write_catch_rates(db)
     write_pla_names(db)
     # compare_version_history(dex)
