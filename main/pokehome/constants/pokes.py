@@ -36,8 +36,10 @@ DIGIMON: List[str] = [
     "Mega",
     "Primal",
     "Gigantamax",
-    "Cowboy",  # Caterpie
+    "Eternamax",
     "Ultra",  # Necrozma
+    "Partner",  # Pikachu, Eevee
+    "Cowboy",  # Caterpie
 ]
 
 EXCLUDE_BASE_FORM: List[str] = [
@@ -152,6 +154,7 @@ DIGIMON_TYPES: Dict[str, List[str]] = {
     "Mega Gyarados": ["Water", "Dark"],
     "Mega Mewtwo X": ["Psychic", "Fighting"],
     "Mega Ampharos": ["Electric", "Dragon"],
+    "Mega Sceptile": ["Grass", "Dragon"],
     "Mega Aggron": ["Steel", EMPTY_FIELD],
     "Mega Altaria": ["Dragon", "Fairy"],
     "Primal Groudon": ["Ground", "Fire"],

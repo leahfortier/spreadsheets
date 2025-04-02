@@ -6,7 +6,7 @@ from main.constants.sheet_id import BUDGET_ID
 from main.util.file_io import from_csv
 from main.util.time import date_str
 
-YEAR = 2024
+YEAR = 2025
 
 SPREADSHEET_ID = BUDGET_ID
 TRANSACTIONS_TAB = f'{YEAR} Transactions'

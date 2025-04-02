@@ -10,7 +10,7 @@ from main.util.general import remove_suffix, has_prefix, remove_prefix
 
 class DbRow:
     def __init__(self, sheet: Sheet, row: List[str], row_index: int):
-        sheet.update(row, DbFields.SORT_ID, str(row_index + 1))
+        sheet.update(row, DbFields.SORT_ID, str(row_index + 1), print_diff=False)
 
         self.dex = sheet.get(row, DbFields.DEX)
         self.form_id = sheet.get(row, DbFields.FORM_ID)
@@ -107,8 +107,13 @@ class DbRow:
             # Amped and Low Key Gigantamax images are the same
             form_name = ""
 
+        suffix = self.digimon_form
+        if self.digimon_form == "Partner":
+            # These don't currently have unique sprites
+            suffix = ""
+
         if not image_form_id:
-            image_form_id = "-".join(filter(None, [form_name or self.regional_form, self.digimon_form]))
+            image_form_id = "-".join(filter(None, [form_name or self.regional_form, suffix]))
 
         if self.gender_form and self.species in ["Meowstic", "Alcremie", "Indeedee", "Basculegion", "Oinkologne"]:
             image_form_id += "-" + self.gender_form
