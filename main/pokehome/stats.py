@@ -177,7 +177,7 @@ class DokuStats:
             empty_vals = self.missing_col.or_progress(is_primary_type, is_secondary_type)
             shiny_vals = self.shiny_col.or_progress(is_primary_type, is_secondary_type)
 
-            mono_vals = self.type1_col.progress(self.mono_col.condition)
+            mono_vals = self.caught_col.progress(self.type1_col.condition, self.mono_col.condition)
 
             values = get_values_from_progress(caught_vals, empty_vals, shiny_vals, mono_vals, None)
 
@@ -214,7 +214,7 @@ def get_values_from_progress(
 ) -> List[str]:
     return [
         caught_vals.count, shiny_vals.count,
-        empty_vals.count, mono_vals.count, dual_vals and dual_vals.count or "--",
+        empty_vals.count, mono_vals.concatenated, dual_vals and dual_vals.concatenated or "--",
         caught_vals.total, caught_vals.percent, shiny_vals.percent,
         mono_vals.percent, dual_vals and dual_vals.percent or "--"
     ]
