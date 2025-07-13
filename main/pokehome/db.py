@@ -6,6 +6,7 @@ from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
 from main.util.general import remove_suffix, has_prefix, remove_prefix
+from util.sheets_formulas import image
 
 
 class DbRow:
@@ -64,20 +65,8 @@ class DbRow:
         self.image_id = self.get_image_id()
         sheet.update(row, DbFields.IMAGE_ID, self.image_id)
 
-        shiny_id = self.image_id
-        if self.species == "Minior":
-            # All Minior cores have the same shiny
-            shiny_id = self.get_image_id("core")
-
-        def get_image_url(sprite_type: SpriteType, image_id: str) -> str:
-            if self.name == "Cowboy Caterpie":
-                return '=image("https://pokedoku-space.nyc3.cdn.digitaloceanspaces.com/resources/pokemon/99901.png")'
-            if self.name == "Floette (Eternal Flower)":
-                return f'=image("https://img.pokemondb.net/sprites/bank/{sprite_type.value}/{image_id}.png")'
-            return f'=image("https://img.pokemondb.net/sprites/home/{sprite_type.value}/1x/{image_id}.png")'
-
-        self.image = get_image_url(SpriteType.NORMAL, self.image_id)
-        self.shiny_image = get_image_url(SpriteType.SHINY, shiny_id)
+        self.image = image(self.get_image_url(SpriteType.NORMAL))
+        self.shiny_image = image(self.get_image_url(SpriteType.SHINY))
 
         sheet.set(row, DbFields.IMAGE, self.image)
         sheet.set(row, DbFields.SHINY_IMAGE, self.shiny_image)
@@ -129,6 +118,18 @@ class DbRow:
             .replace(" ", "-").replace("--", "-")
 
         return image_id
+
+    def get_image_url(self, sprite_type: SpriteType) -> str:
+        image_id = self.image_id
+        if sprite_type == SpriteType.SHINY and self.species == "Minior":
+            # All Minior cores have the same shiny
+            image_id = self.get_image_id("core")
+
+        if self.name == "Cowboy Caterpie":
+            return "https://pokedoku-space.nyc3.cdn.digitaloceanspaces.com/resources/pokemon/99901.png"
+        if self.name == "Floette (Eternal Flower)":
+            return f'https://img.pokemondb.net/sprites/bank/{sprite_type.value}/{image_id}.png'
+        return f'https://img.pokemondb.net/sprites/home/{sprite_type.value}/1x/{image_id}.png'
 
     def is_base_form(self, regional_is_base=False) -> bool:
         if self.id == self.dex:

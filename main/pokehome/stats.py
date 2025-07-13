@@ -1,5 +1,4 @@
-from enum import Enum
-from typing import List, Self, Generic, TypeVar
+from typing import List
 
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
@@ -7,43 +6,9 @@ from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX
     DOKU_TAB, EvolutionType, EMPTY_FIELD, DokuFormType
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
-from main.util.sheets_formulas import caught_total_progress, column_range, \
-    or_caught_total_progress, Progress, progress_difference
+from main.util.sheets_formulas import Progress, progress_difference
+from util.sheets_conditions import Column
 from pokehome.doku import Doku
-from util.data import Sheet
-
-FieldsEnum = TypeVar("FieldsEnum", bound=Enum)
-
-
-class Column(Generic[FieldsEnum]):
-    def __init__(self, sheet: Sheet, tab: str, field: FieldsEnum):
-        self.start_index = 2
-        self.col_range = column_range(sheet.column(field), self.start_index, tab=tab)
-
-    def _with_value(self, value: str) -> Self:
-        self.value = value
-        self.condition = f"{self.col_range}, {self.value}"
-        return self
-
-    def with_string(self, value: str) -> Self:
-        if isinstance(value, Enum):
-            value = value.value
-        return self._with_value(f'"{value}"')
-
-    def with_checkbox(self) -> Self:
-        return self._with_value("TRUE")
-
-    def with_false_checkbox(self) -> Self:
-        return self._with_value("FALSE")
-
-    def count(self, *conditions: str) -> str:
-        return caught_total_progress(self.condition, *conditions).count
-
-    def progress(self, *conditions: str) -> Progress:
-        return caught_total_progress(self.condition, *conditions)
-
-    def or_progress(self, first_condition: str, second_condition: str) -> Progress:
-        return or_caught_total_progress(self.condition, first_condition, second_condition)
 
 
 class OutStatsHorizontal:
@@ -118,11 +83,6 @@ def get_dex_stats(dex: Dex):
     out.new_column()
 
     to_tsv(STATS_OUTFILE, out.rows)
-
-
-class DokuStatsRow:
-    def __init__(self, name: str):
-        self.values = []
 
 
 class DokuStats:

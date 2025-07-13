@@ -1,11 +1,14 @@
 from typing import List, Tuple
 
 from main.pokehome.constants.io import DOKU_OUTFILE
-from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DokuFormType
+from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DokuFormType, DexFields, SpriteType, \
+    DOKU_TAB
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
 from pokehome.constants.pokes import REGIONALS, DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
+from util.sheets_conditions import Column
+from util.sheets_formulas import if_image
 
 
 def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
@@ -34,7 +37,11 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.FORM, get_doku_form(db_row).value)
     update(DokuFields.EVO_TYPE, db_row.evolution_type)
 
-    sheet.set(sheet_row, DokuFields.IMAGE, db_row.image)
+    shiny_col = Column(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox()
+    image_url = db_row.get_image_url(SpriteType.NORMAL)
+    shiny_url = db_row.get_image_url(SpriteType.SHINY)
+    image = if_image(shiny_col.row_condition, shiny_url, image_url)
+    sheet.set(sheet_row, DokuFields.IMAGE, image)
 
     return sheet_row
 

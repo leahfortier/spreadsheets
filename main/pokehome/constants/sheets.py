@@ -121,7 +121,7 @@ class DokuFields(str, Enum):
     REGION = "Region"
     TYPE1 = "Type 1"
     TYPE2 = "Type 2"
-    BRANCH_EVO = "Has Branch"
+    BRANCH_EVO = "Branch"
     FORM = "Form"
     EVO_TYPE = "Evolution"
 

@@ -61,12 +61,24 @@ def progress_difference(first: Progress, second: Progress) -> Progress:
     return Progress(count, total)
 
 
+def if_image(condition: str, true_url: str, false_url: str) -> str:
+    return f'=IF({condition}, IMAGE("{true_url}"), IMAGE("{false_url}"))'
+
+
+def image(url: str) -> str:
+    return f'=IMAGE("{url}")'
+
+
 def column_range(column: str, start_index: int = 2, tab: str = "", fixed=False) -> str:
     tab_prefix = f"'{tab}'!" if tab else ""
     index = str(start_index)
     if fixed:
         index = "$" + index
     return f"{tab_prefix}{column}{index}:{column}"
+
+
+def index_value(col_range: str, start_index: int = 2) -> str:
+    return f'INDEX({col_range}, ROW() - {start_index - 1})'
 
 
 def column_name(col_index: int) -> str:
