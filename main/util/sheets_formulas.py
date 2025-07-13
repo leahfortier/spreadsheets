@@ -2,10 +2,11 @@ from typing import List, Optional, Tuple
 
 
 class Progress:
-    def __init__(self, count: str, total: str, percent: str):
-        self.count = count
-        self.total = total
-        self.percent = percent
+    def __init__(self, raw_count: str, raw_total: str):
+        self.count = f'={raw_count}'
+        self.total = f'={raw_total}'
+        self.percent = f'=({raw_count}) / ({raw_total})'
+        self.concatenated = f'=CONCATENATE({raw_count}, "/", {raw_total})'
 
     def values(self) -> List[str]:
         return [self.count, self.total, self.percent]
@@ -24,11 +25,7 @@ def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tupl
 
 def caught_total_progress(progress_condition: str, *required_conditions: str) -> Progress:
     count, total = _raw_count_total(progress_condition, *required_conditions)
-    return Progress(
-        f'={count}',
-        f'={total}',
-        f'={count} / {total}',
-    )
+    return Progress(count, total)
 
 
 # Used when either first condition OR second condition can be true for progress
@@ -36,9 +33,8 @@ def or_caught_total_progress(progress_condition: str, first_condition: str, seco
     count1, total1 = _raw_count_total(progress_condition, first_condition)
     count2, total2 = _raw_count_total(progress_condition, second_condition)
     return Progress(
-        f'={count1} + {count2}',
-        f'={total1} + {total2}',
-        f'=({count1} + {count2}) / ({total1} + {total2})',
+        f'{count1} + {count2}',
+        f'{total1} + {total2}'
     )
 
 

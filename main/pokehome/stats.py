@@ -60,9 +60,9 @@ class OutStatsHorizontal:
         values.insert(0, name)
 
         if self.index == len(self.rows):
-            self.rows.append([""]*(self.column_index * (len(values) + 1)))
+            self.rows.append([""] * (self.column_index * (len(values) + 1)))
         elif self.column_index > 0:
-            self.rows[self.index] += [""*self.column_index]
+            self.rows[self.index] += ["" * self.column_index]
 
         self.rows[self.index] += values
         self.index += 1
@@ -120,77 +120,124 @@ def get_dex_stats(dex: Dex):
     to_tsv(STATS_OUTFILE, out.rows)
 
 
+class DokuStatsRow:
+    def __init__(self, name: str):
+        self.values = []
+
+
+class DokuStats:
+    def __init__(self, doku: Doku):
+        self.out = OutStatsVertical()
+        self.doku = doku
+
+        self.caught_col = self.col(DokuFields.DEX).with_checkbox()
+        self.missing_col = self.col(DokuFields.DEX).with_false_checkbox()
+        self.shiny_col = self.col(DokuFields.SHINY).with_checkbox()
+        self.mono_col = self.col(DokuFields.TYPE2).with_string(EMPTY_FIELD)
+        self.dual_col = self.col(DokuFields.TYPE2).with_string("<>" + EMPTY_FIELD)
+
+        self.type1_col = self.col(DokuFields.TYPE1)
+        self.type2_col = self.col(DokuFields.TYPE2)
+
+    def col(self, field: DokuFields) -> Column:
+        return Column(self.doku.sheet, DOKU_TAB, field)
+
+    def get_values(self, *conditions: str) -> List[str]:
+        caught_vals = self.caught_col.progress(*conditions)
+        empty_vals = self.missing_col.progress(*conditions)
+        shiny_vals = self.shiny_col.progress(*conditions)
+        mono_vals = self.missing_col.progress(*conditions, self.mono_col.condition)
+        dual_vals = self.missing_col.progress(*conditions, self.dual_col.condition)
+        return get_values_from_progress(caught_vals, empty_vals, shiny_vals, mono_vals, dual_vals)
+
+    def append_full(self):
+        self.out.append("All", self.get_values())
+
+    def append_generations(self):
+        generation_col = self.col(DokuFields.GENERATION)
+        for gen in range(1, CURRENT_GENERATION + 1):
+            generation_col.with_string(str(gen))
+            self.out.append(f"Gen {gen}", self.get_values(generation_col.condition))
+
+    def append_regions(self):
+        region_col = self.col(DokuFields.REGION)
+        for region in REGIONS:
+            region_col.with_string(region)
+            self.out.append(region, self.get_values(region_col.condition))
+
+    def append_types(self):
+        for poke_type in ALL_TYPES:
+            self.type1_col.with_string(poke_type)
+            self.type2_col.with_string(poke_type)
+
+            is_primary_type = self.type1_col.condition
+            is_secondary_type = self.type2_col.condition
+
+            caught_vals = self.caught_col.or_progress(is_primary_type, is_secondary_type)
+            empty_vals = self.missing_col.or_progress(is_primary_type, is_secondary_type)
+            shiny_vals = self.shiny_col.or_progress(is_primary_type, is_secondary_type)
+
+            mono_vals = self.type1_col.progress(self.mono_col.condition)
+
+            values = get_values_from_progress(caught_vals, empty_vals, shiny_vals, mono_vals, None)
+
+            self.out.append(poke_type, values)
+
+    def append_special(self):
+        self.type2_col.with_string(EMPTY_FIELD)
+        self.out.append("Mono-Type", self.get_values(self.type2_col.condition))
+
+        self.type2_col.with_string("<>" + EMPTY_FIELD)
+        self.out.append("Dual-Type", self.get_values(self.type2_col.condition))
+
+        branch_col = self.col(DokuFields.BRANCH_EVO).with_string("Yes")
+        self.out.append("Has Branch", self.get_values(branch_col.condition))
+
+        evolution_col = self.col(DokuFields.EVO_TYPE)
+        for evo_type in EvolutionType:
+            evolution_col.with_string(evo_type)
+            self.out.append(evo_type, self.get_values(evolution_col.condition))
+
+        form_col = self.col(DokuFields.FORM)
+        form_col.with_string(DokuFormType.MEGA)
+        self.out.append("Mega", self.get_values(form_col.condition))
+        form_col.with_string(DokuFormType.GMAX)
+        self.out.append("Gmax", self.get_values(form_col.condition))
+
+
+def get_values_from_progress(
+        caught_vals: Progress,
+        empty_vals: Progress,
+        shiny_vals: Progress,
+        mono_vals: Progress,
+        dual_vals: Optional[Progress]
+) -> List[str]:
+    return [
+        caught_vals.count, shiny_vals.count,
+        empty_vals.count, mono_vals.count, dual_vals and dual_vals.count or "--",
+        caught_vals.total, caught_vals.percent, shiny_vals.percent,
+        mono_vals.percent, dual_vals and dual_vals.percent or "--"
+    ]
+
+
 def get_doku_stats(doku: Doku):
-    def col(field: DokuFields) -> Column:
-        return Column(doku.sheet, DOKU_TAB, field)
+    stats = DokuStats(doku)
 
-    dex_col = col(DokuFields.DEX).with_checkbox()
-    empty_dex_col = col(DokuFields.DEX).with_false_checkbox()
-    shiny_dex_col = col(DokuFields.SHINY).with_checkbox()
+    stats.append_full()
+    stats.out.blank_row()
 
-    def get_values(*conditions: str) -> List[str]:
-        caught_vals = dex_col.progress(*conditions)
-        empty_vals = empty_dex_col.progress(*conditions)
-        shiny_vals = shiny_dex_col.progress(*conditions)
-        return [
-            caught_vals.count, empty_vals.count, shiny_vals.count,
-            caught_vals.total, caught_vals.percent, shiny_vals.percent
-        ]
+    stats.append_generations()
+    stats.out.blank_row()
 
-    def get_values_or(first_condition: str, second_condition: str) -> List[str]:
-        caught_vals = dex_col.or_progress(first_condition, second_condition)
-        empty_vals = empty_dex_col.or_progress(first_condition, second_condition)
-        shiny_vals = shiny_dex_col.or_progress(first_condition, second_condition)
-        return [
-            caught_vals.count, empty_vals.count, shiny_vals.count,
-            caught_vals.total, caught_vals.percent, shiny_vals.percent
-        ]
+    stats.append_regions()
+    stats.out.blank_row()
 
-    out = OutStatsVertical()
-    out.append("All", get_values())
-    out.blank_row()
+    stats.append_types()
+    stats.out.blank_row()
 
-    generation_col = col(DokuFields.GENERATION)
-    for gen in range(1, CURRENT_GENERATION + 1):
-        generation_col.with_string(str(gen))
-        out.append(f"Gen {gen}", get_values(generation_col.condition))
-    out.blank_row()
+    stats.append_special()
 
-    region_col = col(DokuFields.REGION)
-    for region in REGIONS:
-        region_col.with_string(region)
-        out.append(region, get_values(region_col.condition))
-    out.blank_row()
-
-    type1_col = col(DokuFields.TYPE1)
-    type2_col = col(DokuFields.TYPE2)
-    for poke_type in ALL_TYPES:
-        type1_col.with_string(poke_type)
-        type2_col.with_string(poke_type)
-        out.append(poke_type, get_values_or(type1_col.condition, type2_col.condition))
-    out.blank_row()
-
-    type2_col.with_string(EMPTY_FIELD)
-    out.append("Mono-Type", get_values(type2_col.condition))
-
-    type2_col.with_string("<>" + EMPTY_FIELD)
-    out.append("Dual-Type", get_values(type2_col.condition))
-
-    branch_col = col(DokuFields.BRANCH_EVO).with_string("Yes")
-    out.append("Has Branch", get_values(branch_col.condition))
-
-    evolution_col = col(DokuFields.EVO_TYPE)
-    for evo_type in EvolutionType:
-        evolution_col.with_string(evo_type)
-        out.append(evo_type, get_values(evolution_col.condition))
-
-    form_col = col(DokuFields.FORM)
-    form_col.with_string(DokuFormType.MEGA)
-    out.append("Mega", get_values(form_col.condition))
-    form_col.with_string(DokuFormType.GMAX)
-    out.append("Gmax", get_values(form_col.condition))
-
-    to_tsv(DOKU_STATS_OUTFILE, out.rows)
+    to_tsv(DOKU_STATS_OUTFILE, stats.out.rows)
 
 
 def write_stats(dex: Dex, doku: Doku):
