@@ -3,9 +3,11 @@ from typing import List, Optional, Tuple
 
 class Progress:
     def __init__(self, raw_count: str, raw_total: str):
+        self.raw_count = raw_count
+        self.raw_total = raw_total
         self.count = f'={raw_count}'
         self.total = f'={raw_total}'
-        self.percent = f'=({raw_count}) / ({raw_total})'
+        self.percent = f'=IF({raw_total}=0, "--", ({raw_count}) / ({raw_total}))'
         self.concatenated = f'=CONCATENATE({raw_count}, "/", {raw_total})'
 
     def values(self) -> List[str]:
@@ -51,6 +53,12 @@ def count_with_percentage(progress_condition: str, required_condition: Optional[
 
 def condition_as_count(progress_condition: str, *required_conditions: str) -> str:
     return caught_total_progress(progress_condition, *required_conditions).count
+
+
+def progress_difference(first: Progress, second: Progress) -> Progress:
+    count = f'{first.raw_count} - {second.raw_count}'
+    total = f'{first.raw_total} - {second.raw_total}'
+    return Progress(count, total)
 
 
 def column_range(column: str, start_index: int = 2, tab: str = "", fixed=False) -> str:

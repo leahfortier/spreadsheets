@@ -126,20 +126,6 @@ class DokuFields(str, Enum):
     EVO_TYPE = "Evolution"
 
 
-class DokuStats(str, Enum):
-    DEX = "Dex"
-    CAUGHT = "Caught"
-    Shiny = "Shiny"
-    MISSING = "Missing"
-    MONO = "Mono"
-    DUAL = "Dual"
-    TOTAL = "Total"
-    CAUGHT_PROGRESS = "Caught %"
-    SHINY_PROGRESS = "Shiny %"
-    MONO_PROGRESS = "Mono %"
-    DUAL_PROGRESS = "Dual %"
-
-
 class GoFields(str, Enum):
     ID = "Id"
     NAME = "Name"

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional, Self, Generic, TypeVar, Callable
+from typing import List, Self, Generic, TypeVar
 
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
@@ -7,8 +7,8 @@ from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX
     DOKU_TAB, EvolutionType, EMPTY_FIELD, DokuFormType
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
-from main.util.sheets_formulas import caught_total_progress, count_with_percentage, condition_as_count, column_range, \
-    or_caught_total_progress, Progress
+from main.util.sheets_formulas import caught_total_progress, column_range, \
+    or_caught_total_progress, Progress, progress_difference
 from pokehome.doku import Doku
 from util.data import Sheet
 
@@ -144,11 +144,11 @@ class DokuStats:
 
     def get_values(self, *conditions: str) -> List[str]:
         caught_vals = self.caught_col.progress(*conditions)
-        empty_vals = self.missing_col.progress(*conditions)
+        missing_vals = self.missing_col.progress(*conditions)
         shiny_vals = self.shiny_col.progress(*conditions)
         mono_vals = self.missing_col.progress(*conditions, self.mono_col.condition)
         dual_vals = self.missing_col.progress(*conditions, self.dual_col.condition)
-        return get_values_from_progress(caught_vals, empty_vals, shiny_vals, mono_vals, dual_vals)
+        return get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals)
 
     def append_full(self):
         self.out.append("All", self.get_values())
@@ -174,12 +174,13 @@ class DokuStats:
             is_secondary_type = self.type2_col.condition
 
             caught_vals = self.caught_col.or_progress(is_primary_type, is_secondary_type)
-            empty_vals = self.missing_col.or_progress(is_primary_type, is_secondary_type)
+            missing_vals = self.missing_col.or_progress(is_primary_type, is_secondary_type)
             shiny_vals = self.shiny_col.or_progress(is_primary_type, is_secondary_type)
 
             mono_vals = self.caught_col.progress(self.type1_col.condition, self.mono_col.condition)
+            dual_vals = progress_difference(missing_vals, mono_vals)
 
-            values = get_values_from_progress(caught_vals, empty_vals, shiny_vals, mono_vals, None)
+            values = get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals)
 
             self.out.append(poke_type, values)
 
@@ -207,16 +208,15 @@ class DokuStats:
 
 def get_values_from_progress(
         caught_vals: Progress,
-        empty_vals: Progress,
+        missing_vals: Progress,
         shiny_vals: Progress,
         mono_vals: Progress,
-        dual_vals: Optional[Progress]
+        dual_vals: Progress
 ) -> List[str]:
     return [
-        caught_vals.count, shiny_vals.count,
-        empty_vals.count, mono_vals.concatenated, dual_vals and dual_vals.concatenated or "--",
-        caught_vals.total, caught_vals.percent, shiny_vals.percent,
-        mono_vals.percent, dual_vals and dual_vals.percent or "--"
+        caught_vals.concatenated, shiny_vals.count,
+        missing_vals.count, mono_vals.concatenated, dual_vals.concatenated,
+        caught_vals.percent, shiny_vals.percent, mono_vals.percent, dual_vals.percent
     ]
 
 
