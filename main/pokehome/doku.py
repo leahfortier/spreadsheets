@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from main.pokehome.constants.io import DOKU_OUTFILE
-from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DokuFormType, DexFields, SpriteType, \
+from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields, SpriteType, \
     DOKU_TAB
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
@@ -34,7 +34,6 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.TYPE1, db_row.type1)
     update(DokuFields.TYPE2, db_row.type2)
     update(DokuFields.BRANCH_EVO, db_row.has_branch_evo)
-    update(DokuFields.FORM, get_doku_form(db_row).value)
     update(DokuFields.EVO_TYPE, db_row.evolution_type)
 
     shiny_col = Column(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox()
@@ -44,20 +43,6 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     sheet.set(sheet_row, DokuFields.IMAGE, image)
 
     return sheet_row
-
-
-def get_doku_form(db_row: DbRow) -> DokuFormType:
-    if db_row.is_base_form(regional_is_base=True):
-        return DokuFormType.BASE
-    elif db_row.digimon_form.startswith("Mega"):
-        return DokuFormType.MEGA
-    elif db_row.digimon_form == "Gigantamax":
-        return DokuFormType.GMAX
-    elif db_row.digimon_form in REGIONALS:
-        return DokuFormType.REGIONAL
-    elif db_row.gender_id and db_row.species in DOKU_INCLUDE_GENDER_FORM:
-        return DokuFormType.GENDER
-    return DokuFormType.ALT
 
 
 def is_doku_form(db_row: DbRow) -> bool:

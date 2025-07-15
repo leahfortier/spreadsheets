@@ -1,8 +1,7 @@
-from terminology import in_red
-
 from main.constants.sheet_id import DOGGY_ID
 from main.util.data import Sheet
 from main.util.sheets_parse import get_sheet_data
+from util.general import warn
 
 SPREADSHEET_ID = DOGGY_ID
 OWED_TAB = "Total"
@@ -17,7 +16,7 @@ def check_doggy_bank():
             owed = sheet.get(row, "Owe")
             try:
                 if float(owed.lstrip("$")) > 0:
-                    print(in_red(f"\n\n!!!!!! YOU OWE {owed} TO THE DOGGY BANK !!!!!!").in_bold())
+                    warn(f"\n\n!!!!!! YOU OWE {owed} TO THE DOGGY BANK !!!!!!")
             except ValueError:
                 pass
             return

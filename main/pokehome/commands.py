@@ -1,5 +1,5 @@
-from typing import List, Optional, Dict, Callable, Set
 import re
+from typing import List, Optional, Dict, Callable, Set, Tuple
 
 from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
@@ -11,7 +11,7 @@ from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
-from main.util.general import remove_suffix, has_prefix, remove_prefix
+from main.util.general import remove_suffix, has_prefix, remove_prefix, warn
 
 
 class FormName:
@@ -56,6 +56,7 @@ class FormName:
 
     def __repr__(self):
         return [self.species, self.form_name, self.regional, self.digimon].__repr__()
+
 
 def handle_values(
         db: Database,
@@ -110,7 +111,7 @@ def handle_values(
                 update_values(form_db_row)
 
         if not updated and values != values_map[num]:
-            print("No match for", species, form.form_name)
+            warn(f'No match for {species}, {form.form_name}')
 
     return updated
 
@@ -143,7 +144,7 @@ def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row:
         set_abs, lambda db_row: db_row.ability1
     )
     if form_name.digimon and not updated:
-        print(f"Ability not found for {form_name.digimon} {species}")
+        warn(f"Ability not found for {form_name.digimon} {species}")
 
 
 def write_abilities(db: Database):
@@ -316,7 +317,7 @@ def write_regions(db: Database):
         elif row.regional_form == "Alolan":
             region = "Alola"
         elif row.regional_form:
-            print(f"Unknown regional form {row.regional_form} for {row.name}")
+            warn(f"Unknown regional form {row.regional_form} for {row.name}")
         elif row.form == "Bloodmoon":
             region = "Paldea"
         elif gen == 1:
@@ -358,7 +359,7 @@ def get_family_pokes(family: str) -> Set[str]:
 def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
     pre_pokes = get_family_pokes(pre_evs)
     post_pokes = get_family_pokes(post_evs)
-    assert not (name in pre_pokes and name in post_pokes)
+    assert not (name in pre_pokes and name in post_pokes), f'{name}, {pre_pokes}, {post_pokes}'
 
     if name in pre_pokes:
         if row.evolution_type == EvolutionType.NONE:
@@ -366,7 +367,7 @@ def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
         elif row.evolution_type == EvolutionType.FINAL:
             row.evolution_type = EvolutionType.MIDDLE
         else:
-            print(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
+            warn(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
 
         if len(post_pokes) > 1:
             row.has_branch_evo = "Yes"
@@ -377,12 +378,20 @@ def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
         elif row.evolution_type == EvolutionType.FIRST:
             row.evolution_type = EvolutionType.MIDDLE
         else:
-            print(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
+            warn(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
 
 
 def handle_evolution(name: str, family: str, row: DbRow):
     row.has_branch_evo = "No"
     row.evolution_type = EvolutionType.NONE
+    found = False
+
+    if row.digimon_form.startswith("Mega"):
+        row.evolution_type = EvolutionType.MEGA
+        return
+    elif row.digimon_form == "Gigantamax":
+        row.evolution_type = EvolutionType.GMAX
+        return
 
     # Ex:
     #    ['Bulbasaur -> Ivysaur -> Venusaur']
@@ -391,6 +400,7 @@ def handle_evolution(name: str, family: str, row: DbRow):
     for line in lines:
         pokes = get_family_pokes(line)
         if name in pokes:
+            found = True
             stages = line.split(" -> ")
             if len(stages) == 2:
                 handle_stage(name, stages[0], stages[1], row)
@@ -398,31 +408,33 @@ def handle_evolution(name: str, family: str, row: DbRow):
                 handle_stage(name, stages[0], stages[1], row)
                 handle_stage(name, stages[1], stages[2], row)
             elif len(stages) != 1:
-                print(f"Unable to parse stages for {name}: {family}")
+                warn(f"Unable to parse stages for {name}: {family}")
+    assert found, f'{name} {family}'
 
 
 def write_families(db: Database):
     evolutions = from_file(FAMILIES_INFILE)
     family_map: Dict[str, Set[str]] = {family: get_family_pokes(family) for family in evolutions}
 
-    def get_family(name: str) -> Optional[str]:
+    def get_family(form_name: str) -> Optional[str]:
         value = None
         for family, pokes in family_map.items():
-            if name in pokes:
+            if form_name in pokes:
                 if value:
-                    print("Duplicate family for " + name)
+                    warn("Duplicate family for " + form_name)
                 value = family
         return value
 
     for row in db.rows:
-        name = row.regional_name()
+        def get_name_and_family() -> Tuple[str, str]:
+            names = [row.name, row.regional_name()]
+            for form_name in names:
+                family = get_family(form_name)
+                if family:
+                    return form_name, family
+            assert False, "No evolution found for " + name
 
-        family = get_family(name)
-        if not family:
-            family = get_family(row.name)
-        if not family:
-            print("No evolution found for " + name)
-
+        name, family = get_name_and_family()
         row.family = family or EMPTY_FIELD
         handle_evolution(name, family, row)
 
@@ -508,8 +520,8 @@ def compare_version_history(dex: Dex):
 
     for prev_row, current_row in zip(previous.rows, current.rows):
         assert len(prev_row) == 36
-        prev_row.insert(-1, 'FALSE') # Quick
-        prev_row.insert(-3, 'FALSE') # Dusk
+        prev_row.insert(-1, 'FALSE')  # Quick
+        prev_row.insert(-3, 'FALSE')  # Dusk
         assert len(prev_row) == 38
 
         if prev_row != current_row:
@@ -519,7 +531,8 @@ def compare_version_history(dex: Dex):
                 if prev_val == "FALSE" and current_val == "TRUE":
                     rows_diffs.append(f"\t{dex.sheet.schema_row[index]}++")
                 elif prev_val.replace("\n", " ") != current_val.replace("\n", " "):
-                    rows_diffs.append(f"\t{dex.sheet.schema_row[index]}: {prev_val} -> {current_val}".replace("\n", " "))
+                    rows_diffs.append(
+                        f"\t{dex.sheet.schema_row[index]}: {prev_val} -> {current_val}".replace("\n", " "))
 
             if len(rows_diffs) > 0:
                 diffs.append(f"Diff: {current_row[0]} {current_row[3]}")

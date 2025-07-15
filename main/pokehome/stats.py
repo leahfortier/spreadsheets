@@ -3,7 +3,7 @@ from typing import List
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
 from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX_TAB, DexClassification, DokuFields, \
-    DOKU_TAB, EvolutionType, EMPTY_FIELD, DokuFormType
+    DOKU_TAB, EvolutionType, EMPTY_FIELD
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
 from main.util.sheets_formulas import Progress, progress_difference
@@ -158,12 +158,6 @@ class DokuStats:
         for evo_type in EvolutionType:
             evolution_col.with_string(evo_type)
             self.out.append(evo_type, self.get_values(evolution_col.condition))
-
-        form_col = self.col(DokuFields.FORM)
-        form_col.with_string(DokuFormType.MEGA)
-        self.out.append("Mega", self.get_values(form_col.condition))
-        form_col.with_string(DokuFormType.GMAX)
-        self.out.append("Gmax", self.get_values(form_col.condition))
 
 
 def get_values_from_progress(

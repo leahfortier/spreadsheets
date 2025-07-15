@@ -1,4 +1,6 @@
 from typing import List
+from enum import Enum
+from terminology import in_red
 
 titlecase_exceptions: List[str] = ["a", "and", "an", "of", "or", "the"]
 
@@ -50,3 +52,13 @@ def all_unique(row: List[str], exceptions: List[str] = None) -> bool:
 def generic_name(styled_name: str) -> str:
     name = styled_name.lower().replace("\"", "")
     return name
+
+
+def to_str(field: str | Enum) -> str:
+    if isinstance(field, Enum):
+        field = field.value
+    return field
+
+
+def warn(message: str):
+    print(in_red(message).in_bold())

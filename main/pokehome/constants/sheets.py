@@ -39,13 +39,6 @@ class EvolutionType(str, Enum):
     MIDDLE = "Middle"
     FINAL = "Final"
     NONE = "None"
-
-
-class DokuFormType(str, Enum):
-    BASE = "Base"
-    ALT = "Alt"
-    GENDER = "Gender"
-    REGIONAL = "Regional"
     MEGA = "Mega"
     GMAX = "Gmax"
 
@@ -122,7 +115,6 @@ class DokuFields(str, Enum):
     TYPE1 = "Type 1"
     TYPE2 = "Type 2"
     BRANCH_EVO = "Branch"
-    FORM = "Form"
     EVO_TYPE = "Evolution"
 
 
