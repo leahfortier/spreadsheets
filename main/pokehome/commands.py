@@ -1,10 +1,10 @@
 from typing import List, Optional, Dict, Callable, Set
 import re
 
-from main.pokehome.constants.io import FILE_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
+from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
-    CATCH_RATE_OUTFILE
-from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, NON_HOME_FORMS, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
+    CATCH_RATE_OUTFILE, IN_PATH
+from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType
 from main.pokehome.db import Database, DbRow
@@ -461,7 +461,7 @@ def write_catch_rates(db: Database):
 
 
 def write_pla_names(db: Database):
-    pla_rows = from_tsv(FILE_PATH + "pla-names.in")
+    pla_rows = from_tsv(IN_PATH + "pla-names.in")
     out_rows = []
     for row in pla_rows:
         assert len(row) == 1
@@ -496,7 +496,7 @@ def write_pla_names(db: Database):
 
         out_rows.append([form_id, name, poke.image, poke.shiny_image])
 
-    to_tsv(FILE_PATH + "pla-names.out", out_rows)
+    to_tsv(OUT_PATH + "pla-names.out", out_rows)
 
 
 def compare_version_history(dex: Dex):
@@ -525,7 +525,7 @@ def compare_version_history(dex: Dex):
                 diffs.append(f"Diff: {current_row[0]} {current_row[3]}")
                 diffs.extend(rows_diffs)
 
-    to_file(FILE_PATH + "diffs.out", diffs)
+    to_file(OUT_PATH + "diffs.out", diffs)
 
 
 def run_commands(db: Database, dex: Dex):
