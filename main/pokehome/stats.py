@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Tuple
 
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
@@ -7,8 +7,8 @@ from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
 from main.util.sheets_formulas import Progress, progress_difference
-from util.sheets_conditions import Column
 from pokehome.doku import Doku
+from util.sheets_conditions import Column
 
 
 class OutStatsHorizontal:
@@ -93,11 +93,15 @@ class DokuStats:
         self.caught_col = self.col(DokuFields.DEX).with_checkbox()
         self.missing_col = self.col(DokuFields.DEX).with_false_checkbox()
         self.shiny_col = self.col(DokuFields.SHINY).with_checkbox()
+
         self.mono_col = self.col(DokuFields.TYPE2).with_string(EMPTY_FIELD)
         self.dual_col = self.col(DokuFields.TYPE2).with_string("<>" + EMPTY_FIELD)
 
-        self.type1_col = self.col(DokuFields.TYPE1)
-        self.type2_col = self.col(DokuFields.TYPE2)
+        self.type_cols: Dict[str, Tuple[Column, Column]] = {}
+        for poke_type in ALL_TYPES:
+            type1_col = self.col(DokuFields.TYPE1).with_string(poke_type)
+            type2_col = self.col(DokuFields.TYPE2).with_string(poke_type)
+            self.type_cols[poke_type] = type1_col, type2_col
 
     def col(self, field: DokuFields) -> Column:
         return Column(self.doku.sheet, DOKU_TAB, field)
@@ -106,9 +110,18 @@ class DokuStats:
         caught_vals = self.caught_col.progress(*conditions)
         missing_vals = self.missing_col.progress(*conditions)
         shiny_vals = self.shiny_col.progress(*conditions)
+
         mono_vals = self.missing_col.progress(*conditions, self.mono_col.condition)
         dual_vals = self.missing_col.progress(*conditions, self.dual_col.condition)
-        return get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals)
+
+        all_type_vals = []
+        for poke_type in ALL_TYPES:
+            type1_col, type2_col = self.type_cols[poke_type]
+            type1_vals = self.missing_col.progress(*conditions, type1_col.condition)
+            type2_vals = self.missing_col.progress(*conditions, type2_col.condition)
+            all_type_vals.append(type1_vals.with_or(type2_vals))
+
+        return get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals, all_type_vals)
 
     def append_full(self):
         self.out.append("All", self.get_values())
@@ -126,30 +139,38 @@ class DokuStats:
             self.out.append(region, self.get_values(region_col.condition))
 
     def append_types(self):
-        for poke_type in ALL_TYPES:
-            self.type1_col.with_string(poke_type)
-            self.type2_col.with_string(poke_type)
+        def get_dual_type_progress(primary_type: str, secondary_type: str) -> Progress:
+            primary_col = self.col(DokuFields.TYPE1).with_string(primary_type)
+            secondary_col = self.col(DokuFields.TYPE2).with_string(secondary_type)
+            return self.missing_col.progress(primary_col.condition, secondary_col.condition)
 
-            is_primary_type = self.type1_col.condition
-            is_secondary_type = self.type2_col.condition
+        for poke_type in ALL_TYPES:
+            type1_col, type2_col = self.type_cols[poke_type]
+
+            is_primary_type = type1_col.condition
+            is_secondary_type = type2_col.condition
 
             caught_vals = self.caught_col.or_progress(is_primary_type, is_secondary_type)
             missing_vals = self.missing_col.or_progress(is_primary_type, is_secondary_type)
             shiny_vals = self.shiny_col.or_progress(is_primary_type, is_secondary_type)
 
-            mono_vals = self.caught_col.progress(self.type1_col.condition, self.mono_col.condition)
+            mono_vals = get_dual_type_progress(poke_type, EMPTY_FIELD)
             dual_vals = progress_difference(missing_vals, mono_vals)
 
-            values = get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals)
+            all_type_vals = []
+            for dual_type in ALL_TYPES:
+                primary_vals = get_dual_type_progress(poke_type, dual_type)
+                secondary_vals = get_dual_type_progress(dual_type, poke_type)
 
+                dual_type_vals = primary_vals.with_or(secondary_vals)
+                all_type_vals.append(dual_type_vals)
+
+            values = get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals, all_type_vals)
             self.out.append(poke_type, values)
 
     def append_special(self):
-        self.type2_col.with_string(EMPTY_FIELD)
-        self.out.append("Mono-Type", self.get_values(self.type2_col.condition))
-
-        self.type2_col.with_string("<>" + EMPTY_FIELD)
-        self.out.append("Dual-Type", self.get_values(self.type2_col.condition))
+        self.out.append("Mono-Type", self.get_values(self.mono_col.condition))
+        self.out.append("Dual-Type", self.get_values(self.dual_col.condition))
 
         branch_col = self.col(DokuFields.BRANCH_EVO).with_string("Yes")
         self.out.append("Has Branch", self.get_values(branch_col.condition))
@@ -165,12 +186,14 @@ def get_values_from_progress(
         missing_vals: Progress,
         shiny_vals: Progress,
         mono_vals: Progress,
-        dual_vals: Progress
+        dual_vals: Progress,
+        all_type_vals: List[Progress],
 ) -> List[str]:
     return [
         caught_vals.concatenated, shiny_vals.count,
         missing_vals.count, mono_vals.concatenated, dual_vals.concatenated,
-        caught_vals.percent, shiny_vals.percent, mono_vals.percent, dual_vals.percent
+        caught_vals.percent, shiny_vals.percent, mono_vals.percent, dual_vals.percent,
+        *[type_vals.concatenated for type_vals in all_type_vals]
     ]
 
 

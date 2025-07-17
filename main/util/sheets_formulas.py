@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import List, Tuple, Self
 
 
 class Progress:
@@ -13,6 +13,12 @@ class Progress:
     def values(self) -> List[str]:
         return [self.count, self.total, self.percent]
 
+    def with_or(self, progress: Self) -> Self:
+        return Progress(
+            f'{self.raw_count} + {progress.raw_count}',
+            f'{self.raw_total} + {progress.raw_total}'
+        )
+
 
 def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tuple[str, str]:
     if len(required_conditions) == 0:
@@ -25,34 +31,16 @@ def _raw_count_total(progress_condition: str, *required_conditions: str) -> Tupl
     return count, total
 
 
-def caught_total_progress(progress_condition: str, *required_conditions: str) -> Progress:
+def get_progress(progress_condition: str, *required_conditions: str) -> Progress:
     count, total = _raw_count_total(progress_condition, *required_conditions)
     return Progress(count, total)
 
 
 # Used when either first condition OR second condition can be true for progress
-def or_caught_total_progress(progress_condition: str, first_condition: str, second_condition: str) -> Progress:
-    count1, total1 = _raw_count_total(progress_condition, first_condition)
-    count2, total2 = _raw_count_total(progress_condition, second_condition)
-    return Progress(
-        f'{count1} + {count2}',
-        f'{total1} + {total2}'
-    )
-
-
-def column_progress(col_range: str, col_value: str) -> str:
-    return caught_total_progress(f'{col_range}, {col_value}', None).percent
-
-
-def count_with_percentage(progress_condition: str, required_condition: Optional[str]) -> str:
-    progress = caught_total_progress(progress_condition, required_condition)
-    count = progress.count.lstrip('=')
-    percentage = progress.percent.lstrip('=')
-    return f'=JOIN("", {count}, " (", TO_PERCENT({percentage}), ")")'
-
-
-def condition_as_count(progress_condition: str, *required_conditions: str) -> str:
-    return caught_total_progress(progress_condition, *required_conditions).count
+def or_progress(progress_condition: str, first_condition: str, second_condition: str) -> Progress:
+    first = get_progress(progress_condition, first_condition)
+    second = get_progress(progress_condition, second_condition)
+    return first.with_or(second)
 
 
 def progress_difference(first: Progress, second: Progress) -> Progress:
