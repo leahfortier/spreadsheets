@@ -8,7 +8,7 @@ from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
 from main.util.sheets_formulas import Progress, progress_difference
 from pokehome.doku import Doku
-from util.sheets_conditions import Column
+from util.sheets_conditions import Column, ColumnBuilder
 
 
 class OutStatsHorizontal:
@@ -46,13 +46,13 @@ class OutStatsVertical:
 
 
 def get_dex_stats(dex: Dex):
-    def col(field: DexFields) -> Column:
-        return Column(dex.sheet, DEX_TAB, field)
+    def col(field: DexFields) -> ColumnBuilder:
+        return ColumnBuilder(dex.sheet, DEX_TAB, field)
 
-    caught_col = col(DexFields.CAUGHT_PROGRESS).with_checkbox()
-    hidden_col = col(DexFields.HIDDEN_PROGRESS).with_string("<>" + HiddenAbilityProgress.UNOBTAINED)
-    nickname_col = col(DexFields.NICKNAME).with_string("<>")
-    shiny_col = col(DexFields.SHINY).with_checkbox()
+    caught_col = col(DexFields.CAUGHT_PROGRESS).with_checkbox().build()
+    hidden_col = col(DexFields.HIDDEN_PROGRESS).with_string("<>" + HiddenAbilityProgress.UNOBTAINED).build()
+    nickname_col = col(DexFields.NICKNAME).with_string("<>").build()
+    shiny_col = col(DexFields.SHINY).with_checkbox().build()
 
     def get_values(*conditions: str) -> List[str]:
         have_values = caught_col.progress(*conditions).values()
@@ -64,21 +64,18 @@ def get_dex_stats(dex: Dex):
     out = OutStatsHorizontal()
     out.append("All", get_values())
 
-    class_col = col(DexFields.CLASS)
     for classification in DexClassification:
-        class_col.with_string(classification)
+        class_col = col(DexFields.CLASS).with_string(classification).build()
         out.append(classification, get_values(class_col.condition))
     out.new_column()
 
-    box_col = col(DexFields.BOX)
     for box in dex.boxes.boxes:
-        box_col.with_string(box.name)
+        box_col = col(DexFields.BOX).with_string(box.name).build()
         out.append(box.name, get_values(box_col.condition))
     out.new_column()
 
-    region_col = col(DexFields.REGION)
     for region in REGIONS:
-        region_col.with_string(region)
+        region_col = col(DexFields.REGION).with_string(region).build()
         out.append(region, get_values(region_col.condition))
     out.new_column()
 
@@ -90,21 +87,21 @@ class DokuStats:
         self.out = OutStatsVertical()
         self.doku = doku
 
-        self.caught_col = self.col(DokuFields.DEX).with_checkbox()
-        self.missing_col = self.col(DokuFields.DEX).with_false_checkbox()
-        self.shiny_col = self.col(DokuFields.SHINY).with_checkbox()
+        self.caught_col = self.col(DokuFields.DEX).with_checkbox().build()
+        self.missing_col = self.col(DokuFields.DEX).with_false_checkbox().build()
+        self.shiny_col = self.col(DokuFields.SHINY).with_checkbox().build()
 
-        self.mono_col = self.col(DokuFields.TYPE2).with_string(EMPTY_FIELD)
-        self.dual_col = self.col(DokuFields.TYPE2).with_string("<>" + EMPTY_FIELD)
+        self.mono_col = self.col(DokuFields.TYPE2).with_string(EMPTY_FIELD).build()
+        self.dual_col = self.col(DokuFields.TYPE2).with_string("<>" + EMPTY_FIELD).build()
 
         self.type_cols: Dict[str, Tuple[Column, Column]] = {}
         for poke_type in ALL_TYPES:
-            type1_col = self.col(DokuFields.TYPE1).with_string(poke_type)
-            type2_col = self.col(DokuFields.TYPE2).with_string(poke_type)
+            type1_col = self.col(DokuFields.TYPE1).with_string(poke_type).build()
+            type2_col = self.col(DokuFields.TYPE2).with_string(poke_type).build()
             self.type_cols[poke_type] = type1_col, type2_col
 
-    def col(self, field: DokuFields) -> Column:
-        return Column(self.doku.sheet, DOKU_TAB, field)
+    def col(self, field: DokuFields) -> ColumnBuilder:
+        return ColumnBuilder(self.doku.sheet, DOKU_TAB, field)
 
     def get_values(self, *conditions: str) -> List[str]:
         caught_vals = self.caught_col.progress(*conditions)
@@ -127,21 +124,19 @@ class DokuStats:
         self.out.append("All", self.get_values())
 
     def append_generations(self):
-        generation_col = self.col(DokuFields.GENERATION)
         for gen in range(1, CURRENT_GENERATION + 1):
-            generation_col.with_string(str(gen))
+            generation_col = self.col(DokuFields.GENERATION).with_string(str(gen)).build()
             self.out.append(f"Gen {gen}", self.get_values(generation_col.condition))
 
     def append_regions(self):
-        region_col = self.col(DokuFields.REGION)
         for region in REGIONS:
-            region_col.with_string(region)
+            region_col = self.col(DokuFields.REGION).with_string(region).build()
             self.out.append(region, self.get_values(region_col.condition))
 
     def append_types(self):
         def get_dual_type_progress(primary_type: str, secondary_type: str) -> Progress:
-            primary_col = self.col(DokuFields.TYPE1).with_string(primary_type)
-            secondary_col = self.col(DokuFields.TYPE2).with_string(secondary_type)
+            primary_col = self.col(DokuFields.TYPE1).with_string(primary_type).build()
+            secondary_col = self.col(DokuFields.TYPE2).with_string(secondary_type).build()
             return self.missing_col.progress(primary_col.condition, secondary_col.condition)
 
         for poke_type in ALL_TYPES:
@@ -172,12 +167,11 @@ class DokuStats:
         self.out.append("Mono-Type", self.get_values(self.mono_col.condition))
         self.out.append("Dual-Type", self.get_values(self.dual_col.condition))
 
-        branch_col = self.col(DokuFields.BRANCH_EVO).with_string("Yes")
+        branch_col = self.col(DokuFields.BRANCH_EVO).with_string("Yes").build()
         self.out.append("Has Branch", self.get_values(branch_col.condition))
 
-        evolution_col = self.col(DokuFields.EVO_TYPE)
         for evo_type in EvolutionType:
-            evolution_col.with_string(evo_type)
+            evolution_col = self.col(DokuFields.EVO_TYPE).with_string(evo_type).build()
             self.out.append(evo_type, self.get_values(evolution_col.condition))
 
 

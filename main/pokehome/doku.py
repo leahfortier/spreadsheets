@@ -6,8 +6,8 @@ from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
-from pokehome.constants.pokes import REGIONALS, DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
-from util.sheets_conditions import Column
+from pokehome.constants.pokes import DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
+from util.sheets_conditions import ColumnBuilder
 from util.sheets_formulas import if_image
 
 
@@ -36,7 +36,7 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.BRANCH_EVO, db_row.has_branch_evo)
     update(DokuFields.EVO_TYPE, db_row.evolution_type)
 
-    shiny_col = Column(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox()
+    shiny_col = ColumnBuilder(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox().build()
     image_url = db_row.get_image_url(SpriteType.NORMAL)
     shiny_url = db_row.get_image_url(SpriteType.SHINY)
     image = if_image(shiny_col.row_condition, shiny_url, image_url)
