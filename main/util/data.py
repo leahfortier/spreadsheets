@@ -1,7 +1,6 @@
-from enum import Enum
 from typing import List, Dict, Optional, Tuple
 
-from main.util.general import is_empty
+from main.util.general import is_empty, FieldsEnum, to_str
 from util.sheets_formulas import column_name
 
 
@@ -9,15 +8,15 @@ class Sheet:
     def __init__(
             self,
             rows: List[List[str]],
-            escape_fields: List[str] = None,
-            id_fields: List[str] = None,
+            escape_fields: List[FieldsEnum] = None,
+            id_fields: List[FieldsEnum] = None,
     ):
         index = 0
         for index, row in enumerate(rows):
             if not is_empty(rows[index]):
                 break
 
-        self.schema_row = rows[index]
+        self.schema_row: List[str] = rows[index]
         self.schema: Dict[str, int] = {}
 
         self.escape_fields: List[str] = escape_fields or []
@@ -41,18 +40,15 @@ class Sheet:
                 self.set(row, field, value)
 
     def get(self, row: List[str], field: str) -> str:
-        if isinstance(field, Enum):
-            field = field.value
+        field = to_str(field)
         value = row[self.schema[field]]
         if field in self.escape_fields:
             return value.lstrip("'")
         return value
 
     def set(self, row: List[str], field: str, value: str):
-        if isinstance(field, Enum):
-            field = field.value
-        if isinstance(value, Enum):
-            value = value.value
+        field = to_str(field)
+        value = to_str(value)
         if field in self.escape_fields:
             value = value.lstrip("'")
             value = f"'{value}"
@@ -64,13 +60,12 @@ class Sheet:
         return None
 
     def update(self, row: List[str], field: str, new_value: str, print_diff=True):
-        if isinstance(field, Enum):
-            field = field.value
+        field = to_str(field)
         existing_value = self.get(row, field)
         if existing_value != new_value:
             self.set(row, field, new_value)
             if print_diff:
-                print(f"{self.get_id(row)}: {field} updated from {existing_value} -> {new_value}: {row}")
+                print(f"{self.get_id(row)}: {field} updated from {existing_value} -> {to_str(new_value)}: {row}")
 
     def column(self, field: str) -> str:
         index = self.schema[field]

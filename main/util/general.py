@@ -1,6 +1,9 @@
-from typing import List
 from enum import Enum
+from typing import List, TypeVar
+
 from terminology import in_red
+
+FieldsEnum = TypeVar("FieldsEnum", bound=Enum)
 
 titlecase_exceptions: List[str] = ["a", "and", "an", "of", "or", "the"]
 

@@ -9,7 +9,7 @@ from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
-from util.general import all_unique
+from util.general import all_unique, to_str
 
 
 def validate_dex(db: Database, sheet: Sheet):
@@ -18,7 +18,7 @@ def validate_dex(db: Database, sheet: Sheet):
     ball_families: Dict[str, Set[str]] = {}
     ball_map: Dict[str, List[str]] = {}
 
-    main_fields = [field.value for field in DexFields]
+    main_fields = [to_str(field) for field in DexFields]
     ball_fields = [field for field in sheet.schema_row if field not in main_fields]
 
     for index, row in enumerate(sheet.rows):

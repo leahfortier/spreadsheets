@@ -125,7 +125,7 @@ class GoFields(str, Enum):
     IMAGE = "Image"
 
 
-SAME_ID_DIFFERENT_FIELDS: List[str] = [
+SAME_ID_DIFFERENT_FIELDS: List[DexFields] = [
     DexFields.CAUGHT_PROGRESS,
     DexFields.HIDDEN_PROGRESS,
     DexFields.ROW,
