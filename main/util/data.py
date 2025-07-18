@@ -70,3 +70,6 @@ class Sheet:
     def column(self, field: str) -> str:
         index = self.schema[field]
         return column_name(index)
+
+    def has_field(self, field: str) -> bool:
+        return to_str(field) in self.schema

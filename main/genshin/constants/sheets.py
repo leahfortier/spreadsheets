@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 from main.constants.sheet_id import GENSHIN_ID
 from main.util.data import Sheet
@@ -7,7 +8,34 @@ from main.util.sheets_parse import get_sheet_data
 SPREADSHEET_ID = GENSHIN_ID
 
 
-CHARACTER_NAME_FIELD = "Character"
+class BuildsFields(str, Enum):
+    NAME = "Character"
+    CONSTELLATION = "C"
+    CHAR_LEVEL = "Lvl"
+    NORMAL_TALENT = "N"
+    SKILL_TALENT = "Skill"
+    BURST_TALENT = "Brst"
+    WEAPON = "Weapon"
+    WEAPON_STAT = "Stat"
+    WEAPON_METHOD = "Method"
+    WEAPON_RARITY = "★"
+    WEAPON_LEVEL = "Lv."
+    WEAPON_RANK = "R"
+    CHAR_SORT = "Char. Sort"
+    USE_SORT = "Use Sort"
+
+
+BUILD_SORT_FIELDS: List[BuildsFields] = [BuildsFields.CHAR_SORT, BuildsFields.USE_SORT]
+
+
+class WeaponMethod(str, Enum):
+    STANDARD = "Standard"
+    LIMITED_BANNER = "Banner"
+    BATTLE_PASS = "BP"
+    EVENT = "Event"
+    SIGNATURE = "Signature"
+    FISH = "Fish"
+    FORGE = "Craft"
 
 
 ABYSS_RANDOMIZE_CHARACTERS = {
@@ -44,6 +72,8 @@ class AchievementCategories(str, Enum):
 
 class CharacterFields(str, Enum):
     NAME = "Character"
+    WEAPON = "Weapon"
+    VERSION = "Version"
     BOSS_MATERIAL = "Boss Material"
     ENEMY_MATERIAL = "Enemy Material"
     LOCAL_SPECIALTY = "Local Specialty"
@@ -54,7 +84,8 @@ class CharacterFields(str, Enum):
 
 class Tab(str, Enum):
     CHARACTER_DATA = "Character Data"
-    L_CHARS = "L Chars"
+    L_CHARS = "L Builds"
+    MEL_CHARS = "Mel Builds"
     ACHIEVEMENTS = "Achievements"
     TROUNCES = "Talent Trounces"
     RECIPES = "Recipes"
@@ -62,6 +93,9 @@ class Tab(str, Enum):
     BOSS_DROPS = "Boss Drops"
     ENEMY_DROPS = "Enemy Drops"
     LOCALS = "Locals"
+
+
+BUILD_TABS: List[Tab] = [Tab.L_CHARS, Tab.MEL_CHARS]
 
 
 def get_sheet(tab_name: Tab) -> Sheet:
