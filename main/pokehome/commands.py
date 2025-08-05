@@ -3,10 +3,10 @@ from typing import List, Optional, Dict, Callable, Set, Tuple
 
 from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
-    CATCH_RATE_OUTFILE, IN_PATH
+    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
-from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType
+from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
@@ -266,7 +266,7 @@ def write_genders(db: Database):
             for form in forms:
                 row = db.get(form)
                 row.gender_ratio = gender_ratio
-                row.can_breed_field = "Yes" if can_breed else "No"
+                row.can_breed_field = DB_TRUE if can_breed else DB_FALSE
         else:
             section: str = row[0]
             types = section.split(": ")
@@ -370,7 +370,7 @@ def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
             warn(f"Invalid family for {name}: {pre_pokes}, {post_pokes}")
 
         if len(post_pokes) > 1:
-            row.has_branch_evo = "Yes"
+            row.has_branch_evo = DB_TRUE
 
     if name in post_pokes:
         if row.evolution_type == EvolutionType.NONE:
@@ -382,7 +382,7 @@ def handle_stage(name: str, pre_evs: str, post_evs: str, row: DbRow):
 
 
 def handle_evolution(name: str, family: str, row: DbRow):
-    row.has_branch_evo = "No"
+    row.has_branch_evo = DB_FALSE
     row.evolution_type = EvolutionType.NONE
     found = False
 
@@ -442,6 +442,23 @@ def write_families(db: Database):
         return [row.has_branch_evo, row.evolution_type, row.family]
 
     to_tsv(FAMILIES_OUTFILE, [to_row(row) for row in db.rows])
+
+
+def write_categories(db: Database):
+    babies: Set[str] = set(from_file(BABY_INFILE))
+    fossils: Set[str] = set(from_file(FOSSIL_INFILE))
+
+    for row in db.rows:
+        def get_truth(all_species: Set[str]) -> str:
+            return DB_TRUE if row.species in all_species else DB_FALSE
+
+        row.baby = get_truth(babies)
+        row.fossil = get_truth(fossils)
+
+    def to_row(row: DbRow) -> List[str]:
+        return [row.baby, row.fossil]
+
+    to_tsv(CATEGORY_OUTFILE, [to_row(row) for row in db.rows])
 
 
 def write_catch_rates(db: Database):
@@ -547,6 +564,7 @@ def run_commands(db: Database, dex: Dex):
     write_genders(db)
     write_regions(db)
     write_families(db)
+    write_categories(db)
     write_catch_rates(db)
     write_pla_names(db)
     # compare_version_history(dex)

@@ -1,15 +1,15 @@
 from typing import Dict, List, Set
 
 from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMILIES_OUTFILE, GENDER_OUTFILE, \
-    BALLS_OUTFILE, TYPES_OUTFILE
+    BALLS_OUTFILE, TYPES_OUTFILE, CATEGORY_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
 from main.pokehome.constants.sheets import DexFields, EMPTY_FIELD, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
-    DbFields
+    DbFields, EvolutionType
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
-from util.general import all_unique, to_str
+from util.general import all_unique, to_str, warn
 
 
 def validate_dex(db: Database, sheet: Sheet):
@@ -106,6 +106,21 @@ def validate_dex(db: Database, sheet: Sheet):
     to_file(BALLS_OUTFILE, out)
 
 
+def validate_db(db: Database):
+    fossil_families: Dict[str, bool] = {}
+
+    for row in db.rows:
+        # Baby Pokemon must be first in evolution
+        if row.is_baby():
+            assert row.evolution_type == EvolutionType.FIRST
+
+        # Fossil status must be consistent for all family members
+        fossil = row.is_fossil()
+        if fossil_families.get(row.family, fossil) != fossil:
+            warn(f"{row.name}: Fossil status does not match family")
+        fossil_families[row.family] = fossil
+
+
 def validate_command_out(db: Database):
     db_rows: List[DbRow] = db.rows
     sheet_rows: List[List[str]] = db.sheet.rows
@@ -114,6 +129,7 @@ def validate_command_out(db: Database):
     region_rows: List[List[str]] = from_tsv(REGIONS_OUTFILE)
     evolution_rows: List[List[str]] = from_tsv(FAMILIES_OUTFILE)
     gender_rows: List[List[str]] = from_tsv(GENDER_OUTFILE)
+    category_rows: List[List[str]] = from_tsv(CATEGORY_OUTFILE)
 
     # Rows must correspond to each other
     assert len(ability_rows) == len(db_rows)
@@ -121,6 +137,7 @@ def validate_command_out(db: Database):
     assert len(region_rows) == len(db_rows)
     assert len(evolution_rows) == len(db_rows)
     assert len(gender_rows) == len(db_rows)
+    assert len(category_rows) == len(db_rows)
 
     assert len(sheet_rows) == len(db_rows)
 
@@ -133,6 +150,7 @@ def validate_command_out(db: Database):
         assert region_rows[index] == [row.generation, row.region]
         assert evolution_rows[index] == [row.has_branch_evo, row.evolution_type, row.family]
         assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
+        assert category_rows[index] == [row.baby, row.fossil]
 
         assert row.ability1 != EMPTY_FIELD and all_unique(ability_rows[index], exceptions=[EMPTY_FIELD])
         assert row.type1 != EMPTY_FIELD and all_unique(type_rows[index])
@@ -142,15 +160,17 @@ def validate_command_out(db: Database):
         def print_mismatch(label: str, sheet_fields: List[DbFields], row_values: List[str]):
             sheet_values = [db.sheet.get(sheet_row, field) for field in sheet_fields]
             if sheet_values != row_values:
-                print(f"{label} mismatch for {row.name}:", sheet_values, row_values)
+                warn(f"{label} mismatch for {row.name}: {sheet_values} {row_values}")
 
         print_mismatch("Ability", [DbFields.ABILITY1, DbFields.ABILITY2, DbFields.HIDDEN_ABILITY], ability_rows[index])
         print_mismatch("Type", [DbFields.TYPE1, DbFields.TYPE2], type_rows[index])
         print_mismatch("Region", [DbFields.GENERATION, DbFields.OG_REGION], region_rows[index])
-        print_mismatch("Family", [DbFields.BRANCH_EVO, DbFields.EVO_TYPE, DbFields.FAMILY_EVOS], evolution_rows[index])
+        print_mismatch("Family", [DbFields.HAS_BRANCH, DbFields.EVO_TYPE, DbFields.FAMILY_EVOS], evolution_rows[index])
         print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
+        print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL], category_rows[index])
 
 
 def run_validation(db: Database, dex: Dex):
     validate_command_out(db)
+    validate_db(db)
     validate_dex(db, dex.sheet)

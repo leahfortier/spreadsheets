@@ -74,13 +74,15 @@ class DbFields(str, Enum):
     HIDDEN_ABILITY = "hidden"
     TYPE1 = "type1"
     TYPE2 = "type2"
-    BRANCH_EVO = "branch evo"
+    HAS_BRANCH = "branch evo"
     EVO_TYPE = "evolution"
     FAMILY_EVOS = "family"
     GENERATION = "generation"
     OG_REGION = "og region"
     GENDER_RATIO = "gender ratio"
     CAN_BREED = "can breed"
+    IS_BABY = "baby"
+    IS_FOSSIL = "fossil"
     CATCH_RATE = "catch rate"
 
 
@@ -114,8 +116,10 @@ class DokuFields(str, Enum):
     REGION = "Region"
     TYPE1 = "Type 1"
     TYPE2 = "Type 2"
-    BRANCH_EVO = "Branch"
     EVO_TYPE = "Evolution"
+    HAS_BRANCH = "Branch"
+    IS_BABY = "Baby"
+    IS_FOSSIL = "Fossil"
 
 
 class GoFields(str, Enum):
@@ -135,6 +139,9 @@ SAME_ID_DIFFERENT_FIELDS: List[DexFields] = [
     DexFields.NOTES,
     DexFields.CLASS,
 ]
+
+DB_TRUE = "Yes"
+DB_FALSE = "No"
 
 
 def get_db_sheet() -> Sheet:

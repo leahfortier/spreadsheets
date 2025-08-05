@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from main.pokehome.constants.io import DB_OUTFILE
 from main.pokehome.constants.pokes import INCLUDE_GENDER_FORM, EXCLUDE_BASE_FORM, DIGIMON, NON_HOME_FORMS
-from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType
+from main.pokehome.constants.sheets import DbFields, get_db_sheet, SpriteType, DB_TRUE
 from main.util.data import Sheet
 from main.util.file_io import to_tsv
 from main.util.general import remove_suffix, has_prefix, remove_prefix
@@ -37,9 +37,12 @@ class DbRow:
         self.can_breed_field = sheet.get(row, DbFields.CAN_BREED)
         self.gender_ratio = sheet.get(row, DbFields.GENDER_RATIO)
 
-        self.has_branch_evo = sheet.get(row, DbFields.BRANCH_EVO)
+        self.has_branch_evo = sheet.get(row, DbFields.HAS_BRANCH)
         self.evolution_type = sheet.get(row, DbFields.EVO_TYPE)
         self.family = sheet.get(row, DbFields.FAMILY_EVOS)
+
+        self.baby = sheet.get(row, DbFields.IS_BABY)
+        self.fossil = sheet.get(row, DbFields.IS_FOSSIL)
 
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)
@@ -158,7 +161,13 @@ class DbRow:
         return False
 
     def can_breed(self):
-        return self.can_breed_field == "Yes"
+        return self.can_breed_field == DB_TRUE
+
+    def is_baby(self):
+        return self.baby == DB_TRUE
+
+    def is_fossil(self):
+        return self.fossil == DB_TRUE
 
     def regional_name(self):
         if self.regional_form:

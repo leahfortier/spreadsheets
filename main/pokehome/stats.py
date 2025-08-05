@@ -3,7 +3,7 @@ from typing import List, Dict, Tuple
 from main.pokehome.constants.io import STATS_OUTFILE, DOKU_STATS_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, CURRENT_GENERATION, ALL_TYPES
 from main.pokehome.constants.sheets import DexFields, HiddenAbilityProgress, DEX_TAB, DexClassification, DokuFields, \
-    DOKU_TAB, EvolutionType, EMPTY_FIELD
+    DOKU_TAB, EvolutionType, EMPTY_FIELD, DB_TRUE
 from main.pokehome.dex import Dex
 from main.util.file_io import to_tsv
 from main.util.sheets_formulas import Progress, progress_difference
@@ -167,8 +167,13 @@ class DokuStats:
         self.out.append("Mono-Type", self.get_values(self.mono_col.condition))
         self.out.append("Dual-Type", self.get_values(self.dual_col.condition))
 
-        branch_col = self.col(DokuFields.BRANCH_EVO).with_string("Yes").build()
-        self.out.append("Has Branch", self.get_values(branch_col.condition))
+        def append_truthies(title: str, column: DokuFields):
+            doku_col = self.col(column).with_string(DB_TRUE).build()
+            self.out.append(title, self.get_values(doku_col.condition))
+
+        append_truthies("Has Branch", DokuFields.HAS_BRANCH)
+        append_truthies("Baby", DokuFields.IS_BABY)
+        append_truthies("Fossil", DokuFields.IS_FOSSIL)
 
         for evo_type in EvolutionType:
             evolution_col = self.col(DokuFields.EVO_TYPE).with_string(evo_type).build()
