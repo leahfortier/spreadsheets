@@ -43,6 +43,8 @@ class DbRow:
 
         self.baby = sheet.get(row, DbFields.IS_BABY)
         self.fossil = sheet.get(row, DbFields.IS_FOSSIL)
+        self.legendary = sheet.get(row, DbFields.IS_LEGENDARY)
+        self.mythical = sheet.get(row, DbFields.IS_MYTHICAL)
 
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)

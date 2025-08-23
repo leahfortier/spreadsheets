@@ -104,4 +104,4 @@ class Dex:
     def write(self):
         rows = self.base_rows + self.form_rows
         out_rows: List[List[str]] = [row.to_dex_row(self.sheet) for row in rows]
-        to_tsv(DEX_OUTFILE, out_rows)
+        to_tsv(DEX_OUTFILE, out_rows, show_diff=False)

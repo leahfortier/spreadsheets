@@ -174,6 +174,8 @@ class DokuStats:
         append_truthies("Has Branch", DokuFields.HAS_BRANCH)
         append_truthies("Baby", DokuFields.IS_BABY)
         append_truthies("Fossil", DokuFields.IS_FOSSIL)
+        append_truthies("Legendary", DokuFields.IS_LEGENDARY)
+        append_truthies("Mythical", DokuFields.IS_MYTHICAL)
 
         for evo_type in EvolutionType:
             evolution_col = self.col(DokuFields.EVO_TYPE).with_string(evo_type).build()
@@ -191,7 +193,7 @@ def get_values_from_progress(
     return [
         caught_vals.concatenated, shiny_vals.count,
         missing_vals.count, mono_vals.concatenated, dual_vals.concatenated,
-        caught_vals.percent, shiny_vals.percent, mono_vals.percent, dual_vals.percent,
+        caught_vals.percent, shiny_vals.percent, mono_vals.reverse_percent, dual_vals.reverse_percent,
         *[type_vals.concatenated for type_vals in all_type_vals]
     ]
 

@@ -37,6 +37,8 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.HAS_BRANCH, db_row.has_branch_evo)
     update(DokuFields.IS_BABY, db_row.baby)
     update(DokuFields.IS_FOSSIL, db_row.fossil)
+    update(DokuFields.IS_LEGENDARY, db_row.legendary)
+    update(DokuFields.IS_MYTHICAL, db_row.mythical)
 
     shiny_col = ColumnBuilder(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox().build()
     image_url = db_row.get_image_url(SpriteType.NORMAL)

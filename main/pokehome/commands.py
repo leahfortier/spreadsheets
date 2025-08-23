@@ -3,7 +3,7 @@ from typing import List, Optional, Dict, Callable, Set, Tuple
 
 from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
-    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE
+    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE
@@ -342,6 +342,13 @@ def write_regions(db: Database):
         else:
             region = "Paldea"
 
+        if row.species in ["Dialga", "Palkia"] and row.form == "Origin":
+            assert region == "Sinnoh"
+            region = "Hisui"
+        elif row.species == "Zygarde" and not row.is_base_form():
+            assert region == "Kalos"
+            region = "Alola"
+
         assert 1 <= gen <= CURRENT_GENERATION
         assert region
         regions.append([str(gen), region])
@@ -386,10 +393,10 @@ def handle_evolution(name: str, family: str, row: DbRow):
     row.evolution_type = EvolutionType.NONE
     found = False
 
-    if row.digimon_form.startswith("Mega"):
+    if row.digimon_form.startswith("Mega") or row.digimon_form == "Primal":
         row.evolution_type = EvolutionType.MEGA
         return
-    elif row.digimon_form == "Gigantamax":
+    elif row.digimon_form in ["Gigantamax", "Eternamax"]:
         row.evolution_type = EvolutionType.GMAX
         return
 
@@ -447,6 +454,8 @@ def write_families(db: Database):
 def write_categories(db: Database):
     babies: Set[str] = set(from_file(BABY_INFILE))
     fossils: Set[str] = set(from_file(FOSSIL_INFILE))
+    legendaries: Set[str] = set(from_file(LEGENDARY_INFILE))
+    mythicals: Set[str] = set(from_file(MYTHICAL_INFILE))
 
     for row in db.rows:
         def get_truth(all_species: Set[str]) -> str:
@@ -454,9 +463,11 @@ def write_categories(db: Database):
 
         row.baby = get_truth(babies)
         row.fossil = get_truth(fossils)
+        row.legendary = get_truth(legendaries)
+        row.mythical = get_truth(mythicals)
 
     def to_row(row: DbRow) -> List[str]:
-        return [row.baby, row.fossil]
+        return [row.baby, row.fossil, row.legendary, row.mythical]
 
     to_tsv(CATEGORY_OUTFILE, [to_row(row) for row in db.rows])
 

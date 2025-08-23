@@ -150,7 +150,7 @@ def validate_command_out(db: Database):
         assert region_rows[index] == [row.generation, row.region]
         assert evolution_rows[index] == [row.has_branch_evo, row.evolution_type, row.family]
         assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
-        assert category_rows[index] == [row.baby, row.fossil]
+        assert category_rows[index] == [row.baby, row.fossil, row.legendary, row.mythical]
 
         assert row.ability1 != EMPTY_FIELD and all_unique(ability_rows[index], exceptions=[EMPTY_FIELD])
         assert row.type1 != EMPTY_FIELD and all_unique(type_rows[index])
@@ -167,7 +167,7 @@ def validate_command_out(db: Database):
         print_mismatch("Region", [DbFields.GENERATION, DbFields.OG_REGION], region_rows[index])
         print_mismatch("Family", [DbFields.HAS_BRANCH, DbFields.EVO_TYPE, DbFields.FAMILY_EVOS], evolution_rows[index])
         print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
-        print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL], category_rows[index])
+        print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL, DbFields.IS_LEGENDARY, DbFields.IS_MYTHICAL], category_rows[index])
 
 
 def run_validation(db: Database, dex: Dex):

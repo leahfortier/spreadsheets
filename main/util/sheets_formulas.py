@@ -7,8 +7,12 @@ class Progress:
         self.raw_total = raw_total
         self.count = f'={raw_count}'
         self.total = f'={raw_total}'
-        self.percent = f'=IF({raw_total}=0, "--", ({raw_count}) / ({raw_total}))'
         self.concatenated = f'=CONCATENATE({raw_count}, "/", {raw_total})'
+
+        raw_percent = f'({raw_count}) / ({raw_total})'
+        zero_value = f'"--"'
+        self.percent = if_zero(raw_total, zero_value, raw_percent)
+        self.reverse_percent = if_zero(raw_total, zero_value, f'1 - {raw_percent}')
 
     def values(self) -> List[str]:
         return [self.count, self.total, self.percent]
@@ -47,6 +51,10 @@ def progress_difference(first: Progress, second: Progress) -> Progress:
     count = f'{first.raw_count} - {second.raw_count}'
     total = f'{first.raw_total} - {second.raw_total}'
     return Progress(count, total)
+
+
+def if_zero(is_zero: str, zero_value: str, nonzero_value: str) -> str:
+    return f'=IF({is_zero}=0, {zero_value}, {nonzero_value})'
 
 
 def if_image(condition: str, true_url: str, false_url: str) -> str:
