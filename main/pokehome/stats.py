@@ -100,8 +100,35 @@ class DokuStats:
             type2_col = self.col(DokuFields.TYPE2).with_string(poke_type).build()
             self.type_cols[poke_type] = type1_col, type2_col
 
+        self.evo_cols: Dict[str, Column] = {}
+        for evo_type in EvolutionType:
+            evolution_col = self.col(DokuFields.EVO_TYPE).with_string(evo_type).build()
+            self.evo_cols[evo_type] = evolution_col
+
+        def get_bool_col(column: DokuFields) -> Column:
+            return self.col(column).with_string(DB_TRUE).build()
+
+        self.branch_col = get_bool_col(DokuFields.HAS_BRANCH)
+        self.baby_col = get_bool_col(DokuFields.IS_BABY)
+        self.fossil_col = get_bool_col(DokuFields.IS_FOSSIL)
+        self.partner_col = get_bool_col(DokuFields.IS_PARTNER)
+        self.legend_col = get_bool_col(DokuFields.IS_LEGENDARY)
+        self.mythic_col = get_bool_col(DokuFields.IS_MYTHICAL)
+
+        self.extra_cols = []
+        for evo_type in EvolutionType:
+            self.extra_cols.append(self.evo_cols[evo_type])
+        self.extra_cols.append(self.partner_col)
+        self.extra_cols.append(self.legend_col)
+
     def col(self, field: DokuFields) -> ColumnBuilder:
         return ColumnBuilder(self.doku.sheet, DOKU_TAB, field)
+
+    def get_type_progress(self, poke_type: str, *conditions: str) -> Progress:
+        type1_col, type2_col = self.type_cols[poke_type]
+        type1_vals = self.missing_col.progress(*conditions, type1_col.condition)
+        type2_vals = self.missing_col.progress(*conditions, type2_col.condition)
+        return type1_vals.with_or(type2_vals)
 
     def get_values(self, *conditions: str) -> List[str]:
         caught_vals = self.caught_col.progress(*conditions)
@@ -111,14 +138,14 @@ class DokuStats:
         mono_vals = self.missing_col.progress(*conditions, self.mono_col.condition)
         dual_vals = self.missing_col.progress(*conditions, self.dual_col.condition)
 
-        all_type_vals = []
-        for poke_type in ALL_TYPES:
-            type1_col, type2_col = self.type_cols[poke_type]
-            type1_vals = self.missing_col.progress(*conditions, type1_col.condition)
-            type2_vals = self.missing_col.progress(*conditions, type2_col.condition)
-            all_type_vals.append(type1_vals.with_or(type2_vals))
+        all_type_vals = [self.get_type_progress(poke_type, *conditions) for poke_type in ALL_TYPES]
+        extra_vals = [self.missing_col.progress(*conditions, extra_col.condition) for extra_col in self.extra_cols]
 
-        return get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals, all_type_vals)
+        return get_values_from_progress(
+            caught_vals, missing_vals, shiny_vals,
+            mono_vals, dual_vals,
+            all_type_vals + extra_vals
+        )
 
     def append_full(self):
         self.out.append("All", self.get_values())
@@ -160,27 +187,36 @@ class DokuStats:
                 dual_type_vals = primary_vals.with_or(secondary_vals)
                 all_type_vals.append(dual_type_vals)
 
-            values = get_values_from_progress(caught_vals, missing_vals, shiny_vals, mono_vals, dual_vals, all_type_vals)
+            extra_vals = [
+                self.get_type_progress(poke_type, extra_col.condition)
+                for extra_col in self.extra_cols
+            ]
+
+            values = get_values_from_progress(
+                caught_vals, missing_vals, shiny_vals,
+                mono_vals, dual_vals,
+                all_type_vals + extra_vals
+            )
             self.out.append(poke_type, values)
 
     def append_special(self):
-        self.out.append("Mono-Type", self.get_values(self.mono_col.condition))
-        self.out.append("Dual-Type", self.get_values(self.dual_col.condition))
+        def append_category(title: str, column: Column):
+            self.out.append(title, self.get_values(column.condition))
 
-        def append_truthies(title: str, column: DokuFields):
-            doku_col = self.col(column).with_string(DB_TRUE).build()
-            self.out.append(title, self.get_values(doku_col.condition))
-
-        append_truthies("Has Branch", DokuFields.HAS_BRANCH)
-        append_truthies("Baby", DokuFields.IS_BABY)
-        append_truthies("Fossil", DokuFields.IS_FOSSIL)
-        append_truthies("Partner", DokuFields.IS_PARTNER)
-        append_truthies("Legendary", DokuFields.IS_LEGENDARY)
-        append_truthies("Mythical", DokuFields.IS_MYTHICAL)
+        append_category("Mono-Type", self.mono_col)
+        append_category("Dual-Type", self.dual_col)
+        self.out.blank_row()
 
         for evo_type in EvolutionType:
-            evolution_col = self.col(DokuFields.EVO_TYPE).with_string(evo_type).build()
-            self.out.append(evo_type, self.get_values(evolution_col.condition))
+            append_category(evo_type, self.evo_cols[evo_type])
+        self.out.blank_row()
+
+        append_category("Partner", self.partner_col)
+        append_category("Legendary", self.legend_col)
+        append_category("Mythical", self.mythic_col)
+        append_category("Baby", self.baby_col)
+        append_category("Fossil", self.fossil_col)
+        append_category("Has Branch", self.branch_col)
 
 
 def get_values_from_progress(
@@ -189,13 +225,13 @@ def get_values_from_progress(
         shiny_vals: Progress,
         mono_vals: Progress,
         dual_vals: Progress,
-        all_type_vals: List[Progress],
+        category_vals: List[Progress],
 ) -> List[str]:
     return [
         caught_vals.concatenated, shiny_vals.count,
         missing_vals.count, mono_vals.concatenated, dual_vals.concatenated,
         caught_vals.percent, shiny_vals.percent, mono_vals.reverse_percent, dual_vals.reverse_percent,
-        *[type_vals.concatenated for type_vals in all_type_vals]
+        *[vals.concatenated for vals in category_vals]
     ]
 
 
