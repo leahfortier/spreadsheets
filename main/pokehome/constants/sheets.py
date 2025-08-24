@@ -84,6 +84,7 @@ class DbFields(str, Enum):
     CAN_BREED = "can breed"
     IS_BABY = "baby"
     IS_FOSSIL = "fossil"
+    IS_PARTNER = "partner"
     IS_LEGENDARY = "legend"
     IS_MYTHICAL = "mythical"
     CATCH_RATE = "catch rate"
@@ -123,6 +124,7 @@ class DokuFields(str, Enum):
     HAS_BRANCH = "Branch"
     IS_BABY = "Baby"
     IS_FOSSIL = "Fossil"
+    IS_PARTNER = "Partner"
     IS_LEGENDARY = "Legend"
     IS_MYTHICAL = "Mythic"
 

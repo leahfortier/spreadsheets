@@ -43,6 +43,7 @@ class DbRow:
 
         self.baby = sheet.get(row, DbFields.IS_BABY)
         self.fossil = sheet.get(row, DbFields.IS_FOSSIL)
+        self.partner = sheet.get(row, DbFields.IS_PARTNER)
         self.legendary = sheet.get(row, DbFields.IS_LEGENDARY)
         self.mythical = sheet.get(row, DbFields.IS_MYTHICAL)
 

@@ -174,6 +174,7 @@ class DokuStats:
         append_truthies("Has Branch", DokuFields.HAS_BRANCH)
         append_truthies("Baby", DokuFields.IS_BABY)
         append_truthies("Fossil", DokuFields.IS_FOSSIL)
+        append_truthies("Partner", DokuFields.IS_PARTNER)
         append_truthies("Legendary", DokuFields.IS_LEGENDARY)
         append_truthies("Mythical", DokuFields.IS_MYTHICAL)
 

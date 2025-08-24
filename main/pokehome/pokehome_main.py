@@ -14,7 +14,7 @@ def main():
     go: GoDex = GoDex(db)
 
     run_commands(db, dex)
-    run_validation(db, dex)
+    run_validation(db, dex, doku)
 
     db.write()
     dex.write()

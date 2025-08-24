@@ -38,6 +38,7 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.HAS_BRANCH, db_row.has_branch_evo)
     update(DokuFields.IS_BABY, db_row.baby)
     update(DokuFields.IS_FOSSIL, db_row.fossil)
+    update(DokuFields.IS_PARTNER, db_row.partner)
     update(DokuFields.IS_LEGENDARY, db_row.legendary)
     update(DokuFields.IS_MYTHICAL, db_row.mythical)
 
@@ -103,15 +104,17 @@ def write_stats_diff():
                     return f'{first} / {second}'
 
                 category_names = [get_category_name(row_name, col_name), get_category_name(col_name, row_name)]
-                in_diffs = any( category_name in current_diffs for category_name in category_names)
+                in_diffs = any(category_name in current_diffs for category_name in category_names)
+                message = f'{remaining} / {total} {category_names[0]}'
 
-                if int(remaining) == 0 and int(total) != 0:
-                    if not in_diffs:
-                        category_name = category_names[0]
-                        print(f"Finished {category_name}!!")
-                        doku_diffs.append([today_str(), total, category_name])
-                else:
-                    for category_name in category_names:
-                        assert category_name not in current_diffs, category_name
+                if int(total) == 0:
+                    assert int(remaining) == 0, message
+                    assert not in_diffs, message
+                elif in_diffs:
+                    assert int(remaining) == 0, message
+                elif int(remaining) == 0:
+                    finished_category = category_names[0]
+                    print(f"Finished {finished_category}!! ({total})")
+                    doku_diffs.append([today_str(), total, finished_category])
 
     to_tsv(DOKU_DIFFS_OUTFILE, doku_diffs)

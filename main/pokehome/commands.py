@@ -3,7 +3,8 @@ from typing import List, Optional, Dict, Callable, Set, Tuple
 
 from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
-    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE
+    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE, \
+    PARTNER_INFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE
@@ -454,20 +455,22 @@ def write_families(db: Database):
 def write_categories(db: Database):
     babies: Set[str] = set(from_file(BABY_INFILE))
     fossils: Set[str] = set(from_file(FOSSIL_INFILE))
+    partners: Set[str] = set(from_file(PARTNER_INFILE))
     legendaries: Set[str] = set(from_file(LEGENDARY_INFILE))
     mythicals: Set[str] = set(from_file(MYTHICAL_INFILE))
 
     for row in db.rows:
         def get_truth(all_species: Set[str]) -> str:
-            return DB_TRUE if row.species in all_species else DB_FALSE
+            return DB_TRUE if row.species in all_species or row.name in all_species else DB_FALSE
 
         row.baby = get_truth(babies)
         row.fossil = get_truth(fossils)
+        row.partner = get_truth(partners)
         row.legendary = get_truth(legendaries)
         row.mythical = get_truth(mythicals)
 
     def to_row(row: DbRow) -> List[str]:
-        return [row.baby, row.fossil, row.legendary, row.mythical]
+        return [row.baby, row.fossil, row.partner, row.legendary, row.mythical]
 
     to_tsv(CATEGORY_OUTFILE, [to_row(row) for row in db.rows])
 

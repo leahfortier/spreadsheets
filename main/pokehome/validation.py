@@ -4,11 +4,12 @@ from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMIL
     BALLS_OUTFILE, TYPES_OUTFILE, CATEGORY_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
 from main.pokehome.constants.sheets import DexFields, EMPTY_FIELD, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
-    DbFields, EvolutionType
+    DbFields, EvolutionType, DB_TRUE, DokuFields
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
+from pokehome.doku import Doku
 from util.general import all_unique, to_str, warn
 
 
@@ -108,11 +109,10 @@ def validate_dex(db: Database, sheet: Sheet):
 
 def validate_db(db: Database):
     fossil_families: Dict[str, bool] = {}
-
     for row in db.rows:
         # Baby Pokemon must be first in evolution
         if row.is_baby():
-            assert row.evolution_type == EvolutionType.FIRST
+            assert row.evolution_type == EvolutionType.FIRST, row.name
 
         # Fossil status must be consistent for all family members
         fossil = row.is_fossil()
@@ -150,7 +150,7 @@ def validate_command_out(db: Database):
         assert region_rows[index] == [row.generation, row.region]
         assert evolution_rows[index] == [row.has_branch_evo, row.evolution_type, row.family]
         assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
-        assert category_rows[index] == [row.baby, row.fossil, row.legendary, row.mythical]
+        assert category_rows[index] == [row.baby, row.fossil, row.partner, row.legendary, row.mythical]
 
         assert row.ability1 != EMPTY_FIELD and all_unique(ability_rows[index], exceptions=[EMPTY_FIELD])
         assert row.type1 != EMPTY_FIELD and all_unique(type_rows[index])
@@ -167,10 +167,21 @@ def validate_command_out(db: Database):
         print_mismatch("Region", [DbFields.GENERATION, DbFields.OG_REGION], region_rows[index])
         print_mismatch("Family", [DbFields.HAS_BRANCH, DbFields.EVO_TYPE, DbFields.FAMILY_EVOS], evolution_rows[index])
         print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
-        print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL, DbFields.IS_LEGENDARY, DbFields.IS_MYTHICAL], category_rows[index])
+        print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL, DbFields.IS_PARTNER, DbFields.IS_LEGENDARY, DbFields.IS_MYTHICAL], category_rows[index])
 
 
-def run_validation(db: Database, dex: Dex):
+def validate_doku(doku: Doku):
+    expected_rows = len(doku.rows)
+    actual_rows = len(doku.sheet.rows) - 1  # There's an extra schema row
+
+    # Accidentally added a bunch of extra rows once by trying to update doku fields from db
+    # You will need to manually delete the extra rows at the bottom of the file since correctly
+    #   pasting doku output will not reach to overwrite and will fuck up all the stats
+    assert expected_rows == actual_rows, f'{expected_rows} != {actual_rows}'
+
+
+def run_validation(db: Database, dex: Dex, doku: Doku):
     validate_command_out(db)
     validate_db(db)
     validate_dex(db, dex.sheet)
+    validate_doku(doku)
