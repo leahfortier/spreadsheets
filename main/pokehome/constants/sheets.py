@@ -12,6 +12,7 @@ EMPTY_FIELD = "--"
 DB_TAB = "Database"
 DEX_TAB = "Live Dex"
 DOKU_TAB = "Doku Dex"
+DOKU_STATS_TAB = "Doku Stats"
 GO_TAB = "GO Dex"
 
 
@@ -169,6 +170,12 @@ def get_doku_sheet() -> Sheet:
         get_sheet_data(SPREADSHEET_ID, DOKU_TAB),
         escape_fields=[DokuFields.ID],
         id_fields=[DokuFields.ID]
+    )
+
+
+def get_doku_stats_sheet() -> Sheet:
+    return Sheet(
+        get_sheet_data(SPREADSHEET_ID, DOKU_STATS_TAB),
     )
 
 

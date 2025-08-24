@@ -1,14 +1,15 @@
-from typing import List, Tuple
+from typing import List, Tuple, Set
 
-from main.pokehome.constants.io import DOKU_OUTFILE
+from main.pokehome.constants.io import DOKU_OUTFILE, DOKU_DIFFS_OUTFILE
 from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields, SpriteType, \
-    DOKU_TAB
+    DOKU_TAB, get_doku_stats_sheet
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet
-from main.util.file_io import to_tsv
+from main.util.file_io import to_tsv, from_tsv
 from pokehome.constants.pokes import DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
 from util.sheets_conditions import ColumnBuilder
 from util.sheets_formulas import if_image
+from util.time import today_str
 
 
 def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
@@ -78,4 +79,39 @@ class Doku:
 
     def write(self):
         out_rows: List[List[str]] = [to_doku_row(db_row, self.sheet) for db_row in self.rows]
-        to_tsv(DOKU_OUTFILE, out_rows)
+        to_tsv(DOKU_OUTFILE, out_rows, show_diff=False)
+
+        write_stats_diff()
+
+
+def write_stats_diff():
+    stats_sheet: Sheet = get_doku_stats_sheet()
+    doku_diffs: List[List[str]] = from_tsv(DOKU_DIFFS_OUTFILE)
+    current_diffs: Set[str] = {row[-1] for row in doku_diffs}
+
+    for row in stats_sheet.rows:
+        for schema_index, value in enumerate(row):
+            if "/" in value:
+                index = value.index("/")
+                remaining = value[:index]
+                total = value[index+1:]
+
+                row_name = stats_sheet.get(row, "Category")
+                col_name = stats_sheet.rows[0][schema_index]
+
+                def get_category_name(first: str, second: str) -> str:
+                    return f'{first} / {second}'
+
+                category_names = [get_category_name(row_name, col_name), get_category_name(col_name, row_name)]
+                in_diffs = any( category_name in current_diffs for category_name in category_names)
+
+                if int(remaining) == 0 and int(total) != 0:
+                    if not in_diffs:
+                        category_name = category_names[0]
+                        print(f"Finished {category_name}!!")
+                        doku_diffs.append([today_str(), total, category_name])
+                else:
+                    for category_name in category_names:
+                        assert category_name not in current_diffs, category_name
+
+    to_tsv(DOKU_DIFFS_OUTFILE, doku_diffs)

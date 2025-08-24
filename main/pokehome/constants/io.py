@@ -5,7 +5,7 @@ DB_OUTFILE = OUT_PATH + "db-out.tsv"
 DEX_OUTFILE = OUT_PATH + "dex-out.tsv"
 GO_OUTFILE = OUT_PATH + "go-out.tsv"
 DOKU_OUTFILE = OUT_PATH + "doku-out.tsv"
-DOKU_DIFFS_OUTFILE = OUT_PATH + "doku-diffs.out"
+DOKU_DIFFS_OUTFILE = OUT_PATH + "doku-diffs-out.tsv"
 STATS_OUTFILE = OUT_PATH + "stats-out.tsv"
 DOKU_STATS_OUTFILE = OUT_PATH + "doku_stats-out.tsv"
 
