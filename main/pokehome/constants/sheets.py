@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List
 
-from main.constants.sheet_id import POKEMON_ID
+from main.constants.sheet_id import POKEMON_ID, DOKU_MASTERS_ID
 from main.util.data import Sheet
 from main.util.sheets_parse import get_sheet_data
 
@@ -182,6 +182,12 @@ def get_doku_sheet() -> Sheet:
 def get_doku_stats_sheet() -> Sheet:
     return Sheet(
         get_sheet_data(SPREADSHEET_ID, DOKU_STATS_TAB),
+    )
+
+
+def get_shiny_tracker_sheet() -> Sheet:
+    return Sheet(
+        get_sheet_data(DOKU_MASTERS_ID, "Shiny Tracker"),
     )
 
 
