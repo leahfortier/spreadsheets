@@ -41,6 +41,8 @@ def to_doku_row(db_row: DbRow, sheet: Sheet) -> List[str]:
     update(DokuFields.IS_PARTNER, db_row.partner)
     update(DokuFields.IS_LEGENDARY, db_row.legendary)
     update(DokuFields.IS_MYTHICAL, db_row.mythical)
+    update(DokuFields.IS_PARADOX, db_row.paradox)
+    update(DokuFields.IS_ULTRA_BEAST, db_row.ultra)
 
     shiny_col = ColumnBuilder(sheet, DOKU_TAB, DexFields.SHINY).with_checkbox().build()
     image_url = db_row.get_image_url(SpriteType.NORMAL)
@@ -97,7 +99,7 @@ def write_stats_diff():
                 remaining = value[:index]
                 total = value[index+1:]
 
-                row_name = stats_sheet.get(row, "Category")
+                row_name = stats_sheet.get(row, "Category").removesuffix("-Type")
                 col_name = stats_sheet.rows[0][schema_index]
 
                 def get_category_name(first: str, second: str) -> str:
@@ -116,5 +118,6 @@ def write_stats_diff():
                     finished_category = category_names[0]
                     print(f"Finished {finished_category}!! ({total})")
                     doku_diffs.append([today_str(), total, finished_category])
+                    current_diffs.add(finished_category)
 
     to_tsv(DOKU_DIFFS_OUTFILE, doku_diffs)

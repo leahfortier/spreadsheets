@@ -11,7 +11,7 @@ def main():
     update_spreadsheet("out/out_transactions.tsv", "out/backup_transactions.tsv")
     # check_duplicates()
 
-    check_doggy_bank()
+    # check_doggy_bank()
 
 
 def check_duplicates():

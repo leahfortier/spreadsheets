@@ -46,6 +46,8 @@ class DbRow:
         self.partner = sheet.get(row, DbFields.IS_PARTNER)
         self.legendary = sheet.get(row, DbFields.IS_LEGENDARY)
         self.mythical = sheet.get(row, DbFields.IS_MYTHICAL)
+        self.paradox = sheet.get(row, DbFields.IS_PARADOX)
+        self.ultra = sheet.get(row, DbFields.IS_ULTRA_BEAST)
 
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)
@@ -191,8 +193,7 @@ class Database:
         self.regionals: Dict[str, List[str]] = {}
 
         for index, row in enumerate(self.rows):
-            # print(row.id, row.name)
-            assert row.id not in self.id_map
+            assert row.id not in self.id_map, f'{row.id} {row.name}'
             self.id_map[row.id] = index
 
             self.species_map.setdefault(row.species, []).append(row.id)

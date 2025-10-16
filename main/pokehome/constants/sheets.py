@@ -87,6 +87,8 @@ class DbFields(str, Enum):
     IS_PARTNER = "partner"
     IS_LEGENDARY = "legend"
     IS_MYTHICAL = "mythical"
+    IS_PARADOX = "paradox"
+    IS_ULTRA_BEAST = "ultra"
     CATCH_RATE = "catch rate"
 
 
@@ -127,6 +129,8 @@ class DokuFields(str, Enum):
     IS_PARTNER = "Partner"
     IS_LEGENDARY = "Legend"
     IS_MYTHICAL = "Mythic"
+    IS_PARADOX = "Paradox"
+    IS_ULTRA_BEAST = "Ultra Beast"
 
 
 class GoFields(str, Enum):

@@ -114,6 +114,8 @@ class DokuStats:
         self.partner_col = get_bool_col(DokuFields.IS_PARTNER)
         self.legend_col = get_bool_col(DokuFields.IS_LEGENDARY)
         self.mythic_col = get_bool_col(DokuFields.IS_MYTHICAL)
+        self.paradox_col = get_bool_col(DokuFields.IS_PARADOX)
+        self.ultra_col = get_bool_col(DokuFields.IS_ULTRA_BEAST)
 
         self.extra_cols = []
         for evo_type in EvolutionType:
@@ -216,6 +218,8 @@ class DokuStats:
         append_category("Mythical", self.mythic_col)
         append_category("Baby", self.baby_col)
         append_category("Fossil", self.fossil_col)
+        append_category("Paradox", self.paradox_col)
+        append_category("Ultra Beast", self.ultra_col)
         append_category("Has Branch", self.branch_col)
 
 
