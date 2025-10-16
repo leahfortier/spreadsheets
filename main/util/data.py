@@ -10,6 +10,7 @@ class Sheet:
             rows: List[List[str]],
             escape_fields: List[FieldsEnum] = None,
             id_fields: List[FieldsEnum] = None,
+            break_schema_field: str = None
     ):
         index = 0
         for index, row in enumerate(rows):
@@ -23,10 +24,16 @@ class Sheet:
         self.id_fields: List[str] = id_fields or []
         self.id_map: Dict[Tuple[str, ...], int] = {}
 
+        if break_schema_field:
+            self.break_index = self.schema_row.index(break_schema_field)
+        else:
+            self.break_index = len(self.schema_row)
+        self.schema_row = self.schema_row[:self.break_index]
+
         for i, val in enumerate(self.schema_row):
             self.schema[val] = i
 
-        self.rows: List[List[str]] = rows[(index + 1):]
+        self.rows: List[List[str]] = [row[:self.break_index] for row in rows[(index + 1):]]
         for row_index, row in enumerate(self.rows):
             if len(row) < len(self.schema_row):
                 row += [""] * (len(self.schema_row) - len(row))

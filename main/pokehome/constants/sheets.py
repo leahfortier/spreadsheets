@@ -195,5 +195,6 @@ def get_go_sheet() -> Sheet:
     return Sheet(
         get_sheet_data(SPREADSHEET_ID, GO_TAB),
         escape_fields=[GoFields.ID],
-        id_fields=[GoFields.ID]
+        id_fields=[GoFields.ID],
+        break_schema_field="!!! SCHEMA BREAK !!!"
     )
