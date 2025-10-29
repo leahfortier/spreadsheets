@@ -182,6 +182,7 @@ def get_doku_sheet() -> Sheet:
 def get_doku_stats_sheet() -> Sheet:
     return Sheet(
         get_sheet_data(SPREADSHEET_ID, DOKU_STATS_TAB),
+        break_schema_field="END"
     )
 
 

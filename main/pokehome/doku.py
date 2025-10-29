@@ -92,6 +92,13 @@ def write_stats_diff():
     doku_diffs: List[List[str]] = from_tsv(DOKU_DIFFS_OUTFILE)
     current_diffs: Set[str] = {row[-1] for row in doku_diffs}
 
+    def get_category_name(first: str, second: str) -> str:
+        return f'{first} / {second}'
+
+    def in_diffs(first: str, second: str) -> bool:
+        category_names = [get_category_name(first, second), get_category_name(second, first)]
+        return any(category_name in current_diffs for category_name in category_names)
+
     for row in stats_sheet.rows:
         for schema_index, value in enumerate(row):
             if "/" in value:
@@ -101,23 +108,21 @@ def write_stats_diff():
 
                 row_name = stats_sheet.get(row, "Category").removesuffix("-Type")
                 col_name = stats_sheet.rows[0][schema_index]
+                if row_name == col_name and int(total) > 0:
+                    row_name = "All"
+                category = get_category_name(row_name, col_name)
 
-                def get_category_name(first: str, second: str) -> str:
-                    return f'{first} / {second}'
-
-                category_names = [get_category_name(row_name, col_name), get_category_name(col_name, row_name)]
-                in_diffs = any(category_name in current_diffs for category_name in category_names)
-                message = f'{remaining} / {total} {category_names[0]}'
+                seen = in_diffs(row_name, col_name)
+                message = f'{remaining} / {total} {category}'
 
                 if int(total) == 0:
                     assert int(remaining) == 0, message
-                    assert not in_diffs, message
-                elif in_diffs:
+                    assert not seen, message
+                elif seen:
                     assert int(remaining) == 0, message
                 elif int(remaining) == 0:
-                    finished_category = category_names[0]
-                    print(f"Finished {finished_category}!! ({total})")
-                    doku_diffs.append([today_str(), total, finished_category])
-                    current_diffs.add(finished_category)
+                    print(f"Finished {category}!! ({total})")
+                    doku_diffs.append([today_str(), total, category])
+                    current_diffs.add(category)
 
     to_tsv(DOKU_DIFFS_OUTFILE, doku_diffs)
