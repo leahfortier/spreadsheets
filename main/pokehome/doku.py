@@ -103,24 +103,29 @@ def write_stats_diff():
         for schema_index, value in enumerate(row):
             if "/" in value:
                 index = value.index("/")
-                remaining = value[:index]
-                total = value[index+1:]
+                remaining = int(value[:index])
+                total = int(value[index+1:])
 
                 row_name = stats_sheet.get(row, "Category").removesuffix("-Type")
                 col_name = stats_sheet.rows[0][schema_index]
-                if row_name == col_name and int(total) > 0:
+
+                if row_name == col_name and total > 0:
+                    row_name = "All"
+                if col_name == "Total":
+                    remaining = total - remaining
+                    col_name = row_name
                     row_name = "All"
                 category = get_category_name(row_name, col_name)
 
                 seen = in_diffs(row_name, col_name)
                 message = f'{remaining} / {total} {category}'
 
-                if int(total) == 0:
-                    assert int(remaining) == 0, message
+                if total == 0:
+                    assert remaining == 0, message
                     assert not seen, message
                 elif seen:
-                    assert int(remaining) == 0, message
-                elif int(remaining) == 0:
+                    assert remaining == 0, message
+                elif remaining == 0:
                     print(f"Finished {category}!! ({total})")
                     doku_diffs.append([today_str(), total, category])
                     current_diffs.add(category)

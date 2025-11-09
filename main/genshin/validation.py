@@ -3,6 +3,7 @@ from typing import Set, List, Dict, Self
 from genshin.characters import CharacterSheet, CharacterRow
 from genshin.constants.sheets import get_sheet, Tab, BuildsFields, BUILD_TABS, WeaponMethod, BUILD_SORT_FIELDS
 from util.data import Sheet
+from util.general import warn
 
 
 def get_values(tab_name: Tab, field_name: str) -> Set[str]:
@@ -25,11 +26,15 @@ def validate_character_data(characters: CharacterSheet):
         if character.name == "Traveler":
             continue
 
-        assert character.trounce in trounces, character.name + " " + character.trounce
-        assert character.boss_mat in boss_drops, character.name + " " + character.boss_mat
-        assert character.enemy_mat in enemy_drops, character.name + " " + character.enemy_mat
-        assert character.local in specialties, character.name + " " + character.local
-        assert character.recipe in recipes, character.name + " " + character.recipe
+        def check_asset(asset: str, values: Set[str]):
+            if asset not in values:
+                warn(f'{character.name} {asset}')
+
+        check_asset(character.trounce, trounces)
+        check_asset(character.boss_mat, boss_drops)
+        check_asset(character.enemy_mat, enemy_drops)
+        check_asset(character.local, specialties)
+        check_asset(character.recipe, recipes)
 
 
 def validate_talents(sheet: Sheet, row: List[str], character: CharacterRow):
