@@ -172,7 +172,7 @@ def validate_command_out(db: Database):
 
 def validate_doku(doku: Doku):
     expected_rows = len(doku.rows)
-    actual_rows = len(doku.sheet.rows) - 1  # There's an extra schema row
+    actual_rows = len(doku.sheet.rows)
 
     # Accidentally added a bunch of extra rows once by trying to update doku fields from db
     # You will need to manually delete the extra rows at the bottom of the file since correctly

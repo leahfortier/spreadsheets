@@ -175,7 +175,8 @@ def get_doku_sheet() -> Sheet:
     return Sheet(
         get_sheet_data(SPREADSHEET_ID, DOKU_TAB),
         escape_fields=[DokuFields.ID],
-        id_fields=[DokuFields.ID]
+        id_fields=[DokuFields.ID],
+        schema_size=2
     )
 
 

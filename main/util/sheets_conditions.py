@@ -26,9 +26,9 @@ class Column:
 
 class ColumnBuilder(Generic[FieldsEnum]):
     def __init__(self, sheet: Sheet, tab: str, field: FieldsEnum):
-        self.start_index = 2
-        self.col_range = column_range(sheet.column(field), self.start_index, tab=tab)
-        self.address = index_value(self.col_range, self.start_index)
+        start_index = sheet.rows_start_index + 1
+        self.col_range = column_range(sheet.column(field), start_index, tab=tab)
+        self.address = index_value(self.col_range, start_index)
 
     def _with_value(self, value: str) -> Self:
         self.value = value

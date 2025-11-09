@@ -10,7 +10,8 @@ class Sheet:
             rows: List[List[str]],
             escape_fields: List[FieldsEnum] = None,
             id_fields: List[FieldsEnum] = None,
-            break_schema_field: str = None
+            break_schema_field: str = None,
+            schema_size=1,
     ):
         index = 0
         for index, row in enumerate(rows):
@@ -33,7 +34,12 @@ class Sheet:
         for i, val in enumerate(self.schema_row):
             self.schema[val] = i
 
-        self.rows: List[List[str]] = [row[:self.break_index] for row in rows[(index + 1):]]
+        self.schema_values: List[List[str]] = []
+        for i in range(1, schema_size):
+            self.schema_values.append(rows[index + i][:self.break_index])
+
+        self.rows_start_index = index + schema_size
+        self.rows: List[List[str]] = [row[:self.break_index] for row in rows[self.rows_start_index:]]
         for row_index, row in enumerate(self.rows):
             if len(row) < len(self.schema_row):
                 row += [""] * (len(self.schema_row) - len(row))
