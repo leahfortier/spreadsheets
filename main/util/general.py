@@ -65,3 +65,8 @@ def to_str(field: str | Enum) -> str:
 
 def warn(message: str):
     print(in_red(message).in_bold())
+
+
+def warn_if(condition: bool, message: str):
+    if condition:
+        warn(message)

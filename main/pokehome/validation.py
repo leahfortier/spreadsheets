@@ -4,13 +4,13 @@ from main.pokehome.constants.io import ABILITIES_OUTFILE, REGIONS_OUTFILE, FAMIL
     BALLS_OUTFILE, TYPES_OUTFILE, CATEGORY_OUTFILE
 from main.pokehome.constants.pokes import REGIONS, INCLUDE_UNBREEDABLE_POKEBALLS, BALL_NOTES
 from main.pokehome.constants.sheets import DexFields, EMPTY_FIELD, HiddenAbilityProgress, SAME_ID_DIFFERENT_FIELDS, \
-    DbFields, EvolutionType, DB_TRUE, DokuFields
+    DbFields, EvolutionType
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_file
-from pokehome.doku import Doku
-from util.general import all_unique, to_str, warn
+from pokehome.doku import Doku, DokuDiffs, DokuDiff
+from util.general import all_unique, to_str, warn, warn_if
 
 
 def validate_dex(db: Database, sheet: Sheet):
@@ -180,8 +180,31 @@ def validate_doku(doku: Doku):
     assert expected_rows == actual_rows, f'{expected_rows} != {actual_rows}'
 
 
+def validate_doku_diffs(diffs: DokuDiffs):
+    categories: Dict[str, DokuDiff] = {}
+    for diff in diffs.out_diffs:
+        assert diff.category not in categories, diff.message
+        warn_if(diff.reverse in categories, f'Duplicate diff entry: {diff.message}')
+        categories[diff.category] = diff
+
+        assert diff.category != diff.reverse, diff.message
+
+    for diff in diffs.stats_diffs:
+        if diff.total == 0:
+            assert diff.remaining == 0, diff.message
+            assert not diffs.seen(diff), diff.message
+        else:
+            assert (diff.remaining == 0) == diffs.seen(diff), diff.message
+
+        out_diff = categories.get(diff.category) or categories.get(diff.reverse)
+        if out_diff:
+            assert out_diff.remaining == 0 and diff.remaining == 0, diff.message
+            assert out_diff.total == diff.total and diff.total > 0, f'{out_diff.total} != {diff.total} | {diff.message}'
+
+
 def run_validation(db: Database, dex: Dex, doku: Doku):
     validate_command_out(db)
     validate_db(db)
     validate_dex(db, dex.sheet)
     validate_doku(doku)
+    validate_doku_diffs(doku.diffs)
