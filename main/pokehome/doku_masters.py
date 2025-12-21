@@ -7,6 +7,7 @@ from util.data import Sheet
 from util.file_io import to_file
 from util.general import warn
 
+DEX_COLUMNS = 4
 
 def get_form(db: Database, full_name: str, form_name: str, poke_name: str):
     if form_name == "Gmax":
@@ -69,6 +70,7 @@ class Shiny:
         self.date = date
         self.shiny = shiny
         self.poke_id = get_poke_id(db, shiny)
+        self.species = db.get(self.poke_id).species
 
     def __str__(self):
         return f'{self.date} {self.shiny} {self.poke_id}'
@@ -117,7 +119,14 @@ class DokuMasters:
         out_rows = []
         for player in self.players:
             out_rows.append(f'{player.name} ({len(player.shinies)}):')
-            for shiny in player.number_order():
-                out_rows.append(f'\t{shiny}')
 
-        to_file(DOKU_SHINIES_OUTFILE, out_rows, show_diff=False)
+            prev_species = ""
+            dex_count = 0
+            for shiny in player.number_order():
+                if shiny.species != prev_species:
+                    dex_count += 1
+                prev_species = shiny.species
+                column = (dex_count - 1) % DEX_COLUMNS + 1
+                out_rows.append(f'\t{column} {shiny}')
+
+        to_file(DOKU_SHINIES_OUTFILE, out_rows)

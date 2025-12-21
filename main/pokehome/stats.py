@@ -162,6 +162,11 @@ class DokuStats:
             region_col = self.col(DokuFields.REGION).with_string(region).build()
             self.out.append(region, self.get_values(region_col.condition))
 
+    def append_mono_regions(self):
+        for region in REGIONS:
+            region_col = self.col(DokuFields.REGION).with_string(region).build()
+            self.out.append(region + " Mono", self.get_values(region_col.condition, self.mono_col.condition))
+
     def append_types(self):
         def get_dual_type_progress(primary_type: str, secondary_type: str) -> Progress:
             primary_col = self.col(DokuFields.TYPE1).with_string(primary_type).build()
@@ -249,6 +254,9 @@ def write_doku_stats(doku: Doku):
     stats.out.blank_row()
 
     stats.append_regions()
+    stats.out.blank_row()
+
+    stats.append_mono_regions()
     stats.out.blank_row()
 
     stats.append_types()
