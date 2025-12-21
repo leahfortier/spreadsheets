@@ -16,7 +16,7 @@ def main():
     go: GoDex = GoDex(db)
     masters: DokuMasters = DokuMasters(db)
 
-    run_commands(db, dex)
+    run_commands(db)
     run_validation(db, dex, doku)
 
     db.write()

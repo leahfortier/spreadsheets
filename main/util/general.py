@@ -63,6 +63,10 @@ def to_str(field: str | Enum) -> str:
     return field
 
 
+def flatten(lists: List[List[str]]) -> List[str]:
+    return [value for sublist in lists for value in sublist]
+
+
 def warn(message: str):
     print(in_red(message).in_bold())
 

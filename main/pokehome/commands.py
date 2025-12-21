@@ -576,7 +576,7 @@ def compare_version_history(dex: Dex):
     to_file(OUT_PATH + "diffs.out", diffs)
 
 
-def run_commands(db: Database, dex: Dex):
+def run_commands(db: Database):
     write_abilities(db)
     write_types(db)
     write_genders(db)
@@ -585,4 +585,3 @@ def run_commands(db: Database, dex: Dex):
     write_categories(db)
     write_catch_rates(db)
     write_pla_names(db)
-    # compare_version_history(dex)

@@ -182,12 +182,13 @@ def validate_doku(doku: Doku):
 
 def validate_doku_diffs(diffs: DokuDiffs):
     categories: Dict[str, DokuDiff] = {}
-    for diff in diffs.out_diffs:
-        assert diff.category not in categories, diff.message
-        warn_if(diff.reverse in categories, f'Duplicate diff entry: {diff.message}')
-        categories[diff.category] = diff
+    for puzzle in diffs.puzzles:
+        for diff in puzzle.diffs:
+            assert diff.category not in categories, diff.message
+            warn_if(diff.reverse in categories, f'Duplicate diff entry: {diff.message}')
+            categories[diff.category] = diff
 
-        assert diff.category != diff.reverse, diff.message
+            assert diff.category != diff.reverse or diff.category == "All / All", diff.message
 
     for diff in diffs.stats_diffs:
         if diff.total == 0:

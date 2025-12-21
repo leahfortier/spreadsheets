@@ -1,4 +1,4 @@
-from typing import List, Tuple, Set, Self, Optional
+from typing import List, Tuple, Set, Optional
 
 from main.pokehome.constants.io import DOKU_OUTFILE, DOKU_DIFFS_OUTFILE
 from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields, SpriteType, \
@@ -7,6 +7,7 @@ from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv
 from pokehome.constants.pokes import DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
+from util.general import flatten, warn_if
 from util.sheets_conditions import ColumnBuilder
 from util.sheets_formulas import if_image
 from util.time import today_str
@@ -101,14 +102,13 @@ class Doku:
 
 
 class DokuDiff:
-    def __init__(self, remaining: int, total: int, row_name: str, col_name: str, date: str = None):
+    def __init__(self, remaining: int, total: int, row_name: str, col_name: str):
         self.remaining = remaining
         self.total = total
         self.row_name = row_name.strip()
         self.col_name = col_name.strip()
         self.category = f'{self.row_name} / {self.col_name}'
         self.reverse = f'{self.col_name} / {self.row_name}'
-        self.date = date or today_str()
 
         self.message = f'{self.remaining} / {self.total} {self.category}'
 
@@ -116,26 +116,47 @@ class DokuDiff:
         return self.remaining == 0 and self.total > 0
 
     def to_out_row(self) -> List[str]:
-        return [self.date, str(self.total), self.category]
+        # Empty value gives the effect of a tab/indent
+        return ["", str(self.total), self.category]
 
     @staticmethod
     def from_out_row(row: List[str]) -> "DokuDiff":
-        date, total, category = row
+        _, total, category = row
 
         index = category.index("/")
         row_name = category[:index]
         col_name = category[index + 1:]
 
-        return DokuDiff(0, int(total), row_name, col_name, date)
+        return DokuDiff(0, int(total), row_name, col_name)
+
+
+class PuzzleVersion:
+    def __init__(self, title: str):
+        self.title = title
+        self.diffs: List[DokuDiff] = []
+
+    def add(self, diff: DokuDiff):
+        self.diffs.append(diff)
+
+    def has_diffs(self) -> bool:
+        return len(self.diffs) > 0
+
+    def categories(self) -> List[str]:
+        return [diff.category for diff in self.diffs]
+
+    def to_out_rows(self) -> List[List[str]]:
+        return [[self.title], *[diff.to_out_row() for diff in self.diffs]]
 
 
 class DokuDiffs:
     def __init__(self):
         self.stats_sheet: Sheet = get_doku_stats_sheet()
 
-        out_rows: List[List[str]] = from_tsv(DOKU_DIFFS_OUTFILE)
-        self.out_diffs: List[DokuDiff] = [DokuDiff.from_out_row(row) for row in out_rows]
-        self.seen_categories: Set[str] = {diff.category for diff in self.out_diffs}
+        caught, puzzles = self.read()
+        self.out_caught: List[str] = caught
+        self.puzzles: List[PuzzleVersion] = puzzles
+
+        self.seen_categories: Set[str] = set(flatten([puzzle.categories() for puzzle in self.puzzles]))
 
         self.stats_diffs: List[DokuDiff] = []
         for row in self.stats_sheet.rows:
@@ -143,10 +164,25 @@ class DokuDiffs:
                 diff = self.create_diff(schema_index, value, row)
                 if diff:
                     self.stats_diffs.append(diff)
-                    if diff.finished() and not self.seen(diff):
-                        print(f"Finished {diff.category}!! ({diff.total})")
-                        self.out_diffs.append(diff)
-                        self.seen_categories.add(diff.category)
+
+    @staticmethod
+    def read() -> Tuple[List[str], List[PuzzleVersion]]:
+        out_rows: List[List[str]] = from_tsv(DOKU_DIFFS_OUTFILE)
+        out_caught: List[str] = out_rows[0]
+
+        assert len(out_rows[1]) == 1
+        current_puzzle = PuzzleVersion(out_rows[1][0])
+        puzzles: List[PuzzleVersion] = [current_puzzle]
+
+        for row in out_rows[2:]:
+            if len(row) == 1:
+                current_puzzle = PuzzleVersion(row[0])
+                puzzles.append(current_puzzle)
+            else:
+                diff = DokuDiff.from_out_row(row)
+                current_puzzle.add(diff)
+
+        return out_caught, puzzles
 
     def seen(self, diff: DokuDiff) -> bool:
         return diff.category in self.seen_categories or diff.reverse in self.seen_categories
@@ -171,5 +207,27 @@ class DokuDiffs:
 
         return DokuDiff(remaining, total, row_name, col_name)
 
+    def update(self, db: Database, caught: List[str]):
+        prev_caught: Set[str] = set(self.out_caught)
+        self.out_caught: List[str] = list(caught)
+
+        warn_if(len(prev_caught) > len(caught), f'{len(prev_caught)} {len(caught)}')
+        new_entries = [db.get(poke_id).name for poke_id in caught if poke_id not in prev_caught]
+        title = f'{today_str()}: {len(new_entries)} -- {", ".join(new_entries)}'
+        new_puzzle = PuzzleVersion(title)
+
+        for diff in self.stats_diffs:
+            if diff.finished() and not self.seen(diff):
+                print(f"Finished {diff.category}!! ({diff.total})")
+                self.seen_categories.add(diff.category)
+                new_puzzle.add(diff)
+
+        if new_entries or new_puzzle.has_diffs():
+            self.puzzles.append(new_puzzle)
+
     def write(self):
-        to_tsv(DOKU_DIFFS_OUTFILE, [diff.to_out_row() for diff in self.out_diffs])
+        out_rows: List[List[str]] = [self.out_caught]
+        for puzzle in self.puzzles:
+            out_rows.extend(puzzle.to_out_rows())
+
+        to_tsv(DOKU_DIFFS_OUTFILE, out_rows)
