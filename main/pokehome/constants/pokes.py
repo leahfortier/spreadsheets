@@ -58,8 +58,8 @@ INCLUDE_GENDER_FORM: List[str] = [
     "Hippopotas", "Hippowdon",
     "Unfezant",
     "Frillish", "Jellicent",
-    "Meowstic",
     "Pyroar",
+    "Meowstic",
     "Indeedee",
     "Basculegion",
     "Oinkologne",
@@ -113,6 +113,7 @@ BALL_NOTES: Dict[str, str] = {
 }
 
 NON_HOME_FORMS: Dict[str, List[str]] = {
+    "Cherrim": ["Sunshine"],
     "Darmanitan": ["Zen Mode"],
     "Kyurem": ["White Kyurem", "Black Kyurem"],
     "Greninja": ["Ash"],
@@ -123,19 +124,9 @@ NON_HOME_FORMS: Dict[str, List[str]] = {
 }
 
 NON_DOKU_FORMS: List[str] = [
-    "Pikachu", "Unown", "Burmy",
-    "Shellos", "Gastrodon", "Arceus",
-    "Deerling", "Sawsbuck", "Vivillon",
-    "Flabébé", "Floette", "Florges",
-    "Furfrou", "Sinistea", "Polteageist",
-    "Alcremie"
-]
-
-DOKU_INCLUDE_GENDER_FORM: List[str] = [
-    "Meowstic",
-    "Indeedee",
-    "Basculegion",
-    "Oinkologne",
+    "Pikachu", "Unown", "Arceus", "Vivillon",
+    "Flabébé", "Floette", "Florges", "Furfrou",
+    "Sinistea", "Polteageist", "Alcremie"
 ]
 
 ALL_TYPES: List[str] = [

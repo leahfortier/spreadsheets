@@ -6,7 +6,7 @@ from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields
 from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv
-from pokehome.constants.pokes import DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
+from pokehome.constants.pokes import INCLUDE_GENDER_FORM, NON_DOKU_FORMS
 from util.general import flatten, warn_if
 from util.sheets_conditions import ColumnBuilder
 from util.sheets_formulas import if_image
@@ -64,7 +64,7 @@ def is_doku_form(db_row: DbRow) -> bool:
     if db_row.species in NON_DOKU_FORMS:
         return False
     if db_row.gender_id:
-        return db_row.species in DOKU_INCLUDE_GENDER_FORM
+        return db_row.species in INCLUDE_GENDER_FORM
     if db_row.form:
         return True
     if db_row.regional_form:
