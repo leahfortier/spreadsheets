@@ -179,8 +179,18 @@ def validate_doku(doku: Doku):
     #   pasting doku output will not reach to overwrite and will fuck up all the stats
     assert expected_rows == actual_rows, f'{expected_rows} != {actual_rows}'
 
+    for row in doku.sheet.rows:
+        if doku.is_shiny(row):
+            assert doku.is_caught(row)
 
-def validate_doku_diffs(diffs: DokuDiffs):
+
+def validate_doku_diffs(doku: Doku, diffs: DokuDiffs):
+    for row in doku.sheet.rows:
+        poke_id = doku.get_id(row)
+        if doku.is_shiny(row):
+            poke_id += "*"
+        assert doku.is_caught(row) == (poke_id in diffs.out_caught), poke_id
+
     categories: Dict[str, DokuDiff] = {}
     for puzzle in diffs.puzzles:
         for diff in puzzle.diffs:
@@ -203,9 +213,9 @@ def validate_doku_diffs(diffs: DokuDiffs):
             assert out_diff.total == diff.total and diff.total > 0, f'{out_diff.total} != {diff.total} | {diff.message}'
 
 
-def run_validation(db: Database, dex: Dex, doku: Doku):
+def run_validation(db: Database, dex: Dex, doku: Doku, diffs: DokuDiffs):
     validate_command_out(db)
     validate_db(db)
     validate_dex(db, dex.sheet)
     validate_doku(doku)
-    validate_doku_diffs(doku.diffs)
+    validate_doku_diffs(doku, diffs)

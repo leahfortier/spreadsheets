@@ -45,7 +45,7 @@ class OutStatsVertical:
         self.rows.append(values)
 
 
-def get_dex_stats(dex: Dex):
+def write_dex_stats(dex: Dex):
     def col(field: DexFields) -> ColumnBuilder:
         return ColumnBuilder(dex.sheet, DEX_TAB, field)
 
@@ -239,7 +239,7 @@ def get_values_from_progress(
     ]
 
 
-def get_doku_stats(doku: Doku):
+def write_doku_stats(doku: Doku):
     stats = DokuStats(doku)
 
     stats.append_full()
@@ -260,5 +260,5 @@ def get_doku_stats(doku: Doku):
 
 
 def write_stats(dex: Dex, doku: Doku):
-    get_dex_stats(dex)
-    get_doku_stats(doku)
+    write_dex_stats(dex)
+    write_doku_stats(doku)

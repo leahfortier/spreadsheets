@@ -81,24 +81,18 @@ class Doku:
             if is_doku_form(db_row):
                 self.rows.append(db_row)
 
-        self.diffs: DokuDiffs = DokuDiffs()
-        self.diffs.update(db, self.all_caught())
+    def get_id(self, row: List[str]) -> str:
+        return self.sheet.get(row, DokuFields.ID)
 
     def is_caught(self, row: List[str]) -> bool:
         return self.sheet.get(row, DokuFields.DEX) == CHECKBOX_TRUE
 
-    def all_caught(self) -> List[str]:
-        caught_ids: List[str] = []
-        for row in self.sheet.rows:
-            if self.is_caught(row):
-                caught_ids.append(self.sheet.get(row, DokuFields.ID))
-        return caught_ids
+    def is_shiny(self, row: List[str]) -> bool:
+        return self.sheet.get(row, DokuFields.SHINY) == CHECKBOX_TRUE
 
     def write(self):
         out_rows: List[List[str]] = [to_doku_row(db_row, self.sheet) for db_row in self.rows]
         to_tsv(DOKU_OUTFILE, out_rows, show_diff=False)
-
-        self.diffs.write()
 
 
 class DokuDiff:
@@ -149,7 +143,7 @@ class PuzzleVersion:
 
 
 class DokuDiffs:
-    def __init__(self):
+    def __init__(self, db: Database, doku: Doku):
         self.stats_sheet: Sheet = get_doku_stats_sheet()
 
         caught, puzzles = self.read()
@@ -164,6 +158,8 @@ class DokuDiffs:
                 diff = self.create_diff(schema_index, value, row)
                 if diff:
                     self.stats_diffs.append(diff)
+
+        self.update(db, doku)
 
     @staticmethod
     def read() -> Tuple[List[str], List[PuzzleVersion]]:
@@ -207,13 +203,31 @@ class DokuDiffs:
 
         return DokuDiff(remaining, total, row_name, col_name)
 
-    def update(self, db: Database, caught: List[str]):
+    def update(self, db: Database, doku: Doku):
         prev_caught: Set[str] = set(self.out_caught)
-        self.out_caught: List[str] = list(caught)
+        all_caught: List[str] = []
+        new_caught: List[str] = []
+        new_shinies: int = 0
+        for row in doku.sheet.rows:
+            if doku.is_caught(row):
+                poke_id = doku.get_id(row)
+                name = db.get(poke_id).name
 
-        warn_if(len(prev_caught) > len(caught), f'{len(prev_caught)} {len(caught)}')
-        new_entries = [db.get(poke_id).name for poke_id in caught if poke_id not in prev_caught]
-        title = f'{today_str()}: {len(new_entries)} -- {", ".join(new_entries)}'
+                if doku.is_shiny(row):
+                    name = f'*{name}*'
+                    poke_id += "*"
+                    if poke_id not in prev_caught:
+                        new_shinies += 1
+
+                if poke_id not in prev_caught:
+                    new_caught.append(name)
+
+                all_caught.append(poke_id)
+
+        self.out_caught: List[str] = all_caught
+
+        warn_if(len(prev_caught) > len(all_caught), f'{len(prev_caught)} {len(all_caught)}')
+        title = f'{today_str()}: {len(new_caught)}{"*"*new_shinies} -- {", ".join(new_caught)}'
         new_puzzle = PuzzleVersion(title)
 
         for diff in self.stats_diffs:
@@ -222,7 +236,7 @@ class DokuDiffs:
                 self.seen_categories.add(diff.category)
                 new_puzzle.add(diff)
 
-        if new_entries or new_puzzle.has_diffs():
+        if new_caught or new_puzzle.has_diffs():
             self.puzzles.append(new_puzzle)
 
     def write(self):
