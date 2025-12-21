@@ -7,7 +7,8 @@ from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUT
     PARTNER_INFILE, ULTRA_INFILE, PARADOX_INFILE
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
-from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE
+from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE, \
+    DbFields
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
@@ -346,7 +347,7 @@ def write_regions(db: Database):
         if row.species in ["Dialga", "Palkia"] and row.form == "Origin":
             assert region == "Sinnoh"
             region = "Hisui"
-        elif row.species == "Zygarde" and not row.is_base_form():
+        elif row.species == "Zygarde" and not row.is_base_form() and not row.evolution_type == EvolutionType.MEGA:
             assert region == "Kalos"
             region = "Alola"
 
@@ -435,12 +436,12 @@ def write_families(db: Database):
 
     for row in db.rows:
         def get_name_and_family() -> Tuple[str, str]:
-            names = [row.name, row.regional_name()]
+            names = [row.name, row.regional_name(), row.get_name(exclude_digimon=True)]
             for form_name in names:
                 family = get_family(form_name)
                 if family:
                     return form_name, family
-            assert False, "No evolution found for " + name
+            assert False, f"No evolution found for {names}"
 
         name, family = get_name_and_family()
         row.family = family or EMPTY_FIELD
@@ -544,6 +545,40 @@ def write_pla_names(db: Database):
         out_rows.append([form_id, name, poke.image, poke.shiny_image])
 
     to_tsv(OUT_PATH + "pla-names.out", out_rows)
+
+
+# Can use this command if needing to add several new rows in the spreadsheet at once
+# Will need to be manually edited as needed for whatever is adding
+# Not perfect and requires some amount of manual followup
+def add_new_rows(db: Database):
+    new_megas = [
+        "Clefable", "Victreebel", "Starmie", "Dragonite", "Meganium", "Feraligatr", "Skarmory",
+        "Froslass", "Scrafty", "Emboar", "Eelektross", "Chandelure", "Excadrill", "Scolipede",
+        "Pyroar", "Barbaracle", "Dragalge", "Hawlucha", "Floette", "Malamar", "Zygarde", "Delphox",
+        "Greninja", "Chesnaught", "Drampa", "Falinks",
+    ]
+
+    added = set()
+
+    while len(added) < len(new_megas):
+        for index, sheet_row in enumerate(db.sheet.rows):
+            db_row = DbRow(db.sheet, sheet_row, index)
+            if db_row.species in new_megas and db_row.species not in added and not db.rows[index+1].species == db_row.species:
+                added.add(db_row.species)
+                print(f"Adding {db_row.species}: {len(added)}")
+
+                new_row = sheet_row.copy()
+
+                db.sheet.update(new_row, DbFields.DIGIMON_FORM, "Mega", print_diff=(len(db_row.digimon_form) > 0))
+                db.sheet.update(new_row, DbFields.FORM_ID, "-m", print_diff=(len(db_row.form_id) > 0))
+                db.sheet.update(new_row, DbFields.EVO_TYPE, "Mega", print_diff=False)
+
+                db.sheet.update(new_row, DbFields.ABILITY1, EMPTY_FIELD, print_diff=False)
+                db.sheet.update(new_row, DbFields.ABILITY2, EMPTY_FIELD, print_diff=False)
+                db.sheet.update(new_row, DbFields.HIDDEN_ABILITY, EMPTY_FIELD, print_diff=False)
+
+                db.sheet.rows.insert(index+1, new_row)
+                break
 
 
 def compare_version_history(dex: Dex):

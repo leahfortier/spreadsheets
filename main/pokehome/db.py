@@ -52,6 +52,19 @@ class DbRow:
         self.id = self.dex + self.form_id + self.gender_id
         sheet.update(row, DbFields.ID, self.id)
 
+        self.name = self.get_name()
+        sheet.update(row, DbFields.NAME, self.name)
+
+        self.image_id = self.get_image_id()
+        sheet.update(row, DbFields.IMAGE_ID, self.image_id)
+
+        self.image = image(self.get_image_url(SpriteType.NORMAL))
+        self.shiny_image = image(self.get_image_url(SpriteType.SHINY))
+
+        sheet.set(row, DbFields.IMAGE, self.image)
+        sheet.set(row, DbFields.SHINY_IMAGE, self.shiny_image)
+
+    def get_name(self, exclude_digimon=False) -> str:
         name_form = self.form
         digimon_form = self.digimon_form
         if self.species == "Alcremie" and self.gender_form:
@@ -67,17 +80,10 @@ class DbRow:
                 digimon_form = remove_suffix(digimon_form, [" " + digimon_variant])
                 name_form = digimon_variant
 
-        self.name = " ".join(filter(None, [digimon_form, self.regional_form, self.species, name_form]))
-        sheet.update(row, DbFields.NAME, self.name)
+        if exclude_digimon:
+            digimon_form = ""
 
-        self.image_id = self.get_image_id()
-        sheet.update(row, DbFields.IMAGE_ID, self.image_id)
-
-        self.image = image(self.get_image_url(SpriteType.NORMAL))
-        self.shiny_image = image(self.get_image_url(SpriteType.SHINY))
-
-        sheet.set(row, DbFields.IMAGE, self.image)
-        sheet.set(row, DbFields.SHINY_IMAGE, self.shiny_image)
+        return " ".join(filter(None, [digimon_form, self.regional_form, self.species, name_form]))
 
     # Get the id in the format that pokemondb uses
     # Go to https://pokemondb.net/sprites/<species_name> and look at the different

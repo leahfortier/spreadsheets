@@ -150,9 +150,12 @@ ALL_TYPES: List[str] = [
 # Megas are not included in the Types list so handling manually for those that differs
 DIGIMON_TYPES: Dict[str, List[str]] = {
     "Mega Charizard X": ["Fire", "Dragon"],
+    "Mega Clefable": ["Fairy", "Flying"],
     "Mega Pinsir": ["Bug", "Flying"],
     "Mega Gyarados": ["Water", "Dark"],
     "Mega Mewtwo X": ["Psychic", "Fighting"],
+    "Mega Meganium": ["Grass", "Fairy"],
+    "Mega Feraligatr": ["Water", "Dragon"],
     "Mega Ampharos": ["Electric", "Dragon"],
     "Mega Sceptile": ["Grass", "Dragon"],
     "Mega Aggron": ["Steel", EMPTY_FIELD],
@@ -160,5 +163,6 @@ DIGIMON_TYPES: Dict[str, List[str]] = {
     "Primal Groudon": ["Ground", "Fire"],
     "Mega Lopunny": ["Normal", "Fighting"],
     "Mega Audino": ["Normal", "Fairy"],
+    "Mega Barbaracle": ["Rock", "Fighting"],
     "Ultra Necrozma": ["Psychic", "Dragon"],
 }
