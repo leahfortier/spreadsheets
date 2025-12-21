@@ -3,6 +3,8 @@ from typing import List, Dict, Optional, Tuple
 from main.util.general import is_empty, FieldsEnum, to_str
 from util.sheets_formulas import column_name
 
+CHECKBOX_TRUE = "TRUE"
+CHECKBOX_FALSE = "FALSE"
 
 class Sheet:
     def __init__(

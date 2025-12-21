@@ -7,7 +7,7 @@ from main.pokehome.constants.sheets import DexFields, EMPTY_FIELD, HiddenAbility
     DbFields, EvolutionType
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
-from main.util.data import Sheet
+from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import from_tsv, to_file
 from pokehome.doku import Doku, DokuDiffs, DokuDiff
 from util.general import all_unique, to_str, warn, warn_if
@@ -26,8 +26,8 @@ def validate_dex(db: Database, sheet: Sheet):
         def get(field: DexFields) -> str:
             return sheet.get(row, field.value)
 
-        def is_caught(field: str) -> bool:
-            return sheet.get(row, field) == "TRUE"
+        def is_caught(checkbox_field: str) -> bool:
+            return sheet.get(row, checkbox_field) == CHECKBOX_TRUE
 
         name = get(DexFields.NAME)
         row_id = get(DexFields.ID)

@@ -4,7 +4,7 @@ from main.pokehome.constants.io import DOKU_OUTFILE, DOKU_DIFFS_OUTFILE
 from main.pokehome.constants.sheets import DokuFields, get_doku_sheet, DexFields, SpriteType, \
     DOKU_TAB, get_doku_stats_sheet
 from main.pokehome.db import DbRow, Database
-from main.util.data import Sheet
+from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv
 from pokehome.constants.pokes import DOKU_INCLUDE_GENDER_FORM, NON_DOKU_FORMS
 from util.sheets_conditions import ColumnBuilder
@@ -81,6 +81,17 @@ class Doku:
                 self.rows.append(db_row)
 
         self.diffs: DokuDiffs = DokuDiffs()
+        self.diffs.update(db, self.all_caught())
+
+    def is_caught(self, row: List[str]) -> bool:
+        return self.sheet.get(row, DokuFields.DEX) == CHECKBOX_TRUE
+
+    def all_caught(self) -> List[str]:
+        caught_ids: List[str] = []
+        for row in self.sheet.rows:
+            if self.is_caught(row):
+                caught_ids.append(self.sheet.get(row, DokuFields.ID))
+        return caught_ids
 
     def write(self):
         out_rows: List[List[str]] = [to_doku_row(db_row, self.sheet) for db_row in self.rows]

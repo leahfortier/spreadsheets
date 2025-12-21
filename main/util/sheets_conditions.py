@@ -1,6 +1,6 @@
 from typing import Self, Generic
 
-from util.data import Sheet
+from util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
 from util.general import FieldsEnum, to_str
 from util.sheets_formulas import column_range, Progress, index_value, get_progress, or_progress
 
@@ -39,10 +39,10 @@ class ColumnBuilder(Generic[FieldsEnum]):
         return self._with_value(f'"{value}"')
 
     def with_checkbox(self) -> Self:
-        return self._with_value("TRUE")
+        return self._with_value(CHECKBOX_TRUE)
 
     def with_false_checkbox(self) -> Self:
-        return self._with_value("FALSE")
+        return self._with_value(CHECKBOX_FALSE)
 
     def build(self) -> Column:
         return Column(self.col_range, self.address, self.value)

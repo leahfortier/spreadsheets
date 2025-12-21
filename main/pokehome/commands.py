@@ -10,7 +10,7 @@ from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, D
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE
 from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
-from main.util.data import Sheet
+from main.util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
 from main.util.general import remove_suffix, has_prefix, remove_prefix, warn
 
@@ -555,15 +555,15 @@ def compare_version_history(dex: Dex):
 
     for prev_row, current_row in zip(previous.rows, current.rows):
         assert len(prev_row) == 36
-        prev_row.insert(-1, 'FALSE')  # Quick
-        prev_row.insert(-3, 'FALSE')  # Dusk
+        prev_row.insert(-1, CHECKBOX_FALSE)  # Quick
+        prev_row.insert(-3, CHECKBOX_FALSE)  # Dusk
         assert len(prev_row) == 38
 
         if prev_row != current_row:
             assert len(prev_row) == len(current_row)
             rows_diffs = []
             for index, (prev_val, current_val) in enumerate(zip(prev_row, current_row)):
-                if prev_val == "FALSE" and current_val == "TRUE":
+                if prev_val == CHECKBOX_FALSE and current_val == CHECKBOX_TRUE:
                     rows_diffs.append(f"\t{dex.sheet.schema_row[index]}++")
                 elif prev_val.replace("\n", " ") != current_val.replace("\n", " "):
                     rows_diffs.append(
