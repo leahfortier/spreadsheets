@@ -95,7 +95,10 @@ class Tab(str, Enum):
     LOCALS = "Locals"
 
 
-BUILD_TABS: List[Tab] = [Tab.L_CHARS, Tab.MEL_CHARS]
+BUILD_TABS: List[Tab] = [
+    Tab.L_CHARS,
+    Tab.MEL_CHARS,
+]
 
 
 def get_sheet(tab_name: Tab) -> Sheet:

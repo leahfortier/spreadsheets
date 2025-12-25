@@ -5,7 +5,7 @@ from pokehome.constants.sheets import get_shiny_tracker_sheet
 from pokehome.db import Database
 from util.data import Sheet
 from util.file_io import to_file
-from util.general import warn
+from util.warn import warn
 
 DEX_COLUMNS = 4
 

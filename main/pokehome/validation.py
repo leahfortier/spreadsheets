@@ -10,7 +10,8 @@ from main.pokehome.dex import Dex
 from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import from_tsv, to_file
 from pokehome.doku import Doku, DokuDiffs, DokuDiff
-from util.general import all_unique, to_str, warn, warn_if
+from util.general import all_unique, to_str
+from util.warn import warn, warn_if
 
 
 def validate_dex(db: Database, sheet: Sheet):

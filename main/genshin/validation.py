@@ -3,7 +3,9 @@ from typing import Set, List, Dict, Self
 from genshin.characters import CharacterSheet, CharacterRow
 from genshin.constants.sheets import get_sheet, Tab, BuildsFields, BUILD_TABS, WeaponMethod, BUILD_SORT_FIELDS
 from util.data import Sheet
-from util.general import warn
+from util.warn import GuardDog, message_guardian, WarnLevel
+
+guard: GuardDog = GuardDog()
 
 
 def get_values(tab_name: Tab, field_name: str) -> Set[str]:
@@ -23,12 +25,13 @@ def validate_character_data(characters: CharacterSheet):
     recipes.add("None")
 
     for character in characters.rows:
-        if character.name == "Traveler":
+        if character.name.endswith("Traveler"):
             continue
 
+        guard.append_message(character.name)
+
         def check_asset(asset: str, values: Set[str]):
-            if asset not in values:
-                warn(f'{character.name} {asset}')
+            guard.inside(asset, values)
 
         check_asset(character.trounce, trounces)
         check_asset(character.boss_mat, boss_drops)
@@ -36,35 +39,40 @@ def validate_character_data(characters: CharacterSheet):
         check_asset(character.local, specialties)
         check_asset(character.recipe, recipes)
 
+        guard.pop_message(character.name)
 
+
+@message_guardian(guard)
 def validate_talents(sheet: Sheet, row: List[str], character: CharacterRow):
     constellation = int(sheet.get(row, BuildsFields.CONSTELLATION))
     normal = sheet.get(row, BuildsFields.NORMAL_TALENT)
     skill = sheet.get(row, BuildsFields.SKILL_TALENT)
     burst = sheet.get(row, BuildsFields.BURST_TALENT)
 
+    guard.append_message(f'C{constellation} {character.name}: {normal} {skill} {burst}')
+
     plus = 0
     for talent in [normal, skill, burst]:
         if "+" in talent:
             plus += 1
             index = talent.index("+")
-            assert talent[index:] == "+3"
+            guard.eq(talent[index:], "+3")
             talent = talent[:index]
-            assert talent == talent.strip(), character.name
-        assert 1 <= int(talent) <= 10
+            guard.eq(talent, talent.strip())
+        guard.range(int(talent), 1, 10)
 
-    assert 0 <= plus <= 2
+    guard.range(plus, 0, 2)
     if constellation < 3:
-        assert plus == 0, character.name
+        guard.eq(plus, 0, "Invalid constellation")
     elif constellation < 5:
-        assert plus == 1, character.name
+        guard.sniff(plus == 1, "Missing C3 talent boost")
     else:
-        assert plus == 2, character.name
+        guard.sniff(plus == 2, "Missing C5 talent boost")
 
 
 def get_rarity(rawrity: str) -> int:
     starless = rawrity.strip("★☆")
-    assert len(starless) < len(rawrity), rawrity + " -> " + starless
+    guard.greater(len(starless), len(rawrity), f'{rawrity} -> {starless}')
     return int(starless)
 
 
@@ -76,42 +84,49 @@ class Weapon:
         self.method = sheet.get(row, BuildsFields.WEAPON_METHOD)
         self.rarity: int = get_rarity(sheet.get(row, BuildsFields.WEAPON_RARITY))
 
+    @message_guardian(guard)
     def compare(self, other: Self):
+        guard.append_message(f'{self.name} / {other.name}')
         if self.name == "TODO":
             return
-        assert self.name == other.name, self.name
-        assert self.type == other.type, self.name
-        assert self.stat == other.stat or other.stat == "", self.name
-        assert self.method == other.method or other.stat == "", self.name
-        assert self.rarity == other.rarity, self.name
+
+        guard.eq(self.name, other.name)
+        guard.eq(self.type, other.type)
+        guard.eq(self.stat, other.stat)
+        guard.eq(self.method, other.method)
+        guard.eq(self.rarity, other.rarity, "Rarity")
 
 
+@message_guardian(guard)
 def validate_weapon(sheet: Sheet, row: List[str], character: CharacterRow, weapon_map: Dict[str, Weapon]):
     weapon = Weapon(sheet, row, character)
-
     level = int(sheet.get(row, BuildsFields.WEAPON_LEVEL))
     rank = int(sheet.get(row, BuildsFields.WEAPON_RANK))
-    assert 1 <= level <= 90
-    assert 1 <= rank <= 5
 
-    assert 1 <= weapon.rarity <= 5 and weapon.rarity != 2
+    guard.append_message(f'{character.name} {weapon.name} {level} {rank}')
+
+    guard.range(level, 1, 90)
+    guard.range(rank, 1, 5)
+
+    guard.range(weapon.rarity, 1, 5)
+    guard.uneq(weapon.rarity, 2)
     if weapon.rarity == 1:
-        assert weapon.method in [WeaponMethod.STANDARD, ""]
-        assert level == 1
-        assert rank == 1
+        guard.eq(weapon.method, WeaponMethod.STANDARD)
+        guard.eq(level, 1)
+        guard.eq(rank, 1)
     else:
-        assert weapon.method in WeaponMethod, character.name
+        guard.inside(weapon.method, WeaponMethod)
         if weapon.method == WeaponMethod.SIGNATURE:
-            assert weapon.rarity == 5, character.name
+            guard.eq(weapon.rarity, 5)
         if weapon.method in [
             WeaponMethod.LIMITED_BANNER, WeaponMethod.BATTLE_PASS, WeaponMethod.FISH,
             WeaponMethod.EVENT, WeaponMethod.FORGE
         ]:
-            assert weapon.rarity == 4, character.name
+            guard.eq(weapon.rarity, 4)
         if weapon.method == WeaponMethod.BATTLE_PASS:
-            assert weapon.stat == "CRIT Rate"
+            guard.eq(weapon.stat, "CRIT Rate", f'BP {weapon.stat}')
         if weapon.method in [WeaponMethod.FISH, WeaponMethod.EVENT]:
-            assert rank == 5
+            guard.eq(rank, 5, f'{weapon.method} Rank')
 
     if weapon.name in weapon_map:
         existing = weapon_map.get(weapon.name)
@@ -134,9 +149,11 @@ def validate_builds(characters: CharacterSheet):
     weapon_map: Dict[str, Weapon] = {}
     for tab in BUILD_TABS:
         sheet = get_sheet(tab)
+        guard.append_message(tab.value)
 
         # Sort columns have a unique value for every index
         check_sort = sheet.has_field(BuildsFields.CHAR_SORT)
+        sort_guard = GuardDog(tab.value + " Sort", WarnLevel.INFO)
         sort_map: Dict[BuildsFields, List[bool]] = {}
         if check_sort:
             for sort_field in BUILD_SORT_FIELDS:
@@ -146,21 +163,32 @@ def validate_builds(characters: CharacterSheet):
             name = sheet.get(row, BuildsFields.NAME)
 
             if check_sort:
+                sort_guard.append_message(name or "--")
                 for sort_field in BUILD_SORT_FIELDS:
                     sort_val = int(sheet.get(row, sort_field)) - 1
-                    assert not sort_map[sort_field][sort_val], f'{sort_field} {name}'
+                    sort_guard.sniff(not sort_map[sort_field][sort_val], f'{sort_field} duplicate index {sort_val + 1}')
                     sort_map[sort_field][sort_val] = True
+
+                sort_guard.pop_message(name or "--")
                 if name == "":
                     continue
 
             character = characters.get(name)
-            assert 20 <= int(sheet.get(row, BuildsFields.CHAR_LEVEL)) <= 90, name
+            guard.append_message(name)
+
+            guard.range(int(sheet.get(row, BuildsFields.CHAR_LEVEL)), 20, 90)
             validate_talents(sheet, row, character)
             validate_weapon(sheet, row, character, weapon_map)
 
+            guard.pop_message(name)
+
         if check_sort:
             for sort_field in BUILD_SORT_FIELDS:
-                assert sum(sort_map[sort_field]) == len(sheet.rows)
+                missing = [index+1 for index, val in enumerate(sort_map[sort_field]) if not val]
+                sort_guard.eq(missing, [], f"{sort_field}: Missing sort values")
+                sort_guard.eq(sum(sort_map[sort_field]), len(sheet.rows), f"{sort_field}: Sort field total")
+
+        guard.pop_message(tab.value)
 
 
 def validate():

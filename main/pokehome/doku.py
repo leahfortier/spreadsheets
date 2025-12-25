@@ -7,7 +7,8 @@ from main.pokehome.db import DbRow, Database
 from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv
 from pokehome.constants.pokes import INCLUDE_GENDER_FORM, NON_DOKU_FORMS
-from util.general import flatten, warn_if
+from util.general import flatten
+from util.warn import warn_if
 from util.sheets_conditions import ColumnBuilder
 from util.sheets_formulas import if_image
 from util.time import today_str

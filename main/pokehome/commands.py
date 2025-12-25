@@ -13,7 +13,8 @@ from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
-from main.util.general import remove_suffix, has_prefix, remove_prefix, warn
+from main.util.general import remove_suffix, has_prefix, remove_prefix
+from main.util.warn import warn
 
 
 class FormName:
