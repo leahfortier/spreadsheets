@@ -22,7 +22,7 @@ class CharacterSheet:
         self.sheet: Sheet = get_sheet(Tab.CHARACTER_DATA)
         self.character_map: Dict[str, CharacterRow] = {}
 
-        self.rows = []
+        self.rows: List[CharacterRow] = []
         for row in self.sheet.rows:
             character = CharacterRow(self.sheet, row)
             self.rows.append(character)
