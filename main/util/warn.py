@@ -1,34 +1,58 @@
 from contextlib import ContextDecorator
 from enum import Enum
-from typing import Any, List, Iterable, Callable, Optional
+from typing import Any, List, Iterable, Callable, Optional, Self
 
-from terminology import in_red
-
-
-def warn(message: str):
-    print(in_red(message).in_bold())
-
-
-def warn_if(condition: bool, message: str):
-    if condition:
-        warn(message)
+from terminology import in_red, in_yellow, in_white
 
 
 class WarnLevel(Enum):
-    ASSERT = "Bark! Bark!! Bark!!!",
+    ASSERT = "d e d",
+    SEVERE = "Bark! Bark!! Bark!!!",
     WARN = "Woof! Woof!! Woof!!!",
     INFO = "Grrrr...",
 
 
+def warn_if(c: bool, message: str):
+    if c:
+        print("DEPRECATED:", message)
+
+
+def warn(message: str, level: WarnLevel = WarnLevel.WARN):
+    match level:
+        case WarnLevel.INFO:
+            print(in_white(message).in_bold())
+        case WarnLevel.WARN:
+            print(in_yellow(message).in_bold())
+        case WarnLevel.SEVERE:
+            print(in_red(message).in_bold())
+        case WarnLevel.ASSERT:
+            assert False, message
+        case _:
+            assert False, f"{message}, Unknown level {level}"
+
+
 class GuardDog:
-    def __init__(self, message: str = None, level: WarnLevel = WarnLevel.WARN):
+    def __init__(self, message: str = None, level: WarnLevel = WarnLevel.WARN, beta_pup: bool = False):
         self.level = level
         self.messages = []
         if message:
             self.messages.append(message)
 
+        if beta_pup:
+            self.info = None
+            self.woof = None
+            self.bark = None
+            self.kill = None
+        else:
+            self.info = GuardDog(level=WarnLevel.INFO, beta_pup=True)
+            self.woof = GuardDog(level=WarnLevel.WARN, beta_pup=True)
+            self.bark = GuardDog(level=WarnLevel.SEVERE, beta_pup=True)
+            self.kill = GuardDog(level=WarnLevel.ASSERT, beta_pup=True)
+            for guard in [self.info, self.woof, self.bark, self.kill]:
+                guard.messages = self.messages
+
     def append_message(self, message: str):
-        self.nonempty(message, level=WarnLevel.ASSERT)
+        self.kill.nonempty(message)
         self.messages.append(message)
 
     def pop_message(self, expected: str = None) -> str:
@@ -37,72 +61,78 @@ class GuardDog:
             self.eq(popped, expected)
         return popped
 
-    def _message(self, level: WarnLevel, *messages: str):
+    def _message(self, *messages: str):
         all_messages = self.messages + [message for message in messages if message]
         if len(all_messages) == 0:
-            return level.value
+            return self.level.value
         base_message = all_messages.pop(0)
         remaining = ", ".join(all_messages)
         if remaining:
             return f'{base_message}: {remaining}'
         return base_message
 
-    def _handle(self, expect_true: bool, level: WarnLevel = None, *messages: str):
+    def _handle(self, expect_true: bool, *messages: str):
         if expect_true:
             return
 
-        level = level or self.level
-        message = self._message(level, *messages)
-        match level:
-            case WarnLevel.INFO:
-                print(message)
-            case WarnLevel.WARN:
-                warn(message)
-            case WarnLevel.ASSERT:
-                assert False, message
-            case _:
-                assert False, f"{message}, Unknown level {level}, Default: {self.level}"
+        message = self._message(*messages)
+        warn(message, self.level)
+
+    def sniff(self, expect_true: bool, message: str = None):
+        self._handle(expect_true, message)
+
+    def nope(self, condition: bool, message: str = None):
+        self._handle(not condition, message)
+
+    def info_if(self, info_if: bool, message: str = None):
+        self.info.sniff(not info_if, message)
 
     def woof_if(self, woof_if: bool, message: str = None):
-        self._handle(not woof_if, WarnLevel.WARN, message)
+        self.woof.sniff(not woof_if, message)
 
     def bark_if(self, bark_if: bool, message: str = None):
-        self._handle(not bark_if, WarnLevel.ASSERT, message)
+        self.bark.sniff(not bark_if, message)
 
-    def sniff(self, expect_true: bool, message: str = None, level: WarnLevel = None):
-        self._handle(expect_true, level, message)
+    def eq(self, first: Any, second: Any, message: str = None):
+        self._handle(first == second, message, f'{first} != {second}')
 
-    def eq(self, first: Any, second: Any, message: str = None, level: WarnLevel = None):
-        self._handle(first == second, level, message, f'{first} != {second}')
+    def uneq(self, first: Any, second: Any, message: str = None):
+        self._handle(first != second, message, f'{first} == {second}')
 
-    def uneq(self, first: Any, second: Any, message: str = None, level: WarnLevel = None):
-        self._handle(first != second, level, message, f'{first} == {second}')
+    def greater(self, smaller: Any, larger: Any, message: str = None):
+        self._handle(smaller < larger, message, f'{smaller} >= {larger}')
 
-    def greater(self, smaller: Any, larger: Any, message: str = None, level: WarnLevel = None):
-        self._handle(smaller < larger, level, message, f'{smaller} >= {larger}')
+    def positive(self, positive: Any, message: str = None):
+        self.greater(0, positive, message)
 
-    def range(self, value: Any, min_value: Any, max_value: Any, message: str = None, level: WarnLevel = None):
-        self._handle(min_value <= value <= max_value, level, message, f'!({min_value} <= {value} <= {max_value})')
+    def range(self, value: Any, min_value: Any, max_value: Any, message: str = None):
+        self._handle(min_value <= value <= max_value, message, f'!({min_value} <= {value} <= {max_value})')
 
-    def inside(self, value: Any, values: Iterable[Any], message: str = None, level: WarnLevel = None):
-        self._handle(value in values, level, message, f'{value} not in {values}')
+    def inside(self, value: Any, values: Iterable[Any], message: str = None):
+        self._handle(value in values, message, f'{value} not in {values}')
 
-    def none(self, value: Any, message: str = None, level: WarnLevel = None):
-        self._handle(value is None, level, message, f'{value} is not None')
+    def nonside(self, value: Any, values: Iterable[Any], message: str = None):
+        self._handle(value not in values, message, f'{value} in {values}')
 
-    def empty(self, value: Any, message: str = None, level: WarnLevel = None):
-        self._handle(not bool(value), level, message, f'{value} is non-empty')
+    def none(self, value: Any, message: str = None):
+        message = f'{message}, {value}' if message else f'{value} is not None'
+        self._handle(value is None, message)
 
-    def nonempty(self, value: Any, message: str = None, level: WarnLevel = None):
-        self._handle(bool(value), level, message, f'{value} is empty')
+    def empty(self, value: Any, message: str = None):
+        self._handle(not bool(value), message, f'{value} is non-empty')
+
+    def nonempty(self, value: Any, message: str = None):
+        self._handle(bool(value), message, f'{value} is empty')
+
+    def len(self, first: List[Any], second: list[Any], message: str = None):
+        self._handle(len(first) == len(second), message, f'Unequal Lengths: {len(first)} != {len(second)}')
 
 
 # Automatically pops any appended messages on exit
 class message_guardian(ContextDecorator):
-    def __init__(self, guard: GuardDog):
+    def __init__(self, guard: GuardDog, name: str = None):
         self.guard = guard
-
-        self.name: str
+        self.name = name
 
         self.enter_count: int
         self.added: List[str]
@@ -110,7 +140,8 @@ class message_guardian(ContextDecorator):
         self.original_pop: Callable[[Optional[str]], str]
 
     def __call__(self, func):
-        self.name = func.__name__
+        if not self.name:
+            self.name = func.__name__
         return super().__call__(func)
 
     def guardian_append(self, message: str):
@@ -120,7 +151,7 @@ class message_guardian(ContextDecorator):
     def guardian_pop(self, expected: str = None) -> str:
         popped = self.original_pop(expected)
         unadded = self.added.pop()
-        self.guard.eq(unadded, popped, level=WarnLevel.ASSERT)
+        self.guard.kill.eq(unadded, popped)
         return popped
 
     def __enter__(self):
@@ -138,7 +169,7 @@ class message_guardian(ContextDecorator):
     def __exit__(self, exc_type, exc_value, traceback):
         while len(self.added) > 0:
             self.guardian_pop()
-        self.guard.eq(len(self.guard.messages), self.enter_count, level=WarnLevel.ASSERT)
+        self.guard.kill.eq(len(self.guard.messages), self.enter_count)
 
         self.guard.append_message = self.original_append
         self.guard.pop_message = self.original_pop

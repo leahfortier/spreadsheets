@@ -11,9 +11,12 @@ from main.util.data import Sheet, CHECKBOX_TRUE
 from main.util.file_io import from_tsv, to_file
 from pokehome.doku import Doku, DokuDiffs, DokuDiff
 from util.general import all_unique, to_str
-from util.warn import warn, warn_if
+from util.warn import GuardDog, message_guardian
+
+guard = GuardDog()
 
 
+@message_guardian(guard)
 def validate_dex(db: Database, sheet: Sheet):
     id_map: Dict[str, int] = {}
     hidden_families: Dict[str, bool] = {}
@@ -41,30 +44,32 @@ def validate_dex(db: Database, sheet: Sheet):
         hidden_ability = get(DexFields.HIDDEN_ABILITY)
         hidden_progress = get(DexFields.HIDDEN_PROGRESS)
 
+        guard.append_message(f'{name} {row_id}')
+
         # Uncaught Pokemon should not have a nickname or OT
-        if nickname and not caught and not nickname.startswith("TODO"):
-            print(f"Uncaught with nickname {nickname} for {name}")
-        if trainer and not caught:
-            print(f"Uncaught with trainer {trainer} for {name}")
+        guard.info_if(nickname and not caught and not nickname.startswith("TODO"), f"Uncaught with nickname: {nickname}")
+        guard.info_if(trainer and not caught, f"Uncaught with trainer: {trainer}")
 
         # All caught Pokemon should include their OT
-        if caught and not trainer:
-            print(f"Caught without trainer for {name}")
+        guard.info_if(caught and not trainer, f"Caught without trainer")
 
         # Validate region
         region = get(DexFields.REGION)
-        assert region in REGIONS
+        guard.inside(region, REGIONS)
 
         # Hidden ability matches family or N/A
-        assert db_row.hidden == hidden_ability
-        assert hidden_progress in [e for e in HiddenAbilityProgress]
-        if hidden_ability == EMPTY_FIELD or name == "Pangoro":
-            assert hidden_progress == HiddenAbilityProgress.NO_HIDDEN_ABILITY
-        else:
-            has_hidden = hidden_progress != HiddenAbilityProgress.UNOBTAINED
-            if hidden_families.get(db_row.family, has_hidden) != has_hidden:
-                print(f"{name}: Hidden ability ({hidden_progress}) does not match family ({not has_hidden})")
-            hidden_families[db_row.family] = has_hidden
+        with message_guardian(guard, f'{hidden_ability}, {hidden_progress}'):
+            guard.eq(db_row.hidden, hidden_ability)
+            guard.inside(hidden_progress, [e for e in HiddenAbilityProgress])
+            if hidden_ability == EMPTY_FIELD or name == "Pangoro":
+                guard.eq(hidden_progress, HiddenAbilityProgress.NO_HIDDEN_ABILITY)
+            else:
+                has_hidden = hidden_progress != HiddenAbilityProgress.UNOBTAINED
+                guard.eq(
+                    hidden_families.get(db_row.family, has_hidden), has_hidden,
+                    "Hidden progress does not match family"
+                )
+                hidden_families[db_row.family] = has_hidden
 
         # Duplicate rows (in live dex and forms) should have matching values
         if row_id in id_map:
@@ -75,9 +80,9 @@ def validate_dex(db: Database, sheet: Sheet):
                 form_value = sheet.get(row, field)
                 base_value = sheet.get(base_row, field)
                 if field == DexFields.BOX:
-                    assert form_value != base_value
-                elif form_value != base_value:
-                    print(f"Mismatched field {field} (Base: {base_value}, Form: {form_value}) for {row_id}: {row}")
+                    guard.uneq(form_value, base_value, "Non-base in Box")
+                else:
+                    guard.eq(form_value, base_value, f'Mismatched field {field}')
         else:
             id_map[row_id] = index
 
@@ -88,16 +93,19 @@ def validate_dex(db: Database, sheet: Sheet):
 
                     # Assert only one family member per ball
                     ball_families.setdefault(family, set())
-                    if ball in ball_families.get(family):
-                        print(f"Duplicate {ball} Ball for {family}")
+                    if name == "Scizor" and ball == "Park":
+                        guard.inside(ball, ball_families.get(family))
+                    else:
+                        guard.nonside(ball, ball_families.get(family), f'Duplicate ball for {family}')
                     ball_families[family].add(ball)
 
                     # Only collecting balls for Pokemon that can pass them down
-                    if not db_row.can_breed() and db_row.species not in INCLUDE_UNBREEDABLE_POKEBALLS:
-                        print(f"{ball} Ball marked for Unbreedable Pokemon {name}")
+                    guard.sniff(db_row.can_breed() or db_row.species in INCLUDE_UNBREEDABLE_POKEBALLS, f"Unbreedable with {ball}")
+
+        guard.pop_message(f'{name} {row_id}')
 
     for ball in BALL_NOTES.keys():
-        assert ball in ball_map
+        guard.inside(ball, ball_map)
 
     out: List[str] = []
     for ball, names in ball_map.items():
@@ -108,20 +116,23 @@ def validate_dex(db: Database, sheet: Sheet):
     to_file(BALLS_OUTFILE, out)
 
 
+@message_guardian(guard)
 def validate_db(db: Database):
     fossil_families: Dict[str, bool] = {}
     for row in db.rows:
+        guard.append_message(row.name)
+
         # Baby Pokemon must be first in evolution
         if row.is_baby():
-            assert row.evolution_type == EvolutionType.FIRST, row.name
+            guard.eq(row.evolution_type, EvolutionType.FIRST, "Baby")
 
         # Fossil status must be consistent for all family members
         fossil = row.is_fossil()
-        if fossil_families.get(row.family, fossil) != fossil:
-            warn(f"{row.name}: Fossil status does not match family")
+        guard.eq(fossil, fossil_families.get(row.family, fossil), f"Fossil mismatch: {row.family}")
         fossil_families[row.family] = fossil
 
 
+@message_guardian(guard)
 def validate_command_out(db: Database):
     db_rows: List[DbRow] = db.rows
     sheet_rows: List[List[str]] = db.sheet.rows
@@ -133,35 +144,38 @@ def validate_command_out(db: Database):
     category_rows: List[List[str]] = from_tsv(CATEGORY_OUTFILE)
 
     # Rows must correspond to each other
-    assert len(ability_rows) == len(db_rows)
-    assert len(type_rows) == len(db_rows)
-    assert len(region_rows) == len(db_rows)
-    assert len(evolution_rows) == len(db_rows)
-    assert len(gender_rows) == len(db_rows)
-    assert len(category_rows) == len(db_rows)
+    guard.len(ability_rows, db_rows, "Abilities")
+    guard.len(type_rows, db_rows, "Types")
+    guard.len(region_rows, db_rows, "Regions")
+    guard.len(evolution_rows, db_rows, "Evolutions")
+    guard.len(gender_rows, db_rows, "Genders")
+    guard.len(category_rows, db_rows, "Categories")
 
-    assert len(sheet_rows) == len(db_rows)
+    guard.len(sheet_rows, db_rows, "Sheet")
 
     for index, row in enumerate(db_rows):
+        sheet_row = sheet_rows[index]
+        guard.append_message(row.name)
+
         # If this fails you need to either:
         #  - Update the respective DB columns with the output file
         #  - Update the input file with new data to match
-        assert ability_rows[index] == [row.ability1, row.ability2, row.hidden]
-        assert type_rows[index] == [row.type1, row.type2]
-        assert region_rows[index] == [row.generation, row.region]
-        assert evolution_rows[index] == [row.has_branch_evo, row.evolution_type, row.family]
-        assert gender_rows[index] == [row.can_breed_field, row.gender_ratio]
-        assert category_rows[index] == [row.baby, row.fossil, row.partner, row.legendary, row.mythical, row.paradox, row.ultra]
+        guard.eq(ability_rows[index], [row.ability1, row.ability2, row.hidden], "Abilities")
+        guard.eq(type_rows[index], [row.type1, row.type2], "Types")
+        guard.eq(region_rows[index], [row.generation, row.region], "Regions")
+        guard.eq(evolution_rows[index], [row.has_branch_evo, row.evolution_type, row.family], "Evolutions")
+        guard.eq(gender_rows[index], [row.can_breed_field, row.gender_ratio], "Genders")
+        guard.eq(category_rows[index], [row.baby, row.fossil, row.partner, row.legendary, row.mythical, row.paradox, row.ultra], "Categories")
 
-        assert row.ability1 != EMPTY_FIELD and all_unique(ability_rows[index], exceptions=[EMPTY_FIELD])
-        assert row.type1 != EMPTY_FIELD and all_unique(type_rows[index])
-        assert row.region in REGIONS
-        sheet_row = sheet_rows[index]
+        guard.uneq(row.ability1, EMPTY_FIELD, "Empty primary ability")
+        guard.uneq(row.type1, EMPTY_FIELD, "Empty primary type")
+        guard.sniff(all_unique(ability_rows[index], exceptions=[EMPTY_FIELD]), f'Non-unique abilities: {ability_rows[index]}')
+        guard.sniff(all_unique(type_rows[index]), f'Non-unique types: {type_rows[index]}')
+        guard.inside(row.region, REGIONS)
 
         def print_mismatch(label: str, sheet_fields: List[DbFields], row_values: List[str]):
             sheet_values = [db.sheet.get(sheet_row, field) for field in sheet_fields]
-            if sheet_values != row_values:
-                warn(f"{label} mismatch for {row.name}: {sheet_values} {row_values}")
+            guard.eq(sheet_values, row_values, f'{label} mismatch')
 
         print_mismatch("Ability", [DbFields.ABILITY1, DbFields.ABILITY2, DbFields.HIDDEN_ABILITY], ability_rows[index])
         print_mismatch("Type", [DbFields.TYPE1, DbFields.TYPE2], type_rows[index])
@@ -170,48 +184,56 @@ def validate_command_out(db: Database):
         print_mismatch("Gender", [DbFields.CAN_BREED, DbFields.GENDER_RATIO], gender_rows[index])
         print_mismatch("Category", [DbFields.IS_BABY, DbFields.IS_FOSSIL, DbFields.IS_PARTNER, DbFields.IS_LEGENDARY, DbFields.IS_MYTHICAL, DbFields.IS_PARADOX, DbFields.IS_ULTRA_BEAST], category_rows[index])
 
+        guard.pop_message(row.name)
 
+
+@message_guardian(guard)
 def validate_doku(doku: Doku):
-    expected_rows = len(doku.rows)
-    actual_rows = len(doku.sheet.rows)
-
     # Accidentally added a bunch of extra rows once by trying to update doku fields from db
     # You will need to manually delete the extra rows at the bottom of the file since correctly
     #   pasting doku output will not reach to overwrite and will fuck up all the stats
-    assert expected_rows == actual_rows, f'{expected_rows} != {actual_rows}'
+    guard.len(doku.rows, doku.sheet.rows, "Doku rows")
 
     for row in doku.sheet.rows:
-        if doku.is_shiny(row):
-            assert doku.is_caught(row)
+        with message_guardian(guard, doku.get_id(row)):
+            if doku.is_shiny(row):
+                guard.sniff(doku.is_caught(row), "Uncaught shiny")
 
 
+@message_guardian(guard)
 def validate_doku_diffs(doku: Doku, diffs: DokuDiffs):
     for row in doku.sheet.rows:
         poke_id = doku.get_id(row)
-        if doku.is_shiny(row):
-            poke_id += "*"
-        assert doku.is_caught(row) == (poke_id in diffs.out_caught), poke_id
+        with message_guardian(guard, poke_id):
+            if doku.is_shiny(row):
+                poke_id += "*"
+            guard.eq(doku.is_caught(row), poke_id in diffs.out_caught, "Caught not in out")
 
     categories: Dict[str, DokuDiff] = {}
     for puzzle in diffs.puzzles:
         for diff in puzzle.diffs:
-            assert diff.category not in categories, diff.message
-            warn_if(diff.reverse in categories, f'Duplicate diff entry: {diff.message}')
-            categories[diff.category] = diff
+            with message_guardian(guard, diff.message):
+                guard.bark.nonside(diff.category, categories, 'Duplicate category')
+                guard.nonside(diff.reverse, categories, 'Duplicate reverse')
+                categories[diff.category] = diff
 
-            assert diff.category != diff.reverse or diff.category == "All / All", diff.message
+                if diff.category != "All / All":
+                    guard.uneq(diff.category, diff.reverse, "Invalid equal categories")
 
     for diff in diffs.stats_diffs:
-        if diff.total == 0:
-            assert diff.remaining == 0, diff.message
-            assert not diffs.seen(diff), diff.message
-        else:
-            assert (diff.remaining == 0) == diffs.seen(diff), diff.message
+        with message_guardian(guard, diff.message):
+            if diff.total == 0:
+                guard.bark.eq(diff.remaining, 0, "Remaining without total")
+                guard.bark.nope(diffs.seen(diff), "Seen without total")
+            else:
+                guard.bark.eq(diff.remaining == 0, diffs.seen(diff), "Seen while remaining")
 
-        out_diff = categories.get(diff.category) or categories.get(diff.reverse)
-        if out_diff:
-            assert out_diff.remaining == 0 and diff.remaining == 0, diff.message
-            assert out_diff.total == diff.total and diff.total > 0, f'{out_diff.total} != {diff.total} | {diff.message}'
+            out_diff = categories.get(diff.category) or categories.get(diff.reverse)
+            if out_diff:
+                with message_guardian(guard, out_diff.message):
+                    guard.bark.sniff(out_diff.remaining == 0 and diff.remaining == 0, "Nonzero remaining")
+                    guard.bark.eq(out_diff.total, diff.total, "Mismatched totals")
+                    guard.bark.positive(diff.total, "Out without total")
 
 
 def run_validation(db: Database, dex: Dex, doku: Doku, diffs: DokuDiffs):
