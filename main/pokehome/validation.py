@@ -224,7 +224,7 @@ def validate_doku_diffs(doku: Doku, diffs: DokuDiffs):
         with message_guardian(guard, diff.message):
             if diff.total == 0:
                 guard.bark.eq(diff.remaining, 0, "Remaining without total")
-                guard.bark.nope(diffs.seen(diff), "Seen without total")
+                guard.bark_if(diffs.seen(diff), "Seen without total")
             else:
                 guard.bark.eq(diff.remaining == 0, diffs.seen(diff), "Seen while remaining")
 

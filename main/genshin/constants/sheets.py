@@ -7,6 +7,8 @@ from main.util.sheets_parse import get_sheet_data
 
 SPREADSHEET_ID = GENSHIN_ID
 
+NUM_TRAVELERS = 6
+
 
 class BuildsFields(str, Enum):
     NAME = "Character"
@@ -48,15 +50,21 @@ ABYSS_RANDOMIZE_CHARACTERS = {
 ACHIEVEMENT_END = "You reached the end of your (achievement) journey ---- so far. Hehe!"
 
 
+# First field is required, others are optional for achievements with multiple levels
+PLAYER_FIELDS = [
+    ["L2", "L1", "L3"],
+    ["M2", "M1", "M3"],
+    ["P2", "P1", "P3"],
+]
+
+
 class AchievementFields(str, Enum):
-    NAME = "Achievement"
+    ACHIEVEMENT = "Achievement"
     DESCRIPTION = "Description"
     NOTES = "Notes"
     CATEGORY = "Category"
     VERSION = "Version"
-    PLAYER_1_MAIN = "L2"
-    PLAYER_2_MAIN = "M2"
-    PLAYER_3_MAIN = "P2"
+    PLAYER_MAIN = PLAYER_FIELDS[0][0],
 
 
 class AchievementSections(str, Enum):

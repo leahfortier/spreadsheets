@@ -4,6 +4,8 @@ from typing import Any, List, Iterable, Callable, Optional, Self
 
 from terminology import in_red, in_yellow, in_white
 
+from util.general import has_prefix
+
 
 class WarnLevel(Enum):
     ASSERT = "d e d",
@@ -81,8 +83,14 @@ class GuardDog:
     def sniff(self, expect_true: bool, message: str = None):
         self._handle(expect_true, message)
 
-    def nope(self, condition: bool, message: str = None):
-        self._handle(not condition, message)
+    def prefix(self, value: str, prefixes: List[str], message: str = None):
+        self._handle(has_prefix(value, prefixes), message, f'{value} has no prefix in {prefixes}')
+
+    def truthy(self, value: Any, message: str = None):
+        self._handle(value, message, f"Unexpected falsy: {value}")
+
+    def falsy(self, value: Any, message: str = None):
+        self._handle(not value, message, f"Unexpected truthy: {value}")
 
     def info_if(self, info_if: bool, message: str = None):
         self.info.sniff(not info_if, message)

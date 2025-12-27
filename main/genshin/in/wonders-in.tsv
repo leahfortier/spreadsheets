@@ -1,4 +1,4 @@
-Tales of Monstrous Madness  Collect the entire "Toki Alley Tales" series.		Yes	Exploration	2.1	5
+Tales of Monstrous Madness	Collect the entire "Toki Alley Tales" series.		Yes	Exploration	2.1	5
 
 
 Zoo Tycoon	Use the Omni-Ubiquity Net item to capture 1 wild animal.		No	Exploration	2.3	5
@@ -79,22 +79,22 @@ Legend in Liyue	Reach Reputation Lv. 8 in Liyue.		No	Exploration	1.1	20
 Illustrious in Inazuma	Reach Reputation Lv. 10 in Inazuma.		Yes	Exploration	2.0	20
 
 
-QUEST CLEAR	Complete 10 Bounties.		No	Exploration	1.1	5
+QUEST CLEAR	Complete 3 Bounties.		No	Exploration	1.1	5
 
 
-QUEST CLEAR	Complete 20 Bounties.		No	Exploration	1.1	10
+QUEST CLEAR	Complete 6 Bounties.		No	Exploration	1.1	10
 
 
-QUEST CLEAR	Complete 30 Bounties.		No	Exploration	1.1	20
+QUEST CLEAR	Complete 9 Bounties.		No	Exploration	1.1	20
 
 
-Hero-in-Training	Complete 10 Requests.		No	Exploration	1.1	5
+Hero-in-Training	Complete 3 Requests.		No	Exploration	1.1	5
 
 
-Hero-in-Training	Complete 20 Requests.		No	Exploration	1.1	10
+Hero-in-Training	Complete 6 Requests.		No	Exploration	1.1	10
 
 
-Hero-in-Training	Complete 30 Requests.		No	Exploration	1.1	20
+Hero-in-Training	Complete 9 Requests.		No	Exploration	1.1	20
 
 
 QUEST FAILED	Lost track of a Bounty target.	Run out of time during a Bounty.	Yes	Exploration	1.1	5
@@ -1264,7 +1264,7 @@ Retrieve the Scattered, Escaping Colors	Return the Monetoo back to where they be
 Maybe This is a Good Place to Camp?	Enter a rest area through glowing ruin pillars for the second time...		Yes	Exploration	5.0	5
 
 
-Six Crowns and Overnight Story	Reach Reputation Lv. 4 with all the tribes of Natlan.		No	Reputation	5.0	20
+Six Crowns and Overnight Story	Reach Reputation Lv. 4 with all the tribes of Natlan.		No	Exploration	5.0	20
 
 
 Only the Night Breeze Can Be Heard	Defeat 4 opponents using Nightsoul-aligned attacks within 5s.		Yes	Exploration	5.0	5
@@ -1438,7 +1438,7 @@ No Air Force	Catch and defeat the Capybara King.		Yes	Exploration	5.8	5
 Golden Rays Over A Leisurely Town	Best "Easy Come" and "Easy Go" in the Easybreeze Speed Champions Tournament.		Yes	Exploration	5.8	5
 
 
-Traces of Chroma	Take part in Chromaflair Studio's opening ceremony.	Complete Traces of Chroma	No	Quest	5.8	5
+Traces of Chroma	Take part in Chromaflair Studio's opening ceremony.	Complete Traces of Chroma	Yes	Quest	5.8	5
 
 
 Paititi In Your Dreams	Discover the hidden treasure of Tete Isle in your dreams.	Complete Dreamy Paititi	Yes	Quest	5.8	5
@@ -1465,7 +1465,7 @@ Even Flying Gets a Ten!	Dive once from a diving platform at Huha Hill.	Dive from
 The Inheritor of Ayar	Win the Ayar Heroes' Cup.	Complete all 3 challenges in Ayar Heroes' Cup	Yes	Exploration	5.8	5
 
 
-There Was Once a Way Back Home	Experience the Dance-Off Stage on Tete Isle once.		Yes	Exploration	5.8	5
+There Was Once a Way Back Home	Experience the Dance-Off Stage on Tete Isle once.	Complete The Surprise That Awaits Us All!	Yes	Exploration	5.8	5
 
 
 "Until the Day That the Fires Turn Me Into Ashes"	Witness Enjou embark on his unknown journey.	Complete The Last Survivor of Tenochtzitoc	Yes	Quest	5.8	5
@@ -1475,6 +1475,72 @@ There Was Once a Way Back Home	Experience the Dance-Off Stage on Tete Isle once.
 
 
 Undimming Lights	Join the opening ceremony with your friends.	Complete The Surprise That Awaits Us All!	Yes	Quest	5.8	5
+
+
+Colors Out of Snezhnaya	Color the Nothing Passage.	Complete Colors Out of Space	Yes	Quest	Luna I	5
+
+
+When the Aurora Shines	Make radiant ribbons appear in the sky over Blue Amber Lake.	Complete The Tale-Telling Heart	Yes	Quest	Luna I	5
+
+
+Electric Dreams	Help Fanngel complete the experiment.	Complete The Power of Research	Yes	Quest	Luna I	5
+
+
+Silent Spring	When the murmurs of life fade from the world's canvas...	Complete Drifting Toward a Promised Sky	Yes	Quest	Luna I	5
+
+
+Wasteland Engineering	Become friends with Bobik.	Complete Team Rigor, or Team Intuition?	Yes	Quest	Luna I	5
+
+
+Dark Secret of The Hollowhands	Discover the true identity of the secret organization.	Complete The Stress of Changing Careers	Yes	Quest	Luna I	5
+
+
+After Man	What kind of world will we leave behind?	Complete Friends of Moleyvalley	Yes	Quest	Luna I	5
+
+
+Tempus Fugit, Pecunia Fugit	It's hard to change the instincts of Weasel Thieves...	Complete Priorities First	Yes	Quest	Luna I	5
+
+
+High Noon's Verdict	Help safeguard the peace of Nasha Town.	Complete the Hidden Exploration Objective The Flagship Bounty Board	Yes	Exploration	Luna I	5
+
+
+Pro aris et focis	Though the light of life has faded, the radiance of his unyielding will endures.	Complete The Bell of Mourning Echoes	Yes	Quest	Luna I	5
+
+
+Fiddler's Green	When all returns to peace...	Complete Whisper Beneath the Waves	Yes	Quest	Luna I	5
+
+
+The Silver Key Unlocked	Obtain the blessing of the new moon.	Arrive in Nod-Krai for the first time.	Yes	Exploration	Luna I	5
+
+
+May the Force Be With You	Strengthen the power of your blessing.	Enter the "empowered state" when infused by kuuvahki for the first time.	Yes	Exploration	Luna I	5
+
+
+Up, Up, and Away!	Perform a special jump.	Jump using a Unipolar Field.	Yes	Exploration	Luna I	5
+
+
+The Tide Turns	It's time for the tides to retreat...	Carry a Kuuvahki Relay Mechanism through a Unipolar Barrier or Unipolar Field.	Yes	Exploration	Luna I	5
+
+
+The Moon Is Bright Tonight	Complete "Selenic Chronicles: Part I."	Complete May the Moonlight Connect Us	No	Quest	Luna I	5
+
+
+Follow the Silver Path	Speed away on a trail of moonlight.	Ride a Moonlane for the first time.	Yes	Exploration	Luna I	5
+
+
+Moonshadow Walker	Roam like a kuuhenki.	Transform into a kuuhenki for the first time.	Yes	Exploration	Luna I	5
+
+
+Magnum Opus	Obtain a Lunar Arcanum.		No		Luna I	5
+
+
+Magnum Opus	Hold 12 different Lunar Arcana at once.		No		Luna I	10
+
+
+The End of the Innocence	The world isn't as sweet as we imagined...	Complete A Small Venture, Minor Commission, or The Spurious Cannot Be Made Genuine	Yes	Quest	Luna II	5
+
+
+Golden Traveler, Silver Moon	Complete "Selenic Chronicles: Part II."		No	Quest	Luna II	5
 
 
 Juggernaut	Crush all of a Geo Hypostasis' Rock Pillars of Revival before it can be revived.		Yes	Boss	1.0	10
@@ -1639,7 +1705,7 @@ Basically Harmless	Defeat a Specter that has not accumulated any Fury.		Yes	Expl
 Overflowing Light	Destroy 2 Oozing Concretions with 1 Blooming Light during a battle against the Ruin Serpent.		Yes	Boss	2.6	5
 
 
-"Han Always Shoots First..."	...So don't bring a knife to a gunfight.	Attack an Eremite Sword-Dancer with a projectile or lunging attack while he is taunting the player.	Yes	Exploration	3.0	5
+"Han Always Shoots First..."	...So don't bring a knife to a gunfight.	Attack an Eremite Sword-Dancer with a projectile or plunging attack while he is taunting the player.	Yes	Exploration	3.0	5
 
 
 Opportunistic Gain	Watch the infighting between the Fungi.	Allow a Floating Hydro Fungus to trap a Fungus of a different type inside its bubble.	Yes	Exploration	3.0	5
@@ -1742,6 +1808,24 @@ Emergency Brakes, Teteocan Style	Use a Tatankasaurus or a Collective of Plenty c
 
 
 Frozen Flow	Use consecutive Cryo attacks to impede the accumulation of Flow Momentum.		Yes	Boss	5.6	5
+
+
+Arsenal Duck Hunt	Destroy Knuckle Duckle's Ward by downing all of its Stamping Devices.		Yes	Boss	Luna I	5
+
+
+Radiant Cocoon	Heal your characters and remove the Radiant Cocoon.	Remove a Radiant Cocoon of a Radiant Beast.	Yes	Exploration	Luna I	5
+
+
+The Silent Command	Interrupt the enemy's progress.	Interrupt a Landcruiser's combo attack using Kuuvahki.	Yes	Exploration	Luna I	5
+
+
+"Mine Now, Friend!"	...As expected, your own weapon feels most natural.	Steal an Enemy weapon in Nod-Krai by using Kuuvahki while in an empowered state.	Yes	Exploration	Luna I	5
+
+
+Stranded Constellation	Defeat the Frostnight Herra without it changing its Elemental Type.		Yes	Boss	Luna II	5
+
+
+Drzislav's Moving Castle	Defeat a Super-Heavy Landrover: Mechanized Fortress that has overheated and become immobilized at least 2 times.		Yes	Boss	Luna III	5
 
 
 The End of the Beginning	Complete the Mondstadt Archon Quests.	Complete Ending Note.	Yes	Quest	1.0	20
@@ -1858,7 +1942,7 @@ Scholarly Pretensions	Complete "The Lost Relic" and "A Little Raid."		Yes	Commis
 Poet Vs. Paycheck	Complete So-called Work and receive Linling's poetry anthology.	Complete So-Called Work.	Yes	Commission	1.0	5
 
 
-All's Well That Ends Well	Complete the quest "For Old Time's Sake."		Yes	Commission	1.1	5
+All's Well That Ends Well	Complete the quest "For Old Time's Sake."		Yes	Commission	1.0	5
 
 
 This Novel Is Amazing!	Steal a peek at Chang the Ninth's draft manuscript.	Take a peek at the book in This Novel Is Amazing!.	No	Commission	1.0	5
@@ -1903,10 +1987,7 @@ Hello...! Anyone in here...?	Discover a secret passageway in Ritou.	Start The Ri
 Editorial Opinion	Help Shigeru and Junkichi return to the right artist path.	Complete This Novel... Seems Familiar? and This Novel Seems... Problematic?.	Yes	Commission	2.2	5
 
 
-You Should Start A Doushin Dojo	Help Asakura train 5 times.	Complete World Quest Battle of Revenge.
-Complete An Art to Be Honed and/or Ceaseless Training 5 times.
-
-Yes	Commission	2.0	5
+You Should Start A Doushin Dojo	Help Asakura train 5 times.	Complete World Quest Battle of Revenge.Complete An Art to Be Honed and/or Ceaseless Training 5 times.  Yes	Commission	2.0	5
 
 
 Guess Who?	Find out who Zhenyu really is.	Earned during Yae Publishing House's Invitation.	Yes	Quest	2.0	5
@@ -2426,3 +2507,75 @@ Incomprehensible Fury	Halt the rekindling and return of the "Mirror of the Dawni
 
 
 The Journey Home	Complete "The Journey Home."	Complete Searing	Yes	Quest	5.8	10
+
+
+Any Discounts for Encounters in a Strange Land?	It's nice to run into a familiar face.	Earned during Where the Moon Rises or Rest Beyond Reach	Yes	Quest	Luna I	5
+
+
+Maidens of Sonnet and Song	Those creatures born among flowers are blessings from the moon.	Earned during Where the Moon Rises	Yes	Quest	Luna I	5
+
+
+The Maiden Beneath the Moonlight	Meet The Damselette at Silvermoon Hall...	Earned during Reunion Beneath the Moonlight	Yes	Quest	Luna I	5
+
+
+A Dance of Snowy Tides and Hoarfrost Groves	Complete "A Dance of Snowy Tides and Hoarfrost Groves."	Complete In the Shadows of Night	Yes	Quest	Luna I	10
+
+
+Channels Are King	Different places have different ways of doing things...	Earned during Fulminations and Undercurrents	Yes	Quest	Luna I	5
+
+
+Every Lantern Casts Its Shadow	Light doesn't reveal good or evil — only the truth.	Earned during One There Was, Who Hunted the Moon	Yes	Quest	Luna I	5
+
+
+Sinner's Descent	In the end, "he" regained his true, complete form...	Complete The Ashen-White Order Burns	Yes	Quest	Luna I	5
+
+
+Elegy of Dust and Lamplight	Complete "Elegy of Dust and Lamplight."	Complete Rest Beyond Reach	Yes	Quest	Luna I	10
+
+
+Fire Suppression	The way to receive uninvited guests.	Earned during Special Operation	Yes	Quest	Luna II	5
+
+
+Only Embers Remain	The final glimmer of the waning moon.	Earned during Everlasting As the Moon	Yes	Quest	Luna II	5
+
+
+A Nation That Doesn't Exist	Complete "A Nation That Doesn't Exist."	Complete Everlasting As the Moon	Yes	Quest	Luna II	10
+
+
+Moonless Night	It was an age when sinners had yet to commit grave sins...	Complete All Is Foretold	Yes	Quest	Luna II	5
+
+
+Game of Blood and Sand	Naught but a handful of dust and sand.	Complete Dance of Death: Serpent and Scorpion	Yes	Quest	Luna II	5
+
+
+Before the Moons Fell	Defeat the Rächer of Solnari, one of the Five Sinners.	Earned during Echoes of Fate	Yes	Quest	Luna II	5
+
+
+An Elegy for Faded Moonlight	Complete "An Elegy for Faded Moonlight."	Complete Echoes of Fate	Yes	Quest	Luna II	10
+
+
+When the Stone is Lifted	Who knows, you might find something unexpected there.	Earned during In the Shifting Light of the Moon.	Yes	Quest	Luna III	5
+
+
+Like an Illusory Dream	Witness the history that once unfolded here.	Complete In the Shifting Light of the Moon	Yes	Quest	Luna III	5
+
+
+Converging Paths	Somewhere in time, you once crossed paths...	Earned during Ripples That Will Never Reach.	Yes	Quest	Luna III	5
+
+
+A Nocturne of the Far North	Complete "A Nocturne of the Far North."	Complete Ripples That Will Never Reach.	Yes	Quest	Luna III	10
+
+
+An Important Day	The whole point of a holiday is to kick back and have fun.	Earned during The Night the Moon Returns Home.	Yes	Quest	Luna III	5
+
+
+Moon-Prayer Night	Enjoy the last night in the sublunary sphere.	Earned during The Night the Moon Returns Home.	Yes	Quest	Luna III	5
+
+
+Between the Eternal and the Ephemeral	The moonlight will always find a way to connect us, night or day.	Complete The Night the Moon Returns Home.	Yes	Quest	Luna III	5
+
+
+Melting Moonlight in the Morning Mist	Complete "Melting Moonlight in the Morning Mist."	Complete Return to the Moon.	Yes	Quest	Luna III	10
+
+
+Stories Along the Way	Witness an anecdote once.		Yes	Quest	Luna I	5

@@ -15,21 +15,21 @@ def title(s: str) -> str:
     return s
 
 
-def has_prefix(s: str, prefixes: List[str]) -> bool:
+def has_prefix(s: str, *prefixes: str) -> bool:
     for prefix in prefixes:
         if s.startswith(prefix):
             return True
     return False
 
 
-def remove_prefix(s: str, prefixes: List[str]) -> str:
+def remove_prefix(s: str, *prefixes: str) -> str:
     for prefix in prefixes:
         if s.startswith(prefix):
             s = s[len(prefix):]
     return s
 
 
-def remove_suffix(s: str, suffixes: List[str]) -> str:
+def remove_suffix(s: str, *suffixes: str) -> str:
     for suffix in suffixes:
         if s.endswith(suffix):
             s = s[:-(len(suffix))]
@@ -53,7 +53,7 @@ def all_unique(row: List[str], exceptions: List[str] = None) -> bool:
 
 
 def generic_name(styled_name: str) -> str:
-    name = styled_name.lower().replace("\"", "")
+    name = styled_name.lower().replace("\"", "").strip()
     return name
 
 

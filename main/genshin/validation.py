@@ -1,21 +1,30 @@
 from typing import Set, List, Dict, Self
 
+from genshin.achievements import AchievementsSheet
 from genshin.characters import CharacterSheet, CharacterRow
-from genshin.constants.sheets import get_sheet, Tab, BuildsFields, BUILD_TABS, WeaponMethod, BUILD_SORT_FIELDS
+from genshin.constants.sheets import get_sheet, Tab, BuildsFields, BUILD_TABS, WeaponMethod, BUILD_SORT_FIELDS, \
+    AchievementSections
 from util.data import Sheet
-from util.warn import GuardDog, message_guardian, WarnLevel
+from util.warn import GuardDog, message_guardian
 
 guard: GuardDog = GuardDog()
 
 
+@message_guardian(guard)
 def get_values(tab_name: Tab, field_name: str) -> Set[str]:
+    guard.append_message(tab_name + " " + field_name)
     values = set()
     sheet: Sheet = get_sheet(tab_name)
     for row in sheet.rows:
-        values.add(sheet.get(row, field_name))
+        value = sheet.get(row, field_name)
+        # If this fails with multiple values, there are likely hidden empty rows after the values
+        # that need to be deleted instead of hidden
+        guard.bark.truthy(value)
+        values.add(value)
     return values
 
 
+@message_guardian(guard)
 def validate_character_data(characters: CharacterSheet):
     trounces = get_values(Tab.TROUNCES, "Drop")
     boss_drops = get_values(Tab.BOSS_DROPS, "Material")
@@ -100,31 +109,31 @@ class Weapon:
 @message_guardian(guard)
 def validate_weapon(sheet: Sheet, row: List[str], character: CharacterRow, weapon_map: Dict[str, Weapon]):
     weapon = Weapon(sheet, row, character)
+    guard.append_message(f'{character.name} {weapon.name}')
+
     level = int(sheet.get(row, BuildsFields.WEAPON_LEVEL))
     rank = int(sheet.get(row, BuildsFields.WEAPON_RANK))
+    guard.range(level, 1, 90, "Level")
+    guard.range(rank, 1, 5, "Rank")
 
-    guard.append_message(f'{character.name} {weapon.name} {level} {rank}')
-
-    guard.range(level, 1, 90)
-    guard.range(rank, 1, 5)
-
-    guard.range(weapon.rarity, 1, 5)
-    guard.uneq(weapon.rarity, 2)
+    guard.range(weapon.rarity, 1, 5, "Rarity")
+    guard.uneq(weapon.rarity, 2, "Rarity")
     if weapon.rarity == 1:
-        guard.eq(weapon.method, WeaponMethod.STANDARD)
-        guard.eq(level, 1)
-        guard.eq(rank, 1)
+        with message_guardian(guard, "1★ Requirements"):
+            guard.eq(weapon.method, WeaponMethod.STANDARD, "Method")
+            guard.eq(level, 1, "Level")
+            guard.eq(rank, 1, "Rank")
     else:
         guard.inside(weapon.method, WeaponMethod)
         if weapon.method == WeaponMethod.SIGNATURE:
-            guard.eq(weapon.rarity, 5)
+            guard.eq(weapon.rarity, 5, "Signature Rarity")
         if weapon.method in [
             WeaponMethod.LIMITED_BANNER, WeaponMethod.BATTLE_PASS, WeaponMethod.FISH,
             WeaponMethod.EVENT, WeaponMethod.FORGE
         ]:
-            guard.eq(weapon.rarity, 4)
+            guard.eq(weapon.rarity, 4, "4★ Method")
         if weapon.method == WeaponMethod.BATTLE_PASS:
-            guard.eq(weapon.stat, "CRIT Rate", f'BP {weapon.stat}')
+            guard.eq(weapon.stat, "CRIT Rate", f'BP Stat')
         if weapon.method in [WeaponMethod.FISH, WeaponMethod.EVENT]:
             guard.eq(rank, 5, f'{weapon.method} Rank')
 
@@ -153,7 +162,6 @@ def validate_builds(characters: CharacterSheet):
 
         # Sort columns have a unique value for every index
         check_sort = sheet.has_field(BuildsFields.CHAR_SORT)
-        sort_guard = GuardDog(tab.value + " Sort", WarnLevel.INFO)
         sort_map: Dict[BuildsFields, List[bool]] = {}
         if check_sort:
             for sort_field in BUILD_SORT_FIELDS:
@@ -163,32 +171,71 @@ def validate_builds(characters: CharacterSheet):
             name = sheet.get(row, BuildsFields.NAME)
 
             if check_sort:
-                sort_guard.append_message(name or "--")
                 for sort_field in BUILD_SORT_FIELDS:
-                    sort_val = int(sheet.get(row, sort_field)) - 1
-                    sort_guard.sniff(not sort_map[sort_field][sort_val], f'{sort_field} duplicate index {sort_val + 1}')
-                    sort_map[sort_field][sort_val] = True
-
-                sort_guard.pop_message(name or "--")
+                    with message_guardian(guard, f'{name or "--"}, {sort_field}'):
+                        sort_val = int(sheet.get(row, sort_field)) - 1
+                        guard.info_if(sort_map[sort_field][sort_val], f'duplicate index {sort_val + 1}')
+                        sort_map[sort_field][sort_val] = True
                 if name == "":
                     continue
 
             character = characters.get(name)
-            guard.append_message(name)
-
-            guard.range(int(sheet.get(row, BuildsFields.CHAR_LEVEL)), 20, 90)
-            validate_talents(sheet, row, character)
-            validate_weapon(sheet, row, character, weapon_map)
-
-            guard.pop_message(name)
+            with message_guardian(guard, name):
+                guard.range(int(sheet.get(row, BuildsFields.CHAR_LEVEL)), 20, 90, "Level")
+                validate_talents(sheet, row, character)
+                validate_weapon(sheet, row, character, weapon_map)
 
         if check_sort:
             for sort_field in BUILD_SORT_FIELDS:
-                missing = [index+1 for index, val in enumerate(sort_map[sort_field]) if not val]
-                sort_guard.eq(missing, [], f"{sort_field}: Missing sort values")
-                sort_guard.eq(sum(sort_map[sort_field]), len(sheet.rows), f"{sort_field}: Sort field total")
+                with message_guardian(guard, sort_field.name):
+                    missing = [index + 1 for index, val in enumerate(sort_map[sort_field]) if not val]
+                    guard.info.eq(missing, [], f"Missing sort values")
+                    guard.info.eq(sum(sort_map[sort_field]), len(sheet.rows), f"Sort field total")
 
         guard.pop_message(tab.value)
+
+
+@message_guardian(guard)
+def validate_recipes(characters: CharacterSheet):
+    unseen: Set[str] = set()
+    for character in characters.rows:
+        if character.name.endswith(" Traveler") or character.name == "Raiden Shogun":
+            continue
+        unseen.add(character.name)
+
+    sheet: Sheet = get_sheet(Tab.RECIPES)
+    for row in sheet.rows:
+        value = sheet.get(row, "Character")
+        if value:
+            guard.inside(value, characters.character_map, "Unknown character")
+            guard.inside(value, unseen, "Duplicate character")
+            unseen.remove(value)
+
+    guard.empty(unseen, "Missing character recipes")
+
+
+@message_guardian(guard)
+def validate_achievements():
+    sheet = AchievementsSheet()
+
+    index = 0
+    for category in sheet.wonder_categories:
+        guard.greater(index, category.start_index)
+        guard.greater(category.start_index, category.end_index)
+        index = category.end_index
+
+    wonder_keys: Set[str] = set([category.key for category in sheet.wonder_categories])
+    for category in sheet.jump_map.values():
+        guard.bark.inside(category, wonder_keys, "Unknown jump category")
+
+    total_achievements = len(sheet.map)
+    total_category_achievements = sum([len(category.rows) for category in sheet.categories.values()])
+    guard.bark.eq(total_achievements, total_category_achievements, "Totals")
+
+    wonder = sheet.category(AchievementSections.WONDERS)
+    total_wonder = len(wonder.rows)
+    total_category_wonder = sum([len(category.rows) for category in sheet.wonder_categories])
+    guard.bark.eq(total_wonder, total_category_wonder, "Wonder Totals")
 
 
 def validate():
@@ -196,4 +243,7 @@ def validate():
 
     validate_character_data(characters)
     validate_builds(characters)
+    validate_recipes(characters)
+
+    validate_achievements()
 

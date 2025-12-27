@@ -4,7 +4,7 @@ from main.genshin.achievements import update_achievements
 
 
 def main():
-    # update_achievements()
+    update_achievements()
     validate()
 
     # randomize_abyss()
