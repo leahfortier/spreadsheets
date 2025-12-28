@@ -1,4 +1,5 @@
 from typing import Dict, List, Set
+import re
 
 from main.genshin.constants.io import WONDERS_INFILE, VERSIONS_OUTFILE, NAMECARD_INFILE, \
     MEMORIES_INFILE
@@ -7,7 +8,8 @@ from main.genshin.constants.sheets import AchievementFields, ACHIEVEMENT_END, \
 from main.util.data import Sheet
 from main.util.file_io import from_tsv, to_tsv
 from main.util.general import generic_name, remove_prefix
-from util.warn import GuardDog
+from util.warn import GuardDog, message_guardian
+
 
 guard = GuardDog()
 
@@ -24,11 +26,70 @@ class WikiRow:
         self.key = generic_name(self.name)
 
 
+class MultiWikiRow:
+    MULTI_ROW_DESCRIPTION_PATTERN = "(.*) ([0-9]+(?:[,0-9]*)) (.*)"
+
+    def __init__(self, wiki_row: WikiRow):
+        self.combined = [wiki_row]
+        self.count = 1
+
+        self.name = wiki_row.name
+        self.version = wiki_row.version
+        self.key = wiki_row.key
+
+    def peek(self, next_row: WikiRow) -> bool:
+        return next_row.key == self.key
+
+    def add(self, next_row: WikiRow):
+        self.combined.append(next_row)
+        self.count += 1
+
+    @message_guardian(guard)
+    def description(self) -> str:
+        base_description = self.combined[0].description
+        if self.count == 1:
+            return base_description
+
+        if self.name == "Magnum Opus":
+            return " / ".join([row.description for row in self.combined])
+        elif all([row.description == base_description for row in self.combined[1:]]):
+            return base_description
+
+        befores = []
+        numbers = []
+        afters = []
+        for row in self.combined:
+            # One of the few instances where adding message inside a loop is intended without removing it
+            guard.append_message(row.description)
+            match = re.fullmatch(self.MULTI_ROW_DESCRIPTION_PATTERN, row.description)
+            guard.truthy(match, "No pattern match")
+
+            before, number, after = match.groups()
+            befores.append(before)
+            numbers.append(number)
+            afters.append(after)
+
+        base_before = befores[-1]
+        base_after = afters[-1]
+        for before, number, after in zip():
+            guard.eq(base_before, before)
+            if base_after != after:
+                guard.eq(number, 1)
+                guard.close_enough(base_after, after, "s")
+            guard.nonside(number, numbers)
+            numbers.append(number)
+
+        return f'{base_before} {"/".join(numbers)} {base_after}'
+
+
 class AchievementsWiki:
     def __init__(self, in_file: str, category: AchievementSections, version: str = ""):
         wiki_list = from_tsv(in_file)
         self.version_map: Dict[str, str] = {}
         self.rows: List[WikiRow] = []
+        self.multi_rows: List[MultiWikiRow] = []
+
+        multi_row = None
         for row in wiki_list:
             if not row:
                 continue
@@ -40,6 +101,11 @@ class AchievementsWiki:
                 row.insert(-2, AchievementCategories.EXPLORATION)
 
             wiki_row = WikiRow(row)
+            if multi_row and multi_row.peek(wiki_row):
+                multi_row.add(wiki_row)
+            else:
+                multi_row = MultiWikiRow(wiki_row)
+                self.multi_rows.append(multi_row)
             self.rows.append(wiki_row)
 
             name, version = wiki_row.name, wiki_row.version
@@ -51,6 +117,7 @@ class Achievement:
     def __init__(self, sheet: Sheet, row: List[str], category: str, index: int):
         self.name = sheet.get(row, AchievementFields.ACHIEVEMENT)
         self.version = float(sheet.get(row, AchievementFields.VERSION))
+        self.description = sheet.get(row, AchievementFields.DESCRIPTION)
 
         self.category = category
         self.sheet_index = index
@@ -93,6 +160,7 @@ class AchievementsSheet:
         self.map: Dict[str, Achievement] = {}
         self.categories: Dict[str, Category] = {}
         self.wonder_categories: List[Category] = []
+        self.wonder: Category
 
         # Index to category
         self.jump_map: Dict[int, str] = {}
@@ -101,21 +169,15 @@ class AchievementsSheet:
         self._read_sheet()
         self._set_categories()
 
-    def has(self, name: str) -> bool:
-        return generic_name(name) in self.map
-
     def get(self, name: str) -> Achievement:
         return self.map.get(generic_name(name))
 
-    def category(self, name: str) -> Category:
-        return self.categories[name]
-
-    def wonder_category(self, name: str) -> Category:
+    def get_wonder_category(self, name: str) -> Category:
         for category in self.wonder_categories:
             if name in [category.name, category.key]:
                 return category
 
-    def get_wonder(self, index: int) -> Category:
+    def get_wonder_category_from_index(self, index: int) -> Category:
         for category in self.wonder_categories:
             if category.start_index <= index < category.end_index:
                 return category
@@ -124,9 +186,9 @@ class AchievementsSheet:
         return self.get(name).sheet_index
 
     def _set_categories(self):
-        wonder = self.category(AchievementSections.WONDERS)
+        self.wonder = self.categories[AchievementSections.WONDERS]
         for category in self.categories.values():
-            if category == wonder:
+            if category == self.wonder:
                 continue
 
             for index in range(category.start_index, category.end_index):
@@ -143,10 +205,10 @@ class AchievementsSheet:
             category.key: category.start_index
             for category in self.wonder_categories
         }
-        index = wonder.start_index
+        index = self.wonder.start_index
         current_category: Category = None
         seen: Set[str] = set()
-        while index < wonder.end_index:
+        while index < self.wonder.end_index:
             if index in self.jump_map:
                 jump_category = self.jump_map[index]
                 guard.kill.inside(current_category.key, wonder_index_map, f"Invalid wonder category")
@@ -157,7 +219,7 @@ class AchievementsSheet:
             elif index in self.skip_indices:
                 index += 1
             else:
-                current_category = self.get_wonder(index)
+                current_category = self.get_wonder_category_from_index(index)
                 assert current_category, str(index)
 
                 # Check if we've already started this category and if we're already past it
@@ -174,7 +236,7 @@ class AchievementsSheet:
                 seen.add(achievement.key)
 
                 current_category.add(achievement)
-                wonder.add(achievement)
+                self.wonder.add(achievement)
 
                 index += 1
 
@@ -234,53 +296,14 @@ def add_version_column(sheet: AchievementsSheet, wiki: AchievementsWiki):
     to_tsv(VERSIONS_OUTFILE, out)
 
 
-def new_achievements(sheet: AchievementsSheet, wiki: AchievementsWiki):
-    for row in wiki.rows:
-        if not sheet.has(row.name):
-            print("Missing:", row.version, row.name)
+class AchievementsHandler:
+    def __init__(self):
+        self.sheet = AchievementsSheet()
 
+        self.wonders = AchievementsWiki(WONDERS_INFILE, AchievementSections.WONDERS)
+        self.memories = AchievementsWiki(MEMORIES_INFILE, AchievementSections.MEMORIES)
+        self.namecard = AchievementsWiki(NAMECARD_INFILE, AchievementSections.NAMECARD, version="4.2")
 
-def achievement_order(sheet: AchievementsSheet, wiki: AchievementsWiki):
-    wonder = sheet.categories.get(AchievementSections.WONDERS)
-    wonder_rows: List[Achievement] = wonder.rows.copy()
-
-    seen = set()
-
-    disagrees = [
-        ("sky high", 1),
-        ("the final fonta sea", 3)
-    ]
-
-    for key, shift in disagrees:
-        achievement = sheet.get(key)
-        index = achievement.category_index
-
-        guard.eq(achievement.category, AchievementSections.WONDERS, "Disagree category")
-        guard.eq(wonder_rows[index], achievement, "Disagree index")
-
-        wonder_rows.insert(index + shift, wonder_rows.pop(index))
-
-    sheet_index = 0
-    for wiki_row in wiki.rows:
-        wiki_name = wiki_row.key
-        if wiki_name in seen:
-            continue
-        seen.add(wiki_name)
-
-        achievement = wonder_rows[sheet_index]
-        guard.info.eq(wiki_name, achievement.key, "Order")
-        sheet_index += 1
-
-
-def update_achievements():
-    sheet = AchievementsSheet()
-    wonders = AchievementsWiki(WONDERS_INFILE, AchievementSections.WONDERS)
-    memories = AchievementsWiki(MEMORIES_INFILE, AchievementSections.MEMORIES)
-    namecard = AchievementsWiki(NAMECARD_INFILE, AchievementSections.NAMECARD, version="4.2")
-
-    achievement_order(sheet, wonders)
-
-    new_achievements(sheet, wonders)
-    new_achievements(sheet, memories)
-    new_achievements(sheet, namecard)
+    def get_wikis(self) -> List[AchievementsWiki]:
+        return [self.wonders, self.memories, self.namecard]
 

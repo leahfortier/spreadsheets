@@ -1,11 +1,14 @@
 from genshin.abyss import randomize_abyss
+from genshin.achievements import AchievementsHandler
+from genshin.characters import CharacterSheet
 from genshin.validation import validate
-from main.genshin.achievements import update_achievements
 
 
 def main():
-    update_achievements()
-    validate()
+    characters = CharacterSheet()
+    achievements = AchievementsHandler()
+
+    validate(characters, achievements)
 
     # randomize_abyss()
 

@@ -7,6 +7,9 @@ from main.util.data import Sheet
 from main.util.file_io import to_tsv
 from main.util.general import remove_suffix, has_prefix, remove_prefix
 from util.sheets_formulas import image
+from util.warn import GuardDog
+
+guard = GuardDog()
 
 
 class DbRow:
@@ -72,12 +75,12 @@ class DbRow:
         if name_form:
             name_form = f"({name_form})"
         if digimon_form:
-            assert has_prefix(digimon_form, DIGIMON)
+            guard.prefix(digimon_form, DIGIMON)
             # Ex: This would be the "X" of "Mega X"
-            digimon_variant = remove_prefix(digimon_form, DIGIMON).strip()
+            digimon_variant = remove_prefix(digimon_form, *DIGIMON).strip()
             assert not (name_form and digimon_variant)  # Can add support for this if it comes up
             if digimon_variant:
-                digimon_form = remove_suffix(digimon_form, [" " + digimon_variant])
+                digimon_form = remove_suffix(digimon_form, " " + digimon_variant)
                 name_form = digimon_variant
 
         if exclude_digimon:
@@ -91,7 +94,7 @@ class DbRow:
     def get_image_id(self, image_form_id: str = "") -> str:
         form_name = remove_suffix(
             self.form,
-            [
+            *[
                 " Form", " Sea", " Flower",
                 " Style", " Mask", " Mode",
                 " Face"

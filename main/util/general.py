@@ -52,9 +52,11 @@ def all_unique(row: List[str], exceptions: List[str] = None) -> bool:
     return True
 
 
-def generic_name(styled_name: str) -> str:
-    name = styled_name.lower().replace("\"", "").strip()
-    return name
+def generic_name(styled_name: str, replace_chars="\"") -> str:
+    name = styled_name.lower()
+    for char in replace_chars:
+        name = name.replace(char, "")
+    return name.strip()
 
 
 def to_str(field: str | Enum) -> str:

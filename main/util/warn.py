@@ -4,7 +4,7 @@ from typing import Any, List, Iterable, Callable, Optional, Self
 
 from terminology import in_red, in_yellow, in_white
 
-from util.general import has_prefix
+from util.general import has_prefix, generic_name
 
 
 class WarnLevel(Enum):
@@ -73,67 +73,74 @@ class GuardDog:
             return f'{base_message}: {remaining}'
         return base_message
 
-    def _handle(self, expect_true: bool, *messages: str):
+    def _handle(self, expect_true: bool, *messages: str) -> bool:
         if expect_true:
-            return
+            return True
 
         message = self._message(*messages)
         warn(message, self.level)
+        return False
 
-    def sniff(self, expect_true: bool, message: str = None):
-        self._handle(expect_true, message)
+    def sniff(self, expect_true: bool, message: str = None) -> bool:
+        return self._handle(expect_true, message)
 
-    def prefix(self, value: str, prefixes: List[str], message: str = None):
-        self._handle(has_prefix(value, prefixes), message, f'{value} has no prefix in {prefixes}')
+    def prefix(self, value: str, prefixes: List[str], message: str = None) -> bool:
+        return self._handle(has_prefix(value, *prefixes), message, f'{value} has no prefix in {prefixes}')
 
-    def truthy(self, value: Any, message: str = None):
-        self._handle(value, message, f"Unexpected falsy: {value}")
+    def truthy(self, value: Any, message: str = None) -> bool:
+        return self._handle(value, message, f"Unexpected falsy: {value}")
 
-    def falsy(self, value: Any, message: str = None):
-        self._handle(not value, message, f"Unexpected truthy: {value}")
+    def falsy(self, value: Any, message: str = None) -> bool:
+        return self._handle(not value, message, f"Unexpected truthy: {value}")
 
-    def info_if(self, info_if: bool, message: str = None):
-        self.info.sniff(not info_if, message)
+    def info_if(self, info_if: bool, message: str = None) -> bool:
+        return self.info.sniff(not info_if, message)
 
-    def woof_if(self, woof_if: bool, message: str = None):
-        self.woof.sniff(not woof_if, message)
+    def woof_if(self, woof_if: bool, message: str = None) -> bool:
+        return self.woof.sniff(not woof_if, message)
 
-    def bark_if(self, bark_if: bool, message: str = None):
-        self.bark.sniff(not bark_if, message)
+    def bark_if(self, bark_if: bool, message: str = None) -> bool:
+        return self.bark.sniff(not bark_if, message)
 
-    def eq(self, first: Any, second: Any, message: str = None):
-        self._handle(first == second, message, f'{first} != {second}')
+    def eq(self, first: Any, second: Any, message: str = None) -> bool:
+        return self._handle(first == second, message, f'{first} != {second}')
 
-    def uneq(self, first: Any, second: Any, message: str = None):
-        self._handle(first != second, message, f'{first} == {second}')
+    def uneq(self, first: Any, second: Any, message: str = None) -> bool:
+        return self._handle(first != second, message, f'{first} == {second}')
 
-    def greater(self, smaller: Any, larger: Any, message: str = None):
-        self._handle(smaller < larger, message, f'{smaller} >= {larger}')
+    def greater(self, smaller: Any, larger: Any, message: str = None) -> bool:
+        return self._handle(smaller < larger, message, f'{smaller} >= {larger}')
 
-    def positive(self, positive: Any, message: str = None):
-        self.greater(0, positive, message)
+    def positive(self, positive: Any, message: str = None) -> bool:
+        return self.greater(0, positive, message)
 
-    def range(self, value: Any, min_value: Any, max_value: Any, message: str = None):
-        self._handle(min_value <= value <= max_value, message, f'!({min_value} <= {value} <= {max_value})')
+    def range(self, value: Any, min_value: Any, max_value: Any, message: str = None) -> bool:
+        return self._handle(min_value <= value <= max_value, message, f'!({min_value} <= {value} <= {max_value})')
 
-    def inside(self, value: Any, values: Iterable[Any], message: str = None):
-        self._handle(value in values, message, f'{value} not in {values}')
+    def inside(self, value: Any, values: Iterable[Any], message: str = None) -> bool:
+        return self._handle(value in values, message, f'{value} not in {values}')
 
-    def nonside(self, value: Any, values: Iterable[Any], message: str = None):
-        self._handle(value not in values, message, f'{value} in {values}')
+    def nonside(self, value: Any, values: Iterable[Any], message: str = None) -> bool:
+        return self._handle(value not in values, message, f'{value} in {values}')
 
-    def none(self, value: Any, message: str = None):
+    def none(self, value: Any, message: str = None) -> bool:
         message = f'{message}, {value}' if message else f'{value} is not None'
-        self._handle(value is None, message)
+        return self._handle(value is None, message)
 
-    def empty(self, value: Any, message: str = None):
-        self._handle(not bool(value), message, f'{value} is non-empty')
+    def empty(self, value: Any, message: str = None) -> bool:
+        return self._handle(not bool(value), message, f'{value} is non-empty')
 
-    def nonempty(self, value: Any, message: str = None):
-        self._handle(bool(value), message, f'{value} is empty')
+    def nonempty(self, value: Any, message: str = None) -> bool:
+        return self._handle(bool(value), message, f'{value} is empty')
 
-    def len(self, first: List[Any], second: list[Any], message: str = None):
-        self._handle(len(first) == len(second), message, f'Unequal Lengths: {len(first)} != {len(second)}')
+    def len(self, first: List[Any], second: list[Any], message: str = None) -> bool:
+        return self._handle(len(first) == len(second), message, f'Unequal Lengths: {len(first)} != {len(second)}')
+
+    def close_enough(self, first: str, second: str, replace_chars="\"", message: str = None) -> bool:
+        return self._handle(
+            generic_name(first, replace_chars) == generic_name(second, replace_chars),
+            message, f"\n\t{first}\n\t{second}"
+        )
 
 
 # Automatically pops any appended messages on exit

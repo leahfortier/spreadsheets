@@ -1,9 +1,9 @@
-from typing import Set, List, Dict, Self
+from typing import Set, List, Dict, Self, Tuple
 
-from genshin.achievements import AchievementsSheet
+from genshin.achievements import AchievementsSheet, AchievementsWiki, Achievement, AchievementsHandler
 from genshin.characters import CharacterSheet, CharacterRow
 from genshin.constants.sheets import get_sheet, Tab, BuildsFields, BUILD_TABS, WeaponMethod, BUILD_SORT_FIELDS, \
-    AchievementSections
+    AchievementSections, AchievementFields, PLAYER_FIELDS
 from util.data import Sheet
 from util.warn import GuardDog, message_guardian
 
@@ -215,8 +215,47 @@ def validate_recipes(characters: CharacterSheet):
 
 
 @message_guardian(guard)
-def validate_achievements():
-    sheet = AchievementsSheet()
+def wiki_validation(sheet: AchievementsSheet, category_name: str, wiki: AchievementsWiki, disagrees: List[Tuple[str, int]]):
+    sheet_rows: List[Achievement] = sheet.categories[category_name].rows.copy()
+    guard.append_message(f'{category_name} {len(sheet_rows)} {len(wiki.multi_rows)}')
+
+    for key, shift in disagrees:
+        achievement = sheet.get(key)
+        index = achievement.category_index
+
+        guard.eq(achievement.category, category_name, "Disagree category")
+        guard.eq(sheet_rows[index], achievement, "Disagree index")
+
+        sheet_rows.insert(index + shift, sheet_rows.pop(index))
+
+    sheet_index = 0
+    for wiki_row in wiki.multi_rows:
+        wiki_name = wiki_row.key
+
+        if not guard.inside(wiki_row.key, sheet.map, f"Missing: {wiki_row.version} {wiki_row.name}"):
+            continue
+
+        achievement = sheet_rows[sheet_index]
+        sheet_index += 1
+
+        with message_guardian(guard, achievement.name):
+            if not guard.info.eq(wiki_name, achievement.key, "Out of order"):
+                continue
+
+            guard.info.close_enough(wiki_row.description(), achievement.description, "\".()")
+
+
+@message_guardian(guard)
+def validate_achievements(handler: AchievementsHandler):
+    sheet = handler.sheet
+
+    wonder_disagrees = [
+        ("sky high", 1),
+        ("the final fonta sea", 3)
+    ]
+
+    wiki_validation(sheet, AchievementSections.WONDERS, handler.wonders, wonder_disagrees)
+    wiki_validation(sheet, AchievementSections.MEMORIES, handler.memories, [])
 
     index = 0
     for category in sheet.wonder_categories:
@@ -232,18 +271,30 @@ def validate_achievements():
     total_category_achievements = sum([len(category.rows) for category in sheet.categories.values()])
     guard.bark.eq(total_achievements, total_category_achievements, "Totals")
 
-    wonder = sheet.category(AchievementSections.WONDERS)
-    total_wonder = len(wonder.rows)
+    total_wonder = len(sheet.wonder.rows)
     total_category_wonder = sum([len(category.rows) for category in sheet.wonder_categories])
     guard.bark.eq(total_wonder, total_category_wonder, "Wonder Totals")
 
+    for achievement in sheet.map.values():
+        row = sheet.sheet.rows[achievement.sheet_index]
+        guard.eq(achievement.name, sheet.sheet.get(row, AchievementFields.ACHIEVEMENT))
 
-def validate():
-    characters = CharacterSheet()
+        guard.inside(sheet.sheet.get(row, AchievementFields.PLAYER_MAIN), ["FALSE", "TRUE"])
+        guard.range(achievement.count, 1, 3)
+        for player in PLAYER_FIELDS:
+            guard.eq(len(player), 3, "Player field length")
+            guard.inside(sheet.sheet.get(row, player[0]), ["FALSE", "TRUE"], player[0])
+            guard.inside(sheet.sheet.get(row, player[1]), ["", "FALSE", "TRUE"], player[1])
+            guard.inside(sheet.sheet.get(row, player[2]), ["", "FALSE", "TRUE"], player[2])
+            if achievement.count == 2:
+                guard.falsy(sheet.sheet.get(row, player[1]), player[1] + " Count 2")
+                guard.inside(sheet.sheet.get(row, player[2]), ["FALSE", "TRUE"], player[2])
 
+
+def validate(characters: CharacterSheet, achievements: AchievementsHandler):
     validate_character_data(characters)
     validate_builds(characters)
     validate_recipes(characters)
 
-    validate_achievements()
+    validate_achievements(achievements)
 

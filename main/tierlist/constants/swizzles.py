@@ -27,7 +27,7 @@ ERAS = [
 
 # Manual formulas -- +2 because not zero-indexed and ignore schema row
 def update_swizzle(sheet: Sheet, output_index: int, row: List[str]) -> None:
-    era = remove_suffix(sheet.get(row, ERA_FIELD), [" (TV)"])
+    era = remove_suffix(sheet.get(row, ERA_FIELD), " (TV)")
     era_tab = f'Era - {era}'
     era_title_col = "A"
     era_rating_col = "C"
