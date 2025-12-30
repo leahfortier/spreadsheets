@@ -14,37 +14,42 @@ from main.pokehome.dex import Dex
 from main.util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
 from main.util.general import remove_suffix, has_prefix, remove_prefix
-from main.util.warn import warn
+from main.util.warn import warn, GuardDog, message_guardian
+
+guard = GuardDog()
 
 
 class FormName:
+    @message_guardian(guard)
     def __init__(self, species: str, form_name: str):
         self.species = species
         self.form_name = form_name
         self.regional = ""
         self.digimon = ""
 
+        guard.append_message(f"{species}, {form_name}")
+
         if self.form_name:
             for regional in REGIONALS:
                 if self.form_name.startswith(regional):
                     self.regional = regional
-                    prefixes = [regional + " Form", regional + " " + species]
-                    assert has_prefix(self.form_name, prefixes)
-                    self.form_name = remove_prefix(self.form_name, prefixes)
+                    prefixes = [f'{regional} Form', f'{regional} {species}']
+                    guard.prefix(self.form_name, prefixes)
+                    self.form_name = remove_prefix(self.form_name, *prefixes)
                     break
 
             for digimon in DIGIMON:
                 if self.form_name.startswith(f"{digimon} "):
-                    prefixes = [digimon + " " + species]
-                    assert has_prefix(self.form_name, prefixes)
-                    self.digimon = digimon + remove_prefix(self.form_name, prefixes)
+                    prefixes = [f'{digimon} {species}']
+                    guard.prefix(self.form_name, prefixes)
+                    self.digimon = digimon + remove_prefix(self.form_name, *prefixes)
                     self.form_name = ""
                     break
 
             self.form_name = self.form_name.strip(" ()")
             self.form_name = remove_suffix(
                 self.form_name,
-                [
+                *[
                     f" {species}",
                     " Form", " Forme",
                     " Cloak", " Rotom", " Plumage", " Style", " Breed",
@@ -61,6 +66,7 @@ class FormName:
         return [self.species, self.form_name, self.regional, self.digimon].__repr__()
 
 
+@message_guardian(guard)
 def handle_values(
         db: Database,
         species: str,
@@ -72,6 +78,7 @@ def handle_values(
         get_first: Callable[[DbRow], str]
 ) -> List[DbRow]:
     all_forms = db.species_map.get(species)
+    guard.append_message(f'{species} {all_forms}')
     updated = []
 
     def update_values(db_row: DbRow):
@@ -81,7 +88,7 @@ def handle_values(
     # Base form is always first -- fill in all forms with their default values
     if num not in values_map:
         db_row = db.get(all_forms[0])
-        assert db_row.is_base_form(regional_is_base=False)
+        guard.sniff(db_row.is_base_form(regional_is_base=False), "Base form must be first")
         update_values(db_row)
         values_map[num] = values
         updated.append(db_row)
@@ -91,7 +98,7 @@ def handle_values(
             if not form_db_row.regional_form:
                 update_values(form_db_row)
     elif form.digimon:
-        assert not form.regional
+        guard.falsy(form.regional, "No regional digimon")
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form_db_row.digimon_form == form.digimon and form_db_row.form == form.form_name:
@@ -100,10 +107,13 @@ def handle_values(
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form_db_row.regional_form == form.regional:
-                assert get_first(form_db_row) == EMPTY_FIELD or species == "Darmanitan"
+                if species == "Darmanitan":
+                    pass
+                else:
+                    guard.eq(get_first(form_db_row), EMPTY_FIELD, "First regional form should be empty")
                 update_values(form_db_row)
     else:
-        assert form.form_name
+        guard.truthy(form.form_name, "Form must exist")
         for form_id in all_forms[1:]:
             form_db_row = db.get(form_id)
             if form.regional and form_db_row.regional_form != form.regional:
@@ -113,8 +123,7 @@ def handle_values(
             if form.form_name in check_names:
                 update_values(form_db_row)
 
-        if not updated and values != values_map[num]:
-            warn(f'No match for {species}, {form.form_name}')
+        guard.bark_if(not updated and values != values_map[num], f'No match for {form.form_name}')
 
     return updated
 
@@ -130,7 +139,10 @@ def set_abs(db_row: DbRow, abilities: List[str]):
     db_row.hidden = ab_format(abilities[2])
 
 
+@message_guardian(guard)
 def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row: List[str]):
+    guard.append_message(str(bulba_row))
+
     num = bulba_row[0]
     species = bulba_row[1]
     abilities = bulba_row[-3:]
@@ -140,14 +152,15 @@ def handle_abilities(db: Database, ability_map: Dict[str, List[str]], bulba_row:
         form_name = " ".join(bulba_row[3:-3])
 
     form_name = FormName(species, form_name)
+    guard.append_message(str(form_name))
+
     updated = handle_values(
         db, species, num,
         form_name,
         ability_map, abilities,
         set_abs, lambda db_row: db_row.ability1
     )
-    if form_name.digimon and not updated:
-        warn(f"Ability not found for {form_name.digimon} {species}")
+    guard.bark_if(form_name.digimon and not updated, f"No ability found")
 
 
 def write_abilities(db: Database):
@@ -173,7 +186,8 @@ def write_abilities(db: Database):
 
     # Make sure every row has been set
     for db_row in db.rows:
-        assert db_row.ability1 != EMPTY_FIELD
+        with message_guardian(guard, db_row.name):
+            guard.uneq(db_row.ability1, EMPTY_FIELD, "Empty ability")
 
     def get_abilities(row: DbRow) -> List[str]:
         return [row.ability1, row.ability2, row.hidden]
@@ -181,12 +195,15 @@ def write_abilities(db: Database):
     to_tsv(ABILITIES_OUTFILE, [get_abilities(row) for row in db.rows])
 
 
+@message_guardian(guard)
 def set_types(db_row: DbRow, types: List[str]):
+    guard.append_message(f"{db_row.name} {types}")
+
     def type_format(s: str):
-        assert s in ALL_TYPES or s == EMPTY_FIELD
+        guard.truthy(s in ALL_TYPES or s == EMPTY_FIELD, f"Invalid type {s}")
         return s
 
-    assert types[0] != types[1] or types[0] == EMPTY_FIELD
+    guard.truthy(types[0] != types[1] or types[0] == EMPTY_FIELD, "Same dual type")
     db_row.type1 = type_format(types[0])
     db_row.type2 = type_format(types[1])
 
@@ -240,7 +257,7 @@ def write_types(db: Database):
 
     # Make sure every row has been set
     for db_row in db.rows:
-        assert db_row.type1 != EMPTY_FIELD
+        guard.uneq(db_row.type1, EMPTY_FIELD, "Empty type")
 
     def get_types(row: DbRow) -> List[str]:
         return [row.type1, row.type2]
@@ -248,6 +265,7 @@ def write_types(db: Database):
     to_tsv(TYPES_OUTFILE, [get_types(row) for row in db.rows])
 
 
+@message_guardian(guard)
 def write_genders(db: Database):
     # Input file is copy-pasted table from Bulbapedia
     #   - Manually created section titles with new lines between sections
@@ -258,32 +276,36 @@ def write_genders(db: Database):
     in_section = False
     gender_ratio: GenderRatio = GenderRatio.GENDERLESS
     can_breed: bool = False
-    for row in bulba_rows:
-        if len(row) == 0:
+    for wiki_row in bulba_rows:
+        guard.append_message(str(wiki_row))
+        if len(wiki_row) == 0:
             in_section = False
         elif in_section:
-            assert len(row) == 3
-            assert row[1] == row[2]
-            species = row[1]
+            guard.kill.eq(len(wiki_row), 3, "Unexpected row format")
+            guard.bark.eq(wiki_row[1], wiki_row[2], "Unexpected row format")
+
+            species = wiki_row[1]
             forms = db.species_map.get(species)
             for form in forms:
-                row = db.get(form)
-                row.gender_ratio = gender_ratio
-                row.can_breed_field = DB_TRUE if can_breed else DB_FALSE
+                db_row = db.get(form)
+                db_row.gender_ratio = gender_ratio
+                db_row.can_breed_field = DB_TRUE if can_breed else DB_FALSE
         else:
-            section: str = row[0]
+            section: str = wiki_row[0]
             types = section.split(": ")
-            assert len(types) == 2
-            assert types[0] in ["Can Breed", "Cannot Breed"]
+            guard.kill.eq(len(types), 2, "Unexpected row format")
+            guard.kill.inside(types[0], ["Can Breed", "Cannot Breed"])
             can_breed = types[0] == "Can Breed"
             gender_ratio = GenderRatio(types[1])
             in_section = True
+        guard.pop_message(str(wiki_row))
 
-    to_tsv(GENDER_OUTFILE, [[row.can_breed_field, row.gender_ratio] for row in db.rows])
+    to_tsv(GENDER_OUTFILE, [[db_row.can_breed_field, db_row.gender_ratio] for db_row in db.rows])
 
 
+@message_guardian(guard)
 def get_generation(num: int) -> int:
-    assert 1 <= num <= TOTAL_POKEMON
+    guard.range(num, 1, TOTAL_POKEMON)
     if num <= 151:
         return 1
     elif num <= 251:
@@ -586,17 +608,17 @@ def compare_version_history(dex: Dex):
     previous: Sheet = get_dex_sheet()
     current: Sheet = dex.sheet
 
-    assert len(previous.rows) == len(current.rows)
+    guard.kill.len(previous.rows, current.rows)
     diffs = []
 
     for prev_row, current_row in zip(previous.rows, current.rows):
-        assert len(prev_row) == 36
+        guard.kill.eq(len(prev_row), 36)
         prev_row.insert(-1, CHECKBOX_FALSE)  # Quick
         prev_row.insert(-3, CHECKBOX_FALSE)  # Dusk
-        assert len(prev_row) == 38
+        guard.kill.eq(len(prev_row), 38)
 
         if prev_row != current_row:
-            assert len(prev_row) == len(current_row)
+            guard.kill.len(prev_row, current_row)
             rows_diffs = []
             for index, (prev_val, current_val) in enumerate(zip(prev_row, current_row)):
                 if prev_val == CHECKBOX_FALSE and current_val == CHECKBOX_TRUE:
