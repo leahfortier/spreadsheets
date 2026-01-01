@@ -531,12 +531,21 @@ def write_catch_rates(db: Database):
     to_tsv(CATCH_RATE_OUTFILE, [[row.catch_rate] for row in db.rows])
 
 
-def write_pla_names(db: Database):
-    pla_rows = from_tsv(IN_PATH + "pla-names.in")
+@message_guardian(guard)
+def write_regional_dex(db: Database, path_base: str):
+    guard.append_message(path_base)
+    in_rows = from_tsv(IN_PATH + f"{path_base}-names.in")
     out_rows = []
-    for row in pla_rows:
-        assert len(row) == 1
+    update_rows = []
+
+    dex_num = 0
+    current_species = ""
+
+    seen_ids: Set[str] = set()
+    for row in in_rows:
+        guard.kill.eq(len(row), 1, str(row))
         name = row[0]
+        guard.append_message(name)
 
         species = name.rstrip("♂").rstrip("♀").strip()
         for region in REGIONALS:
@@ -565,9 +574,20 @@ def write_pla_names(db: Database):
         assert form_id is not None
         poke = db.get(form_id)
 
-        out_rows.append([form_id, name, poke.image, poke.shiny_image])
+        out_dex = ""
+        if species != current_species:
+            dex_num += 1
+            current_species = species
+            out_dex = str(dex_num)
 
-    to_tsv(OUT_PATH + "pla-names.out", out_rows)
+        guard.nonside(form_id, seen_ids)
+        seen_ids.add(form_id)
+
+        out_rows.append([out_dex, form_id, name, poke.image, poke.shiny_image])
+
+        guard.pop_message(name)
+
+    to_tsv(OUT_PATH + f"{path_base}-names.out", out_rows)
 
 
 # Can use this command if needing to add several new rows in the spreadsheet at once
@@ -642,4 +662,6 @@ def run_commands(db: Database):
     write_families(db)
     write_categories(db)
     write_catch_rates(db)
-    write_pla_names(db)
+
+    write_regional_dex(db, "pla")
+    write_regional_dex(db, "za")
