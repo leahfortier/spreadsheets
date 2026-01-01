@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Callable, Set, Tuple
 from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
     CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE, \
-    PARTNER_INFILE, ULTRA_INFILE, PARADOX_INFILE
+    PARTNER_INFILE, ULTRA_INFILE, PARADOX_INFILE, DEX_OUT_PATH
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE, \
@@ -651,7 +651,7 @@ def compare_version_history(dex: Dex):
                 diffs.append(f"Diff: {current_row[0]} {current_row[3]}")
                 diffs.extend(rows_diffs)
 
-    to_file(OUT_PATH + "diffs.out", diffs)
+    to_file(DEX_OUT_PATH + "diffs.out", diffs)
 
 
 def run_commands(db: Database):
