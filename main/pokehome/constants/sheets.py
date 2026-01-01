@@ -138,6 +138,7 @@ class GoFields(str, Enum):
     NAME = "Name"
     REGION = "Region"
     IMAGE = "Image"
+    DATE_ADDED = "Added"
 
 
 SAME_ID_DIFFERENT_FIELDS: List[DexFields] = [
