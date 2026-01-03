@@ -55,29 +55,33 @@ def write_dex_stats(dex: Dex):
     shiny_col = col(DexFields.SHINY).with_checkbox().build()
 
     def get_values(*conditions: str) -> List[str]:
-        have_values = caught_col.progress(*conditions).values()
-        hidden_value = hidden_col.count(*conditions)
-        nickname_value = nickname_col.count(*conditions)
-        shiny_value = shiny_col.count(*conditions)
-        return [*have_values, hidden_value, nickname_value, shiny_value]
+        caught_vals = caught_col.progress(*conditions)
+        hidden_vals = hidden_col.progress(*conditions)
+        nickname_vals = nickname_col.progress(*conditions)
+        shiny_vals = shiny_col.progress(*conditions)
 
-    out = OutStatsHorizontal()
+        return [
+            caught_vals.total, caught_vals.count, hidden_vals.count, hidden_vals.count, shiny_vals.count,
+            caught_vals.percent, hidden_vals.percent, nickname_vals.percent, shiny_vals.percent
+        ]
+
+    out = OutStatsVertical()
     out.append("All", get_values())
 
     for classification in DexClassification:
         class_col = col(DexFields.CLASS).with_string(classification).build()
         out.append(classification, get_values(class_col.condition))
-    out.new_column()
+    out.blank_row()
 
     for box in dex.boxes.boxes:
         box_col = col(DexFields.BOX).with_string(box.name).build()
         out.append(box.name, get_values(box_col.condition))
-    out.new_column()
+    out.blank_row()
 
     for region in REGIONS:
         region_col = col(DexFields.REGION).with_string(region).build()
         out.append(region, get_values(region_col.condition))
-    out.new_column()
+    out.blank_row()
 
     to_tsv(STATS_OUTFILE, out.rows)
 
