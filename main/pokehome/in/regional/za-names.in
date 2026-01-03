@@ -1,6 +1,7 @@
 Chikorita
 Bayleef
-Meganium
+Meganium ♂
+Meganium ♀
 Tepig
 Pignite
 Emboar
@@ -14,7 +15,8 @@ Bunnelby
 Diggersby
 Scatterbug
 Spewpa
-Vivillon
+Vivillon Meadow Pattern
+Vivillon Marine Pattern
 Weedle
 Kakuna
 Beedrill
@@ -27,32 +29,52 @@ Ampharos
 Patrat
 Watchog
 Budew
-Roselia
-Roserade
-Magikarp
-Gyarados
+Roselia ♂
+Roselia ♀
+Roserade ♂
+Roserade ♀
+Magikarp ♂
+Magikarp ♀
+Gyarados ♂
+Gyarados ♀
 Binacle
 Barbaracle
 Staryu
 Starmie
-Flabébé
-Floette
-Floette (Eternal Flower)
-Florges
+Flabébé Red Flower
+Flabébé White Flower
+Flabébé Orange Flower
+Flabébé Yellow Flower
+Flabébé Blue Flower
+Floette Red Flower
+Floette White Flower
+Floette Orange Flower
+Floette Yellow Flower
+Floette Blue Flower
+AZ's Floette
+Florges Red Flower
+Florges White Flower
+Florges Orange Flower
+Florges Yellow Flower
+Florges Blue Flower
 Skiddo
 Gogoat
 Espurr
-Meowstic
+Meowstic ♂
+Meowstic ♀
 Litleo
-Pyroar
+Pyroar ♂
+Pyroar ♀
 Pancham
 Pangoro
 Trubbish
 Garbodor
 Dedenne
 Pichu
-Pikachu
-Raichu
+Pikachu ♂
+Pikachu ♀
+Raichu ♂
+Raichu ♀
 Alolan Raichu
 Cleffa
 Clefairy
@@ -62,8 +84,10 @@ Ariados
 Ekans
 Arbok
 Abra
-Kadabra
-Alakazam
+Kadabra ♂
+Kadabra ♀
+Alakazam ♂
+Alakazam ♀
 Gastly
 Haunter
 Gengar
@@ -82,8 +106,10 @@ Pansear
 Simisear
 Panpour
 Simipour
-Meditite
-Medicham
+Meditite ♂
+Meditite ♀
+Medicham ♂
+Medicham ♀
 Electrike
 Manectric
 Ralts
@@ -91,7 +117,8 @@ Kirlia
 Gardevoir
 Gallade
 Houndour
-Houndoom
+Houndoom ♂
+Houndoom ♀
 Swablu
 Altaria
 Audino
@@ -99,7 +126,8 @@ Spritzee
 Aromatisse
 Swirlix
 Slurpuff
-Eevee
+Eevee ♂
+Eevee ♀
 Vaporeon
 Jolteon
 Flareon
@@ -117,8 +145,10 @@ Vanillish
 Vanilluxe
 Numel
 Camerupt
-Hippopotas
-Hippowdon
+Hippopotas ♂
+Hippopotas ♀
+Hippowdon ♂
+Hippowdon ♀
 Drilbur
 Excadrill
 Sandile
@@ -127,9 +157,12 @@ Krookodile
 Machop
 Machoke
 Machamp
-Gible
-Gabite
-Garchomp
+Gible ♂
+Gible ♀
+Gabite ♂
+Gabite ♀
+Garchomp ♂
+Garchomp ♀
 Carbink
 Sableye
 Mawile
@@ -145,14 +178,15 @@ Galarian Slowking
 Carvanha
 Sharpedo
 Tynamo
-Eelektrik
-Eelektross
+Elektrik
+Elektross
 Dratini
 Dragonair
 Dragonite
 Bulbasaur
 Ivysaur
-Venusaur
+Venusaur ♂
+Venusaur ♀
 Charmander
 Charmeleon
 Charizard
@@ -161,7 +195,16 @@ Wartortle
 Blastoise
 Stunfisk
 Galarian Stunfisk
-Furfrou
+Furfrou Natural
+Furfrou Heart Trim
+Furfrou Star Trim
+Furfrou Diamond Trim
+Furfrou La Reine Trim
+Furfrou Kabuki Trim
+Furfrou Pharaoh Trim
+Furfrou Debutante Trim
+Furfrou Matron Trim
+Furfrou Dandy Trim
 Inkay
 Malamar
 Skrelp
@@ -170,22 +213,24 @@ Clauncher
 Clawitzer
 Goomy
 Sliggoo
-Hisuian Sliggoo
 Goodra
-Hisuian Goodra
 Delibird
 Snorunt
 Glalie
 Froslass
-Snover
-Abomasnow
+Snover ♂
+Snover ♀
+Abomasnow ♂
+Abomasnow ♀
 Bergmite
 Avalugg
-Hisuian Avalugg
-Scyther
-Scizor
+Scyther ♂
+Scyther♀
+Scizor ♂
+Scizor ♀
 Pinsir
-Heracross
+Heracross ♂
+Heracross ♀
 Emolga
 Hawlucha
 Phantump
@@ -204,14 +249,21 @@ Tyrantrum
 Amaura
 Aurorus
 Onix
-Steelix
+Steelix ♂
+Steelix ♀
 Aron
 Lairon
 Aggron
 Helioptile
 Heliolisk
-Pumpkaboo
-Gourgeist
+Pumpkaboo Small
+Pumpkaboo Average
+Pumpkaboo Large
+Pumpkaboo Super
+Gourgeist Small
+Gourgeist Average
+Gourgeist Large
+Gourgeist Super
 Larvitar
 Pupitar
 Tyranitar
@@ -236,4 +288,5 @@ Metang
 Metagross
 Xerneas
 Yveltal
-Zygarde
+Zygarde 10%
+Zygarde 50%
