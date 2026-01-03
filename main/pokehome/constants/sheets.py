@@ -61,7 +61,6 @@ class DbFields(str, Enum):
     FORM_ID = "form id"
     GENDER_ID = "gender id"
     ID = "id"
-    IMAGE_ID = "img id"
     SPECIES = "species"
     DIGIMON_FORM = "digimon"
     REGIONAL_FORM = "regional"

@@ -1,7 +1,7 @@
+import csv
+import os.path
 import os.path
 from typing import List
-import csv
-
 
 path = '../'
 
@@ -55,6 +55,9 @@ def to_csv(filename: str, rows: List[List[str]], delimiter: str = ',', show_diff
 
 
 def from_csv(filename: str, delimiter: str = ',') -> List[List[str]]:
+    if not os.path.isfile(filename):
+        return []
+
     rows: List[List[str]] = []
     with open(filename, 'r') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=delimiter)

@@ -59,7 +59,6 @@ class DbRow:
         sheet.update(row, DbFields.NAME, self.name)
 
         self.image_id = self.get_image_id()
-        sheet.update(row, DbFields.IMAGE_ID, self.image_id)
 
         self.image = image(self.get_image_url(SpriteType.NORMAL))
         self.shiny_image = image(self.get_image_url(SpriteType.SHINY))

@@ -1,10 +1,10 @@
 import re
 from typing import List, Optional, Dict, Callable, Set, Tuple
 
-from main.pokehome.constants.io import OUT_PATH, ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
+from main.pokehome.constants.io import ABILITIES_INFILE, ABILITIES_OUTFILE, REGIONS_OUTFILE, \
     FAMILIES_INFILE, FAMILIES_OUTFILE, GENDER_INFILE, GENDER_OUTFILE, TYPES_INFILE, TYPES_OUTFILE, CATCH_RATE_INFILE, \
-    CATCH_RATE_OUTFILE, IN_PATH, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE, \
-    PARTNER_INFILE, ULTRA_INFILE, PARADOX_INFILE, DEX_OUT_PATH
+    CATCH_RATE_OUTFILE, BABY_INFILE, FOSSIL_INFILE, CATEGORY_OUTFILE, LEGENDARY_INFILE, MYTHICAL_INFILE, \
+    PARTNER_INFILE, ULTRA_INFILE, PARADOX_INFILE, DEX_OUT_PATH, REGIONAL_IN_PATH, REGIONAL_OUT_PATH
 from main.pokehome.constants.pokes import REGIONALS, TOTAL_POKEMON, ALL_TYPES, DIGIMON, DIGIMON_TYPES, \
     CURRENT_GENERATION
 from main.pokehome.constants.sheets import EMPTY_FIELD, get_dex_sheet, GenderRatio, EvolutionType, DB_TRUE, DB_FALSE, \
@@ -13,7 +13,7 @@ from main.pokehome.db import Database, DbRow
 from main.pokehome.dex import Dex
 from main.util.data import Sheet, CHECKBOX_FALSE, CHECKBOX_TRUE
 from main.util.file_io import to_tsv, from_tsv, to_file, from_file
-from main.util.general import remove_suffix, has_prefix, remove_prefix
+from main.util.general import remove_suffix, remove_prefix
 from main.util.warn import warn, GuardDog, message_guardian
 
 guard = GuardDog()
@@ -534,9 +534,8 @@ def write_catch_rates(db: Database):
 @message_guardian(guard)
 def write_regional_dex(db: Database, path_base: str):
     guard.append_message(path_base)
-    in_rows = from_tsv(IN_PATH + f"{path_base}-names.in")
+    in_rows = from_tsv(REGIONAL_IN_PATH + f"{path_base}-names.in")
     out_rows = []
-    update_rows = []
 
     dex_num = 0
     current_species = ""
@@ -571,7 +570,7 @@ def write_regional_dex(db: Database, path_base: str):
                 if name.rstrip("♀").strip() == poke.name and poke.gender_form == "Female":
                     form_id = form
                     break
-        assert form_id is not None
+        guard.kill.truthy(form_id)
         poke = db.get(form_id)
 
         out_dex = ""
@@ -587,7 +586,7 @@ def write_regional_dex(db: Database, path_base: str):
 
         guard.pop_message(name)
 
-    to_tsv(OUT_PATH + f"{path_base}-names.out", out_rows)
+    to_tsv(REGIONAL_OUT_PATH + f"{path_base}-names.out", out_rows)
 
 
 # Can use this command if needing to add several new rows in the spreadsheet at once
