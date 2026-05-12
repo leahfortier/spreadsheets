@@ -28,7 +28,7 @@
 118 - 160	1,000 + Weedle Candy1	October 17, 2019
 0015	BeedrillShadow	Beedrill	346 - 416
 600 - 685	1,000 + Weedle Candy1	October 17, 2019
-0016	PidgeyShadow	Pidgey	112 - 153
+0016	PidgeyShinyShadow	Pidgey	112 - 153
 201 - 252	1,000 + Pidgey Candy1	March 27, 2024
 0017	PidgeottoShadow	Pidgeotto	213 - 269
 375 - 443	1,000 + Pidgey Candy1	March 27, 2024
@@ -36,7 +36,7 @@
 706 - 798	1,000 + Pidgey Candy1	March 27, 2024
 0019	RattataShadow	Rattata	122 - 165
 219 - 273	1,000 + Rattata Candy1	July 22, 2019
-0019	RattataShadow	Rattata	122 - 165
+0019	RattataShinyShadow	Rattata	122 - 165
 219 - 273	1,000 + Rattata Candy1	April 3, 2022
 0020	RaticateShadow	Raticate	322 - 390
 560 - 643	1,000 + Rattata Candy1	July 22, 2019
@@ -48,9 +48,9 @@
 285 - 344	3,000 + Ekans Candy3	June 10, 2020
 0024	ArbokShadow	Arbok	362 - 433
 626 - 713	3,000 + Ekans Candy3	June 10, 2020
-0027	SandshrewShadow	Sandshrew	227 - 284
+0027	SandshrewShinyShadow	Sandshrew	227 - 284
 398 - 468	3,000 + Sandshrew Candy3	November 7, 2019
-0027	SandshrewShadow	Sandshrew	233 - 291
+0027	SandshrewShinyShadow	Sandshrew	233 - 291
 409 - 480	3,000 + Sandshrew Candy3	April 3, 2022
 0028	SandslashShadow	Sandslash	456 - 535
 785 - 882	3,000 + Sandshrew Candy3	November 7, 2019
@@ -58,23 +58,23 @@
 805 - 903	3,000 + Sandshrew Candy3	April 3, 2022
 0029	Nidoran♀ShinyShadow	Nidoran♀	138 - 184
 246 - 303	3,000 + Nidoran♀ Candy3	February 3, 2020
-0030	NidorinaShadow	Nidorina	236 - 295
+0030	NidorinaShinyShadow	Nidorina	236 - 295
 414 - 486	3,000 + Nidoran♀ Candy3	June 10, 2020
 0031	NidoqueenShadow	Nidoqueen	479 - 560
 825 - 924	3,000 + Nidoran♀ Candy3	June 10, 2020
 0032	Nidoran♂ShinyShadow	Nidoran♂	146 - 194
 261 - 319	3,000 + Nidoran♂ Candy3	June 10, 2020
-0033	NidorinoShadow	Nidorino	253 - 314
+0033	NidorinoShinyShadow	Nidorino	253 - 314
 443 - 517	3,000 + Nidoran♂ Candy3	June 10, 2020
 0033	NidorinoShadow	Nidorino	253 - 314
 443 - 517	3,000 + Nidoran♂ Candy3	December 31, 2022
 0034	NidokingShadow	Nidoking	495 - 578
 852 - 953	3,000 + Nidoran♂ Candy3	June 10, 2020
-0037	VulpixShadow	Vulpix	151 - 199
+0037	VulpixShinyShadow	Vulpix	151 - 199
 270 - 328	3,000 + Vulpix Candy3	February 3, 2020
 0037	VulpixShadow	Vulpix	151 - 199
 270 - 328	3,000 + Vulpix Candy3	October 26, 2023
-0037	VulpixShadow	Vulpix	151 - 199
+0037	VulpixShinyShadow	Vulpix	151 - 199
 270 - 328	3,000 + Vulpix Candy3	February 1, 2023
 0038	NinetalesShadow	Ninetales	436 - 513
 752 - 846	3,000 + Vulpix Candy3	February 3, 2020
@@ -86,7 +86,7 @@
 197 - 247	1,000 + Zubat Candy1	July 22, 2019
 0042	GolbatShadow	Golbat	373 - 445
 646 - 734	1,000 + Zubat Candy1	July 22, 2019
-0043	OddishShadow	Oddish	220 - 277
+0043	OddishShinyShadow	Oddish	220 - 277
 387 - 456	3,000 + Oddish Candy3	September 5, 2019
 0044	GloomShadow	Gloom	312 - 378
 543 - 624	3,000 + Oddish Candy3	September 5, 2019
@@ -116,7 +116,7 @@
 811 - 910	3,000 + Psyduck Candy3	September 5, 2019
 0055	GolduckShadow	Golduck	471 - 552
 811 - 910	3,000 + Psyduck Candy3	December 25, 2023
-0056	MankeyShadow	Mankey	125 - 168
+0056	MankeyShinyShadow	Mankey	125 - 168
 224 - 278	3,000 + Mankey Candy3	October 8, 2024
 0057	PrimeapeShadow	Primeape	471 - 552
 811 - 910	3,000 + Mankey Candy3	October 8, 2024
@@ -184,7 +184,7 @@
 336 - 401	3,000 + Shellder Candy3	October 12, 2020
 0091	CloysterShadow	Cloyster	490 - 574
 844 - 946	3,000 + Shellder Candy3	October 12, 2020
-0092	GastlyShadow	Gastly	216 - 277
+0092	GastlyShinyShadow	Gastly	216 - 277
 382 - 456	3,000 + Gastly Candy3	October 26, 2023
 0093	HaunterShadow	Haunter	367 - 442
 637 - 729	3,000 + Gastly Candy3	October 26, 2023
@@ -194,9 +194,13 @@
 340 - 409	5,000 + Onix Candy5	November 14, 2022
 0096	DrowzeeShinyShadow	Drowzee	181 - 234
 321 - 386	3,000 + Drowzee Candy3	August 1, 2019
-0097	HypnoShadow	Hypno	396 - 471
+0097	HypnoShinyShadow	Hypno	396 - 471
 685 - 776	3,000 + Drowzee Candy3	August 1, 2019
-0100	VoltorbShadow	Voltorb	177 - 227
+0098	KrabbyShinyShadow	Krabby	286 - 351
+499 - 579	3,000 + Krabby Candy3	January 23, 2026
+0099	KinglerShadow	Kingler	549 - 637
+943 - 1051	3,000 + Krabby Candy3	January 23, 2026
+0100	VoltorbShinyShadow	Voltorb	177 - 227
 313 - 375	3,000 + Voltorb Candy3	January 24, 2022
 0101	ElectrodeShadow	Electrode	398 - 473
 688 - 779	3,000 + Voltorb Candy3	January 24, 2022
@@ -210,17 +214,17 @@
 315 - 378	3,000 + Cubone Candy3	August 1, 2019
 0105	MarowakShadow	Marowak	344 - 413
 596 - 681	3,000 + Cubone Candy3	August 1, 2019
-0105	MarowakShadow	Marowak	344 - 413
+0105	MarowakShinyShadow	Marowak	344 - 413
 596 - 681	3,000 + Cubone Candy3	May 25, 2022
-0106	HitmonleeShadow	Hitmonlee	496 - 580
+0106	HitmonleeShinyShadow	Hitmonlee	496 - 580
 854 - 957	5,000 + Tyrogue Candy5	November 7, 2019
-0107	HitmonchanShadow	Hitmonchan	446 - 525
+0107	HitmonchanShinyShadow	Hitmonchan	446 - 525
 769 - 866	5,000 + Tyrogue Candy5	September 5, 2019
 0109	KoffingShinyShadow	Koffing	217 - 273
 382 - 451	3,000 + Koffing Candy3	June 10, 2020
 0110	WeezingShadow	Weezing	439 - 516
 756 - 851	3,000 + Koffing Candy3	June 10, 2020
-0110	WeezingShadow	Weezing	439 - 516
+0110	WeezingShinyShadow	Weezing	439 - 516
 756 - 851	3,000 + Koffing Candy3	September 26, 2024
 0111	RhyhornShadow	Rhyhorn	306 - 372
 532 - 613	3,000 + Rhyhorn Candy3	October 26, 2023
@@ -244,7 +248,7 @@
 791 - 889	5,000 + Magmar Candy5	October 17, 2019
 0127	PinsirShinyShadow	Pinsir	577 - 667
 989 - 1099	5,000 + Pinsir Candy5	February 3, 2020
-0129	MagikarpShadow	Magikarp	34 - 61
+0129	MagikarpShinyShadow	Magikarp	34 - 61
 68 - 102	1,000 + Magikarp Candy1	August 1, 2019
 0130	GyaradosShadow	Gyarados	668 - 764
 1143 - 1259	1,000 + Magikarp Candy1	August 1, 2019
@@ -258,7 +262,7 @@
 929 - 1035	5,000 + Omanyte Candy5	February 3, 2020
 0142	AerodactylShinyShadow	Aerodactyl	540 - 627
 928 - 1034	5,000 + Aerodactyl Candy5	October 12, 2020
-0143	SnorlaxShadow	Snorlax	631 - 727
+0143	SnorlaxShinyShadow	Snorlax	631 - 727
 1081 - 1198	5,000 + Snorlax Candy5	July 22, 2019
 0143	SnorlaxShadow	Snorlax	631 - 727
 1081 - 1198	5,000 + Snorlax Candy5	August 26, 2023
@@ -316,7 +320,7 @@
 706 - 798	5,000 + Sudowoodo Candy5	April 3, 2022
 0186	PolitoedShinyShadow	Politoed	471 - 552
 811 - 910	3,000 + Poliwag Candy3	August 1, 2019
-0187	HoppipShadow	Hoppip	96 - 135
+0187	HoppipShinyShadow	Hoppip	96 - 135
 174 - 222	3,000 + Hoppip Candy3	October 12, 2020
 0188	SkiploomShadow	Skiploom	169 - 220
 300 - 362	3,000 + Hoppip Candy3	October 12, 2020
@@ -346,15 +350,15 @@
 604 - 689	5,000 + Gligar Candy5	June 10, 2020
 0208	SteelixShadow	Steelix	462 - 544
 796 - 896	5,000 + Onix Candy5	November 14, 2022
-0209	SnubbullShadow	Snubbull	221 - 279
+0209	SnubbullShinyShadow	Snubbull	221 - 279
 389 - 459	3,000 + Snubbull Candy3	May 18, 2021
 0210	GranbullShadow	Granbull	491 - 575
 845 - 948	3,000 + Snubbull Candy3	May 18, 2021
-0211	QwilfishShadow	Qwilfish	388 - 462
+0211	QwilfishShinyShadow	Qwilfish	388 - 462
 671 - 761	3,000 + Qwilfish Candy3	September 16, 2025
 0212	ScizorShadow	Scizor	586 - 676
 1004 - 1114	5,000 + Scyther Candy5	August 1, 2019
-0213	ShuckleShadow	Shuckle	43 - 91
+0213	ShuckleShinyShadow	Shuckle	43 - 91
 91 - 150	3,000 + Shuckle Candy3	June 10, 2020
 0215	SneaselShinyShadow	Sneasel	388 - 462
 671 - 762	3,000 + Sneasel Candy3	November 5, 2019
@@ -364,7 +368,7 @@
 420 - 493	3,000 + Teddiursa Candy3	October 12, 2020
 0217	UrsaringShadow	Ursaring	573 - 663
 984 - 1094	3,000 + Teddiursa Candy3	October 12, 2020
-0220	SwinubShadow	Swinub	123 - 167
+0220	SwinubShinyShadow	Swinub	123 - 167
 221 - 275	3,000 + Swinub Candy3	February 2, 2021
 0221	PiloswineShadow	Piloswine	449 - 528
 774 - 871	3,000 + Swinub Candy3	February 2, 2021
@@ -386,7 +390,7 @@
 903 - 1007	3,000 + Porygon Candy3	November 7, 2019
 0234	StantlerShinyShadow	Stantler	411 - 487
 710 - 804	3,000 + Stantler Candy3	December 24, 2019
-0237	HitmontopShadow	Hitmontop	410 - 486
+0237	HitmontopShinyShadow	Hitmontop	410 - 486
 708 - 801	5,000 + Tyrogue Candy5	June 21, 2023
 0243	RaikouShinyShadow	Raikou	681 - 778
 1164 - 1282	20,000 + Raikou Candy20	February 1, 2020
@@ -396,7 +400,7 @@
 998 - 1108	20,000 + Suicune Candy20	June 10, 2020
 0246	LarvitarShinyShadow	Larvitar	182 - 234
 322 - 386	5,000 + Larvitar Candy5	September 5, 2019
-0247	PupitarShadow	Pupitar	330 - 398
+0247	PupitarShinyShadow	Pupitar	330 - 398
 572 - 656	5,000 + Larvitar Candy5	September 5, 2019
 0248	TyranitarShadow	Tyranitar	762 - 864
 1300 - 1424	5,000 + Larvitar Candy5	September 5, 2019
@@ -426,7 +430,7 @@
 576 - 660	3,000 + Mudkip Candy3	July 22, 2019
 0260	SwampertShadow	Swampert	581 - 670
 995 - 1104	3,000 + Mudkip Candy3	July 22, 2019
-0261	PoochyenaShadow	Poochyena	111 - 152
+0261	PoochyenaShinyShadow	Poochyena	111 - 152
 200 - 252	1,000 + Poochyena Candy1	May 18, 2021
 0262	MightyenaShadow	Mightyena	362 - 434
 628 - 715	1,000 + Poochyena Candy1	May 18, 2021
@@ -440,13 +444,13 @@
 384 - 455	3,000 + Seedot Candy3	October 17, 2019
 0275	ShiftryShadow	Shiftry	445 - 526
 768 - 866	3,000 + Seedot Candy3	October 17, 2019
-0276	TaillowShadow	Taillow	194 - 248
-343 - 409	1,000 + Taillow Candy1	January 15, 2025
+0276	TaillowShinyShadow	Taillow	194 - 248
+343 - 409	3,000 + Taillow Candy3	January 15, 2025
 0277	SwellowShadow	Swellow	417 - 493
-719 - 813	1,000 + Taillow Candy1	January 15, 2025
+719 - 813	3,000 + Taillow Candy3	January 15, 2025
 0280	RaltsShinyShadow	Ralts	85 - 121
 155 - 200	5,000 + Ralts Candy5	August 8, 2019
-0281	KirliaShadow	Kirlia	168 - 217
+0281	KirliaShinyShadow	Kirlia	168 - 217
 298 - 359	5,000 + Ralts Candy5	August 8, 2019
 0281	KirliaShadow	Kirlia	168 - 217
 298 - 359	5,000 + Ralts Candy5	November 15, 2023
@@ -474,7 +478,7 @@
 472 - 548	5,000 + Sableye Candy5	October 17, 2019
 0303	MawileShinyShadow	Mawile	303 - 368
 527 - 607	5,000 + Mawile Candy5	February 3, 2020
-0304	AronShadow	Aron	236 - 294
+0304	AronShinyShadow	Aron	236 - 294
 414 - 485	1,000 + Aron Candy1	February 2, 2021
 0305	LaironShadow	Lairon	389 - 463
 673 - 763	1,000 + Aron Candy1	February 2, 2021
@@ -502,7 +506,7 @@
 783 - 880	1,000 + Spoink Candy1	February 1, 2023
 0328	TrapinchShinyShadow	Trapinch	227 - 287
 400 - 473	5,000 + Trapinch Candy5	October 17, 2019
-0329	VibravaShadow	Vibrava	219 - 276
+0329	VibravaShinyShadow	Vibrava	219 - 276
 385 - 455	5,000 + Trapinch Candy5	October 17, 2019
 0330	FlygonShadow	Flygon	515 - 599
 885 - 988	5,000 + Trapinch Candy5	October 17, 2019
@@ -510,7 +514,7 @@
 389 - 461	3,000 + Cacnea Candy3	October 17, 2019
 0332	CacturneShadow	Cacturne	437 - 518
 755 - 853	3,000 + Cacnea Candy3	October 17, 2019
-0333	SwabluShadow	Swablu	139 - 185
+0333	SwabluShinyShadow	Swablu	139 - 185
 248 - 306	1,000 + Swablu Candy1	September 16, 2025
 0334	AltariaShadow	Altaria	378 - 451
 655 - 744	1,000 + Swablu Candy1	September 16, 2025
@@ -524,7 +528,7 @@
 818 - 919	3,000 + Corphish Candy3	January 27, 2024
 0343	BaltoyShadow	Baltoy	132 - 177
 236 - 292	3,000 + Baltoy Candy3	September 16, 2025
-0344	ClaydolShadow	Claydol	371 - 444
+0344	ClaydolShinyShadow	Claydol	371 - 444
 643 - 732	3,000 + Baltoy Candy3	September 16, 2025
 0345	LileepShinyShadow	Lileep	232 - 291
 407 - 479	3,000 + Lileep Candy3	February 2, 2021
@@ -535,16 +539,16 @@
 0348	ArmaldoShadow	Armaldo	554 - 642
 951 - 1058	3,000 + Anorith Candy3	February 2, 2021
 0349	FeebasShinyShadow	Feebas	34 - 61
-68 - 102	3,000 + Feebas Candy3	September 16, 2025
+68 - 102	5,000 + Feebas Candy5	September 16, 2025
 0350	MiloticShadow	Milotic	587 - 677
-1007 - 1116	3,000 + Feebas Candy3	September 16, 2025
+1007 - 1116	5,000 + Feebas Candy5	September 16, 2025
 0353	ShuppetShadow	Shuppet	176 - 229
 313 - 378	3,000 + Shuppet Candy3	October 17, 2019
 0354	BanetteShadow	Banette	438 - 518
 756 - 854	3,000 + Shuppet Candy3	October 17, 2019
-0355	DuskullShadow	Duskull	115 - 159
+0355	DuskullShinyShadow	Duskull	115 - 159
 208 - 262	3,000 + Duskull Candy3	October 17, 2019
-0356	DusclopsShadow	Dusclops	292 - 358
+0356	DusclopsShinyShadow	Dusclops	292 - 358
 510 - 591	3,000 + Duskull Candy3	October 17, 2019
 0359	AbsolShinyShadow	Absol	484 - 569
 834 - 938	5,000 + Absol Candy5	December 24, 2019
@@ -552,7 +556,7 @@
 271 - 330	5,000 + Snorunt Candy5	January 27, 2024
 0362	GlalieShadow	Glalie	400 - 474
 691 - 782	5,000 + Snorunt Candy5	January 27, 2024
-0363	SphealShadow	Spheal	166 - 217
+0363	SphealShinyShadow	Spheal	166 - 217
 295 - 357	3,000 + Spheal Candy3	February 2, 2021
 0364	SealeoShadow	Sealeo	318 - 386
 554 - 637	3,000 + Spheal Candy3	February 2, 2021
@@ -698,7 +702,7 @@
 1372 - 1500	20,000 + Dialga Candy20	May 14, 2025
 0484	PalkiaShadow	Palkia	794 - 899
 1354 - 1482	20,000 + Palkia Candy20	January 15, 2025
-0485	HeatranShadow	Heatran	694 - 791
+0485	HeatranShinyShadow	Heatran	694 - 791
 1185 - 1304	20,000 + Heatran Candy20	October 8, 2024
 0486	RegigigasShinyShadow	Regigigas	870 - 979
 1481 - 1614	20,000 + Regigigas Candy20	October 26, 2023
@@ -745,16 +749,16 @@
 0523	ZebstrikaShadow	Zebstrika	466 - 547
 802 - 902	3,000 + Blitzle Candy3	February 1, 2023
 0524	RoggenrolaShadow	Roggenrola	233 - 291
-409 - 480	1,000 + Roggenrola Candy1	October 8, 2024
+409 - 480	3,000 + Roggenrola Candy3	October 8, 2024
 0525	BoldoreShadow	Boldore	357 - 427
-618 - 705	1,000 + Roggenrola Candy1	October 8, 2024
+618 - 705	3,000 + Roggenrola Candy3	October 8, 2024
 0526	GigalithShadow	Gigalith	576 - 664
-987 - 1095	1,000 + Roggenrola Candy1	October 8, 2024
+987 - 1095	3,000 + Roggenrola Candy3	October 8, 2024
 0529	DrilburShadow	Drilbur	248 - 310
 436 - 511	3,000 + Drilbur Candy3	October 26, 2023
 0530	ExcadrillShadow	Excadrill	634 - 731
 1086 - 1205	3,000 + Drilbur Candy3	October 26, 2023
-0532	TimburrShadow	Timburr	236 - 296
+0532	TimburrShinyShadow	Timburr	236 - 296
 415 - 488	5,000 + Timburr Candy5	August 8, 2024
 0533	GurdurrShadow	Gurdurr	412 - 489
 712 - 806	5,000 + Timburr Candy5	August 8, 2024
@@ -765,11 +769,11 @@
 0539	SawkShadow	Sawk	541 - 628
 929 - 1035	5,000 + Sawk Candy5	June 5, 2023
 0543	VenipedeShadow	Venipede	233 - 291
-409 - 480	1,000 + Venipede Candy1	October 8, 2024
+409 - 480	3,000 + Venipede Candy3	October 8, 2024
 0544	WhirlipedeShadow	Whirlipede	357 - 427
-618 - 705	1,000 + Venipede Candy1	October 8, 2024
+618 - 705	3,000 + Venipede Candy3	October 8, 2024
 0545	ScolipedeShadow	Scolipede	576 - 664
-987 - 1095	1,000 + Venipede Candy1	October 8, 2024
+987 - 1095	3,000 + Venipede Candy3	October 8, 2024
 0554	DarumakaShadow	Darumaka	262 - 325
 458 - 535	3,000 + Darumaka Candy3	March 27, 2024
 0555	DarmanitanShadow	Darmanitan	603 - 700
@@ -778,9 +782,9 @@
 386 - 454	1,000 + Dwebble Candy1	January 27, 2024
 0558	CrustleShadow	Crustle	490 - 573
 844 - 944	1,000 + Dwebble Candy1	January 27, 2024
-0562	YamaskShadow	Yamask	171 - 221
+0562	YamaskShinyShadow	Yamask	171 - 221
 302 - 364	3,000 + Yamask Candy3	October 21, 2025
-0563	CofagrigusShadow	Cofagrigus	434 - 512
+0563	CofagrigusShinyShadow	Cofagrigus	434 - 512
 748 - 844	3,000 + Yamask Candy3	October 21, 2025
 0564	TirtougaShadow	Tirtouga	273 - 335
 477 - 553	5,000 + Tirtouga Candy5	August 8, 2024
@@ -810,15 +814,15 @@
 259 - 318	1,000 + Ducklett Candy1	July 9, 2022
 0581	SwannaShadow	Swanna	396 - 470
 684 - 775	1,000 + Ducklett Candy1	July 9, 2022
-0588	KarrablastShadow	Karrablast	233 - 291
-409 - 480	1,000 + Karrablast Candy1	October 8, 2024
+0588	KarrablastShinyShadow	Karrablast	233 - 291
+409 - 480	3,000 + Karrablast Candy3	October 8, 2024
 0589	EscavalierShadow	Escavalier	357 - 427
-618 - 705	1,000 + Karrablast Candy1	October 8, 2024
+618 - 705	3,000 + Karrablast Candy3	October 8, 2024
 0590	FoongusShadow	Foongus	169 - 220
 301 - 363	1,000 + Foongus Candy1	July 9, 2022
 0591	AmoongussShadow	Amoonguss	406 - 482
 701 - 795	1,000 + Foongus Candy1	July 9, 2022
-0595	JoltikShadow	Joltik	179 - 230
+0595	JoltikShinyShadow	Joltik	179 - 230
 317 - 380	3,000 + Joltik Candy3	February 1, 2023
 0596	GalvantulaShadow	Galvantula	419 - 497
 724 - 819	3,000 + Joltik Candy3	February 1, 2023
@@ -826,21 +830,21 @@
 287 - 349	3,000 + Ferroseed Candy3	January 27, 2024
 0598	FerrothornShadow	Ferrothorn	444 - 523
 766 - 862	3,000 + Ferroseed Candy3	January 27, 2024
-0607	LitwickShadow	Litwick	176 - 226
+0607	LitwickShinyShadow	Litwick	176 - 226
 311 - 374	5,000 + Litwick Candy5	October 26, 2023
 0608	LampentShadow	Lampent	317 - 385
 552 - 634	5,000 + Litwick Candy5	October 26, 2023
 0609	ChandelureShadow	Chandelure	640 - 736
 1097 - 1214	5,000 + Litwick Candy5	October 26, 2023
-0616	ShelmetShadow	Shelmet	233 - 291
-409 - 480	1,000 + Shelmet Candy1	October 8, 2024
+0616	ShelmetShinyShadow	Shelmet	233 - 291
+409 - 480	3,000 + Shelmet Candy3	October 8, 2024
 0617	AccelgorShadow	Accelgor	357 - 427
-618 - 705	1,000 + Shelmet Candy1	October 8, 2024
+618 - 705	3,000 + Shelmet Candy3	October 8, 2024
 0622	GolettShadow	Golett	212 - 268
 373 - 441	5,000 + Golett Candy5	November 14, 2022
 0623	GolurkShadow	Golurk	555 - 643
 952 - 1060	5,000 + Golett Candy5	November 14, 2022
-0633	DeinoShadow	Deino	187 - 239
+0633	DeinoShinyShadow	Deino	187 - 239
 330 - 394	5,000 + Deino Candy5	September 16, 2025
 0634	ZweilousShadow	Zweilous	345 - 414
 598 - 683	5,000 + Deino Candy5	September 16, 2025
@@ -848,10 +852,32 @@
 1225 - 1346	5,000 + Deino Candy5	September 16, 2025
 0641	TornadusShadow	Tornadus	657 - 754
 1125 - 1242	20,000 + Tornadus Candy20	September 16, 2025
-0659	BunnelbyShadow	Bunnelby	133 - 178
-238 - 294	1,000 + Bunnelby Candy1	January 15, 2025
+0642	ThundurusShinyShadow	Thundurus	657 - 754
+1125 - 1242	20,000 + Thundurus Candy20	January 23, 2026
+0645	LandorusShinyShadow	Landorus	709 - 809
+1212 - 1333	20,000 + Landorus Candy20	April 30, 2026
+0650	ChespinShinyShadow	Chespin	193 - 247
+342 - 407	3,000 + Chespin Candy3	January 23, 2026
+0651	QuilladinShadow	Quilladin	320 - 387
+556 - 638	3,000 + Chespin Candy3	January 23, 2026
+0652	ChesnaughtShadow	Chesnaught	577 - 666
+989 - 1097	3,000 + Chespin Candy3	January 23, 2026
+0653	FennekinShinyShadow	Fennekin	180 - 231
+319 - 381	3,000 + Fennekin Candy3	January 23, 2026
+0654	BraixenShadow	Braixen	339 - 408
+588 - 673	3,000 + Fennekin Candy3	January 23, 2026
+0655	DelphoxShadow	Delphox	598 - 689
+1025 - 1136	3,000 + Fennekin Candy3	January 23, 2026
+0656	FroakieShinyShadow	Froakie	173 - 223
+306 - 368	3,000 + Froakie Candy3	January 23, 2026
+0657	FrogadierShadow	Frogadier	303 - 369
+527 - 608	3,000 + Froakie Candy3	January 23, 2026
+0658	GreninjaShadow	Greninja	513 - 598
+882 - 986	3,000 + Froakie Candy3	January 23, 2026
+0659	BunnelbyShinyShadow	Bunnelby	133 - 178
+238 - 294	3,000 + Bunnelby Candy3	January 15, 2025
 0660	DiggersbyShadow	Diggersby	341 - 410
-591 - 675	1,000 + Bunnelby Candy1	January 15, 2025
+591 - 675	3,000 + Bunnelby Candy3	January 15, 2025
 0661	FletchlingShadow	Fletchling	135 - 180
 241 - 297	1,000 + Fletchling Candy1	August 11, 2025
 0662	FletchinderShadow	Fletchinder	269 - 331
@@ -862,14 +888,18 @@
 373 - 441	3,000 + Inkay Candy3	May 14, 2025
 0687	MalamarShadow	Malamar	555 - 643
 952 - 1060	3,000 + Inkay Candy3	May 14, 2025
+0694	HelioptileShinyShadow	Helioptile	161 - 210
+286 - 346	3,000 + Helioptile Candy3	April 30, 2026
+0695	HelioliskShadow	Heliolisk	502 - 586
+863 - 966	3,000 + Helioptile Candy3	April 30, 2026
 0696	TyruntShadow	Tyrunt	273 - 335
-477 - 553	5,000 + Tyrunt Candy5	May 14, 2025
+477 - 553	3,000 + Tyrunt Candy3	May 14, 2025
 0697	TyrantrumShadow	Tyrantrum	507 - 591
-872 - 974	5,000 + Tyrunt Candy5	May 14, 2025
+872 - 974	3,000 + Tyrunt Candy3	May 14, 2025
 0698	AmauraShadow	Amaura	341 - 415
-594 - 684	5,000 + Amaura Candy5	May 14, 2025
+594 - 684	3,000 + Amaura Candy3	May 14, 2025
 0699	AurorusShadow	Aurorus	652 - 750
-1117 - 1237	5,000 + Amaura Candy5	May 14, 2025
+1117 - 1237	3,000 + Amaura Candy3	May 14, 2025
 0708	PhantumpShadow	Phantump	199 - 253
 351 - 417	5,000 + Phantump Candy5	October 21, 2025
 0709	TrevenantShadow	Trevenant	494 - 577
@@ -886,6 +916,18 @@
 549 - 630	1,000 + Grubbin Candy1	August 11, 2025
 0738	VikavoltShadow	Vikavolt	609 - 702
 1044 - 1158	1,000 + Grubbin Candy1	August 11, 2025
+0751	DewpiderShinyShadow	Dewpider	118 - 161
+212 - 265	3,000 + Dewpider Candy3	April 30, 2026
+0752	AraquanidShadow	Araquanid	341 - 411
+592 - 678	3,000 + Dewpider Candy3	April 30, 2026
+0755	MorelullShinyShadow	Morelull	181 - 232
+320 - 383	3,000 + Morelull Candy3	April 30, 2026
+0756	ShiinoticShadow	Shiinotic	349 - 419
+606 - 691	3,000 + Morelull Candy3	April 30, 2026
+0759	StuffulShinyShadow	Stufful	244 - 304
+428 - 502	1,000 + Stufful Candy1	April 30, 2026
+0760	BewearShadow	Bewear	609 - 702
+1044 - 1158	1,000 + Stufful Candy1	April 30, 2026
 0862	ObstagoonShadow	Obstagoon	513 - 598
 882 - 985	3,000 + Zigzagoon Candy3	October 8, 2024
 0901	UrsalunaShadow	Ursaluna	766 - 869
