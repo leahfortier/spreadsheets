@@ -1,6 +1,6 @@
 from contextlib import ContextDecorator
 from enum import Enum
-from typing import Any, List, Iterable, Callable, Optional, Self
+from typing import Any, List, Iterable, Callable, Optional
 
 from terminology import in_red, in_yellow, in_white
 
@@ -141,6 +141,14 @@ class GuardDog:
             generic_name(first, replace_chars) == generic_name(second, replace_chars),
             message, f"\n\t{first}\n\t{second}"
         )
+
+    def empty_or_eq(self, possible_empty: Any, non_empty: Any, message: str = None) -> bool:
+        self.nonempty(non_empty, message)
+        if possible_empty:
+            return self.eq(possible_empty, non_empty, message)
+        # I know this looks dumb but I haven't worked in this code in a bit
+        # and I just want to make sure the return value is consistent
+        return self.truthy(True, message)
 
 
 # Automatically pops any appended messages on exit

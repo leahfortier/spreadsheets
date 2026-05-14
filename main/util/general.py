@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, TypeVar
+from typing import List, TypeVar, Iterable
 
 from terminology import in_red
 
@@ -36,9 +36,9 @@ def remove_suffix(s: str, *suffixes: str) -> str:
     return s
 
 
-def is_empty(row: List[str]) -> bool:
+def is_empty(row: Iterable[str], *exception_values: str) -> bool:
     for val in row:
-        if val != '':
+        if val != '' and val not in exception_values:
             return False
     return True
 

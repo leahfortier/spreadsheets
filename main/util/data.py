@@ -2,10 +2,12 @@ from typing import List, Dict, Optional, Tuple
 
 from main.util.general import is_empty, FieldsEnum, to_str
 from util.sheets_formulas import column_name
+from util.warn import GuardDog
 
 CHECKBOX_TRUE = "TRUE"
 CHECKBOX_FALSE = "FALSE"
 
+guard = GuardDog()
 
 class Sheet:
     def __init__(
@@ -102,7 +104,10 @@ class Sheet:
                 id_index += 1
 
         new_id = self.get_id(row)
-        assert new_id not in self.id_map, new_id
+        if is_empty(new_id):
+            assert is_empty(row, 'FALSE'), str(row)
+        else:
+            assert new_id not in self.id_map, new_id
         return new_id
 
     # Ex: "A", "B"

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List
 
-from main.constants.sheet_id import POKEMON_ID, DOKU_MASTERS_ID, POKOPIA_ID
+from main.constants.sheet_id import POKEMON_ID, DOKU_MASTERS_ID
 from main.util.data import Sheet
 from main.util.sheets_parse import get_sheet_data
 
@@ -140,18 +140,6 @@ class GoFields(str, Enum):
     DATE_ADDED = "Added"
 
 
-class PokopiaFields(str, Enum):
-    NAME = "name"
-    CLASS = "classification"
-    IMAGE_ID = "image id"
-    IMAGE = "image"
-    ALL_ROW = "all row"
-    ALL_COL = "all col"
-    CAT_ROW = "cat row"
-    CAT_COL = "cat col"
-    SORT_ID = "sort"
-
-
 SAME_ID_DIFFERENT_FIELDS: List[DexFields] = [
     DexFields.CAUGHT_PROGRESS,
     DexFields.HIDDEN_PROGRESS,
@@ -214,7 +202,4 @@ def get_go_sheet() -> Sheet:
     )
 
 
-def get_pokopia_sheet() -> Sheet:
-    return Sheet(
-        get_sheet_data(POKOPIA_ID, "Items"),
-    )
+
