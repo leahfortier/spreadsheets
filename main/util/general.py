@@ -36,6 +36,14 @@ def remove_suffix(s: str, *suffixes: str) -> str:
     return s
 
 
+def is_number(number_string: str) -> bool:
+    try:
+        float(number_string)
+        return True
+    except ValueError:
+        return False
+
+
 def is_empty(row: Iterable[str], *exception_values: str) -> bool:
     for val in row:
         if val != '' and val not in exception_values:

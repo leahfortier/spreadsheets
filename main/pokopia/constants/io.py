@@ -3,4 +3,5 @@ OUT_PATH = "out/"
 
 ITEMS_OUTFILE = OUT_PATH + "items-out.tsv"
 TRADERS_OUTFILE = OUT_PATH + "traders-out.tsv"
-TRADE_VALUE_OUTFILE = OUT_PATH + "trade-value-out.tsv"
+PAINT_TRADE_OUTFILE = OUT_PATH + "paint-trade-out.tsv"
+BUY_FROM_OUTFILE = OUT_PATH + "buy-from-out.tsv"

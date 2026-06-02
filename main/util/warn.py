@@ -4,7 +4,7 @@ from typing import Any, List, Iterable, Callable, Optional
 
 from terminology import in_red, in_yellow, in_white
 
-from util.general import has_prefix, generic_name
+from util.general import has_prefix, generic_name, is_number
 
 
 class WarnLevel(Enum):
@@ -149,6 +149,10 @@ class GuardDog:
         # I know this looks dumb but I haven't worked in this code in a bit
         # and I just want to make sure the return value is consistent
         return self.truthy(True, message)
+
+    def number(self, number_string: str, message: str = None) -> bool:
+        return self._handle(is_number(number_string), message, f'Not a number: {number_string}')
+
 
 
 # Automatically pops any appended messages on exit

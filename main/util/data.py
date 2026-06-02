@@ -2,12 +2,10 @@ from typing import List, Dict, Optional, Tuple
 
 from main.util.general import is_empty, FieldsEnum, to_str
 from util.sheets_formulas import column_name
-from util.warn import GuardDog
 
 CHECKBOX_TRUE = "TRUE"
 CHECKBOX_FALSE = "FALSE"
 
-guard = GuardDog()
 
 class Sheet:
     def __init__(
@@ -121,3 +119,17 @@ class Sheet:
 
     def has_field(self, field: str) -> bool:
         return to_str(field) in self.schema
+
+    def has_id(self, *id_values: str) -> bool:
+        row_id = (*id_values,)
+        return row_id in self.id_map
+
+    def get_row(self, *id_values: str) -> List[str]:
+        row_id = (*id_values,)
+        return self.rows[self.id_map[row_id]]
+
+    def add_row(self) -> List[str]:
+        new_row = [""] * len(self.schema_row)
+        self.rows.append(new_row)
+        return new_row
+
