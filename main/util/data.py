@@ -30,6 +30,7 @@ class Sheet:
         self.escape_fields: List[str] = escape_fields or []
         self.id_fields: List[str] = id_fields or []
         self.id_map: Dict[Tuple[str, ...], int] = {}
+        self.row_ids: List[Tuple[str, ...]] = []
         self.allow_duplicate_keys = allow_duplicate_keys
 
         if break_schema_field:
@@ -48,15 +49,14 @@ class Sheet:
                 row += [""] * (len(self.schema_row) - len(row))
                 self.rows[row_index] = row
 
-            row_id = self._create_id(row)
-            if row_id:
-                self.id_map[row_id] = row_index
             # Auto fields should be set to empty since they will automatically repopulate
             for field in self.auto_fields:
                 self.set(row, field, '')
             for field in self.escape_fields:
                 value = self.get(row, field)
                 self.set(row, field, value)
+
+        self.reset_ids()
 
     def get(self, row: List[str], field: str) -> str:
         field = to_str(field)
@@ -107,6 +107,16 @@ class Sheet:
         else:
             assert new_id not in self.id_map, new_id
         return new_id
+
+    def reset_ids(self):
+        self.id_map = {}
+        self.row_ids = []
+
+        for row_index, row in enumerate(self.rows):
+            row_id = self._create_id(row)
+            if row_id:
+                self.id_map[row_id] = row_index
+                self.row_ids.append(row_id)
 
     # Ex: "A", "B"
     def column(self, field: str) -> str:

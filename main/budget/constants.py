@@ -94,6 +94,8 @@ def get_new_transactions() -> Sheet:
         # Remove category
         sheet.set(row, TransactionFields.CATEGORY, '')
 
+    sheet.reset_ids()
+
     return sheet
 
 

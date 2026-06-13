@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Set, Tuple
 
-from terminology import in_red, in_green
+from terminology import in_red
 
 from main.budget.constants import get_new_transactions, get_current_transactions
-from main.budget.transactions import TransactionsIterator, transform_row
+from main.budget.transactions import transform_row, add_label
 from main.util.file_io import to_tsv
 from util.data import Sheet
 
@@ -19,32 +19,27 @@ def update_spreadsheet(output_file: str):
 
 
 def combine(new: Sheet, current: Sheet) -> List[List[str]]:
-    new_iter: TransactionsIterator = TransactionsIterator(new)
-    current_iter: TransactionsIterator = TransactionsIterator(current)
+    current_seen: Set[Tuple[str, ...]] = set()
 
     next_rows: List[List[str]] = []
-    while True:
-        if new_iter.finished() and current_iter.finished():
-            break
-
-        new_key = new_iter.key()
-        current_key = current_iter.key()
-        if new_key == current_key:
-            # print("Same row:", current_key, current_iter.row())
-            next_rows.append(current_iter.row())
-            new_iter.next()
-            current_iter.next()
-        elif new_iter.date() < current_iter.date():
-            if not new_iter.finished():
-                print(in_red(f'Non-transaction row: {current_key}, {new_key}'))
-                current_iter.add_label("MINTLESS")
-            next_rows.append(current_iter.row())
-            current_iter.next()
+    for row_index, row in enumerate(new.rows):
+        key = new.row_ids[row_index]
+        assert key not in current_seen
+        if key in current.id_map:
+            # print("Same row:", key)
+            next_rows.append(current.get_row(*key))
+            current_seen.add(key)
         else:
-            transformed_row = transform_row(new, current, new_iter.row())
-            print(in_green(f'New row: {new_key}, {transformed_row}'))
+            transformed_row = transform_row(new, current, row)
+            # print(in_green(f'New row: {key}, {transformed_row}'))
             next_rows.append(transformed_row)
-            new_iter.next()
+
+    for row_index, row_id in enumerate(current.row_ids):
+        if row_id not in current_seen:
+            print(in_red(f'Non-transaction row: {row_id}'))
+            row = current.rows[row_index]
+            add_label(current, row, "MINTLESS")
+            next_rows.append(row)
 
     return next_rows
 
