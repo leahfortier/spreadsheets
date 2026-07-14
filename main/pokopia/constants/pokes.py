@@ -1,0 +1,3 @@
+NUM_FAVORITES = 5
+
+PAINT_AMOUNTS = ["1", "5", "10"]

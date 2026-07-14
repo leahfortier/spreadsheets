@@ -1,19 +1,32 @@
-from pokopia.items import Items, Traders, BuyFrom
+from pokopia.faves import Faves
+from pokopia.items import Items, Traders
+from pokopia.ref import Ref
 
 
-def main():
-    items = Items()
+def sheet_update(ref: Ref, items: Items):
     traders = Traders()
-    buy_sheet = BuyFrom()
 
-    traders.update(items, buy_sheet)
-    buy_sheet.update(items)
+    traders.update(items)
+    items.update(ref)
 
     items.validate()
 
     items.write_paint_trade_values()
     items.write_traders()
-    buy_sheet.write()
+    items.write_faves()
+
+
+def serebii_compare(ref: Ref, items: Items):
+    faves = Faves(items, ref)
+    faves.validate()
+
+
+def main():
+    ref = Ref()
+    items = Items(ref)
+
+    sheet_update(ref, items)
+    serebii_compare(ref, items)
 
 
 main()

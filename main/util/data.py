@@ -102,7 +102,9 @@ class Sheet:
                 id_index += 1
 
         new_id = self.get_id(row)
-        if is_empty(new_id):
+        if new_id is None:
+            assert is_empty(self.id_fields)
+        elif is_empty(new_id):
             assert is_empty(row, 'FALSE'), str(row)
         else:
             assert new_id not in self.id_map, new_id
